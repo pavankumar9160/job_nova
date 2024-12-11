@@ -15,6 +15,7 @@ jobs:
       uses: SamKirkland/FTP-Deploy-Action@v4.3.5
       with:
         server: lab.wemakesoftwares.com
+        
         username: ${{ secrets.ftp_username }}
         password: ${{ secrets.ftp_password }}
         server-dir: /lab.wemakesoftwares.com/job_nova/
