@@ -1,0 +1,334 @@
+{% extends "base.html" %}
+{% load static %}
+{% block content %}
+
+
+        <section class="section">
+            <div class="container">
+                <div class="row">
+                    <div class="col-12">
+                        <div class="position-relative">
+                            <div class="candidate-cover">
+                                <div class="profile-banner relative text-transparent">
+                                    <input id="pro-banner" name="profile-banner" type="file" class="hidden" onchange="loadFile(event)" />
+                                    <div class="relative shrink-0">
+                                        <img src="{% static 'images/hero/bg5.jpg' %}" class="rounded shadow" id="profile-banner" alt="">
+                                        <label class="profile-image-label" for="pro-banner"></label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="candidate-profile d-flex align-items-end mx-2">
+                                <div class="profile-pic">
+                                    <input id="pro-img" name="profile-image" type="file" class="d-none" onchange="loadFile(event)" />
+                                    <div class="position-relative d-inline-block">
+                                        <img src="{% static 'images/team/01.jpg' %}" class="avatar avatar-medium img-thumbnail rounded-pill shadow-sm" id="profile-image" alt="">
+                                        <label class="icons position-absolute bottom-0 end-0" for="pro-img"><span class="btn btn-icon btn-sm btn-pills btn-primary"><i data-feather="camera" class="icons"></i></span></label>
+                                    </div>
+                                </div>
+                                <div class="ms-2">
+                                    <h5 class="mb-0">Mr. Saroj Kumar Patro</h5>
+                                    <p class="text-muted mb-0">Author & Writing Consultant</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="container">
+                <div class="row">
+                    <div class="col-12">
+                        <div class="rounded shadow p-4">
+                            <form>
+                                <h5>Personal Details:</h5>
+                                <div class="row mt-4">
+                                    <div class="col-md-6">
+                                        <div class="mb-3">
+                                            <label class="form-label fw-semibold">First Name:<span class="text-danger">*</span></label>
+                                            <input name="firstname" id="firstname" type="text" class="form-control" placeholder="First Name">
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="mb-3">
+                                            <label class="form-label fw-semibold">Last Name:<span class="text-danger">*</span></label>
+                                            <input name="lastname" id="lastname" type="text" class="form-control" placeholder="Last Name">
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="mb-3">
+                                            <label class="form-label fw-semibold">Gender:<span class="text-danger">*</span></label>
+                                            <select class="form-control form-select" id="gender">
+                                                <option value="Male">Male</option>
+                                                <option value="Female">Female</option>
+                                                <option value="Other">Other</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="mb-3">
+                                            <label class="form-label fw-semibold">Date of Birth:<span class="text-danger">*</span></label>
+                                            <input name="dob" id="dob" type="date" class="form-control">
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="mb-3">
+                                            <label class="form-label fw-semibold">Phone Number:<span class="text-danger">*</span></label>
+                                            <input name="phone" id="phone" type="text" class="form-control" placeholder="Phone Number">
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="mb-3">
+                                            <label class="form-label fw-semibold">Email Address:<span class="text-danger">*</span></label>
+                                            <input name="email" id="email2" type="email" class="form-control" placeholder="Email Address">
+                                        </div> 
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="mb-3">
+                                            <label class="form-label fw-semibold">Location:</label>
+                                            <select class="form-control form-select" id="Country">
+                                                <option value="India">India</option>
+                                                <option value="USA">USA</option>
+                                                <option value="Canada">Canada</option>
+                                                <option value="UK">UK</option>
+                                                <option value="Australia">Australia</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="col-12">
+                                        <div class="mb-3">
+                                            <label class="form-label fw-semibold">Complete Address:</label>
+                                            <textarea name="address" id="address" rows="4" class="form-control" placeholder="e.g., Full Address"></textarea>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="mb-3">
+                                            <label class="form-label fw-semibold">Role in Literary World:</label>
+                                            <select class="form-control form-select" id="description">
+                                                <option value="Writer">Writer</option>
+                                                <option value="Publisher">Publisher</option>
+                                                <option value="Editor">Editor</option>
+                                                <option value="Poet">Poet</option>
+                                                <option value="Essayist">Essayist</option>
+                                                <option value="Novelist">Novelist</option>
+                                                <option value="Blogger">Blogger</option>
+                                                <option value="Short Story Writer">Short Story Writer</option>
+                                                <option value="Motivational Speaker">Motivational Speaker</option>
+                                                <option value="Spiritual Leader">Spiritual Leader</option>
+                                                <option value="Literary Critic">Literary Critic</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="col-12">
+                                        <div class="mb-3">
+                                            <label class="form-label fw-semibold">Brief Introduction:</label>
+                                            <textarea name="introduction" id="introduction" rows="4" class="form-control" placeholder="Write a brief introduction about yourself..."></textarea>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="mb-3">
+                                            <label class="form-label fw-semibold">Languages you can Read:</label>
+                                            <textarea name="languages_read" id="languages_read" rows="2" class="form-control" placeholder="e.g., English, Hindi, Odia"></textarea>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="mb-3">
+                                            <label class="form-label fw-semibold">Languages you can Write:</label>
+                                            <textarea name="languages_write" id="languages_write" rows="2" class="form-control" placeholder="e.g., English, Hindi, Odia"></textarea>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="mb-3">
+                                            <label class="form-label fw-semibold">Languages you can Speak:</label>
+                                            <textarea name="languages_speak" id="languages_speak" rows="2" class="form-control" placeholder="e.g., English, Hindi, Odia"></textarea>
+                                        </div>
+                                    </div>
+                                    <div class="col-12">
+                                        <div class="mb-3">
+    <label class="form-label fw-semibold">Social Media Links:</label>
+    <div class="d-flex flex-column">
+        <div class="mb-2 d-flex align-items-center">
+            <i data-feather="facebook" class="fea icon-sm align-middle me-2" title="facebook"></i>
+            <input type="url" class="form-control" id="facebook_link" placeholder="Facebook URL">
+        </div>
+        <div class="mb-2 d-flex align-items-center">
+            <i data-feather="instagram" class="fea icon-sm align-middle me-2" title="instagram"></i>
+            <input type="url" class="form-control" id="instagram_link" placeholder="Instagram URL">
+        </div>
+        <div class="mb-2 d-flex align-items-center">
+            <i data-feather="linkedin" class="fea icon-sm align-middle me-2" title="linkedin"></i>
+            <input type="url" class="form-control" id="linkedin_link" placeholder="LinkedIn URL">
+        </div>
+       
+    </div>
+</div>
+                                    </div>
+                                    <div class="col-12">
+                                        <input type="submit" id="submit2" name="send" class="submitBnt btn btn-primary" value="Update Details">
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                        <div class="rounded shadow p-4 mt-4">
+                            <form>
+                                <div class="row">
+                                    <div class="col-md-12 mt-4 pt-2">
+                                        <h5>Professional Details:</h5>
+                                        <form>
+                                            <div class="row mt-4">
+                                                <div class="col-lg-12">
+                                                    <div class="mb-3">
+                                                        <label class="form-label fw-semibold">Professional Title:</label>
+                                                        <input name="job_title" id="job_title" type="text" class="form-control" placeholder="Professional Title">
+                                                    </div>
+                                                </div>
+                                                <div class="col-lg-12">
+                                                    <div class="mb-3">
+                                                        <label class="form-label fw-semibold">Company / Organization (if applicable):</label>
+                                                        <input name="company_name" id="company_name" type="text" class="form-control" placeholder="Company / Organization">
+                                                    </div>
+                                                </div>
+                                                <div class="col-lg-12">
+                                                    <div class="mb-3">
+                                                        <label class="form-label fw-semibold">Years of Experience:</label>
+                                                        <input name="experience" id="experience" type="number" class="form-control" placeholder="Years of Experience">
+                                                    </div>
+                                                </div>
+                                                <div class="col-lg-12">
+                                                    <div class="mb-3">
+                                                        <label class="form-label fw-semibold">Portfolio Links / Website:</label>
+                                                        <input name="portfolio" id="portfolio" type="url" class="form-control" placeholder="Portfolio URL">
+                                                    </div>
+                                                </div>
+                                                <div class="col-lg-12">
+                                                    <div class="mb-3">
+                                                        <label class="form-label fw-semibold">Short Bio:</label>
+                                                        <textarea name="short_bio" id="short_bio" class="form-control" placeholder="Brief description of your professional background"></textarea>
+                                                    </div>
+                                                </div>
+                                                <div class="col-lg-12">
+                                                    <div class="mb-3">
+                                                        <label class="form-label fw-semibold">Availability:</label>
+                                                        <select name="availability" id="availability" class="form-control">
+                                                            <option value="full_time">Full-time</option>
+                                                            <option value="part_time">Part-time</option>
+                                                            <option value="freelance">Freelance</option>
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                                <div class="col-lg-12">
+                                                    <div class="mb-3">
+                                                        <label class="form-label fw-semibold">Primary Skills:</label>
+                                                        <input type="text" class="form-control" placeholder="Primary Skills" required="">
+                                                    </div>
+                                                </div>
+                                                <div class="col-lg-12">
+                                                    <div class="mb-3">
+                                                        <label class="form-label fw-semibold">Secondary Skills:</label>
+                                                        <input type="text" class="form-control" placeholder="Secondary Skills" required="">
+                                                    </div>
+                                                </div>
+                                                <div class="col-lg-12">
+                                                    <div class="mb-3">
+                                                        <label class="form-label fw-semibold">Certifications:</label>
+                                                        <input type="text" class="form-control" placeholder="Certifications" required="">
+                                                    </div>
+                                                </div>
+                                                <div class="col-lg-12">
+                                                    <div class="mb-3">
+                                                        <label class="form-label fw-semibold">Published Works / Projects:</label>
+                                                        <textarea name="published_works" id="published_works" class="form-control" placeholder="Add details about published works (Title, Date, etc.)"></textarea>
+                                                    </div>
+                                                </div>
+                                                <div class="col-lg-12">
+                                                    <div class="mb-3">
+                                                        <label class="form-label fw-semibold">Awards / Recognitions:</label>
+                                                        <textarea name="awards" id="awards" class="form-control" placeholder="Mention any awards or achievements"></textarea>
+                                                    </div>
+                                                </div>
+                                                <div class="col-lg-12 mt-2 mb-0">
+                                                    <button class="btn btn-primary">Update Details</button>
+                                                </div>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                        <div class="rounded shadow p-4 mt-4">
+                            <form>
+                                <div class="row">
+    <div class="col-md-12">
+        <h5>Others:</h5>
+        <button class="btn btn-primary mb-3">Update Details</button>
+                                        <div class="mb-3">
+                                            <label class="form-label fw-semibold">Preferred Payment Method:</label>
+                                            <select class="form-control form-select" id="payment_method">
+                                                <option value="paypal">PayPal</option>
+                                                <option value="upi">UPI</option>
+                                                <option value="bank_transfer">Bank Transfer</option>
+                                            </select>
+                                        </div>
+                                        <div class="mb-3">
+                                            <label class="form-label fw-semibold">ID Verification (Aadhar Card - Front & Back) (Optional):</label>
+                                            <input type="file" class="form-control" id="aadhar_front" accept="image/*">
+                                            <input type="file" class="form-control mt-2" id="aadhar_back" accept="image/*">
+                                        </div>
+                                        <div class="mb-3">
+                                            <label class="form-label fw-semibold">Type of Opportunities:</label>
+                                            <select class="form-control form-select" id="opportunities">
+                                                <option value="writing">Writing</option>
+                                                <option value="publishing">Publishing</option>
+                                                <option value="editing">Editing</option>
+                                                <option value="consulting">Consulting</option>
+                                            </select>
+                                        </div>
+                                        <div class="mb-3">
+                                            <label class="form-label fw-semibold">Alternate Email ID:</label>
+                                            <input type="email" class="form-control" id="alternate_email" placeholder="Alternate Email ID">
+                                        </div>
+                                        <div class="form-check mb-3">
+                                            <input class="form-check-input" type="checkbox" id="newsletter_subscribe">
+                                            <label class="form-check-label" for="newsletter_subscribe">Subscribe to our Newsletter</label>
+                                        </div>
+                                        <div class="mb-3">
+                                            <label class="form-label fw-semibold">Change Password:</label>
+                                            <input type="password" class="form-control mb-2" id="old_password" placeholder="Old Password">
+                                            <input type="password" class="form-control mb-2" id="new_password" placeholder="New Password">
+                                            <input type="password" class="form-control" id="confirm_password" placeholder="Confirm Password">
+                                        </div>
+                                        <div class="form-check mb-3">
+                                            <input class="form-check-input" type="checkbox" id="hide_phone">
+                                            <label class="form-check-label" for="hide_phone">Hide my Phone Number</label>
+                                        </div>
+                                        <div class="form-check mb-3">
+                                            <input class="form-check-input" type="checkbox" id="hide_email">
+                                            <label class="form-check-label" for="hide_email">Hide my Email Address</label>
+                                        </div>
+                                        <div class="mb-3">
+                                            <label class="form-label fw-semibold">Contact Support:</label>
+                                            <a href="mailto:help@sarojaccrosian.com" class="d-block">help@sarojaccrosian.com</a>
+                                        </div>
+                                        <div class="mb-3">
+                                            <label class="form-label fw-semibold">Leave a Feedback / Report an Error:</label>
+                                            <textarea class="form-control" id="feedback" rows="4" placeholder="Your feedback or error report..."></textarea>
+                                        </div>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                        <div class="rounded shadow p-4 mt-4">
+                            <form>
+                                <h5 class="text-danger">Delete Account:</h5>
+                                <div class="row mt-4">
+                                    <h6 class="mb-0">Do you want to delete your account? Please press the "Delete" button below.</h6>
+                                    <div class="mt-4">
+                                        <button class="btn btn-danger">Delete Account</button>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+       {% endblock %}

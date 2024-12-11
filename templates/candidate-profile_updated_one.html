@@ -1,0 +1,265 @@
+
+{% extends "base.html" %}
+{% load static %}
+{% block content %}
+
+        <!-- Start -->
+        <section class="section">
+            <div class="container">
+                <div class="row">
+                    <div class="col-12">
+                        <div class="position-relative">
+                            <div class="candidate-cover">
+                                <img src="{% static 'images/hero/bg5.jpg' %}" class="img-fluid rounded shadow" alt="">
+                            </div>
+                            <div class="candidate-profile d-flex align-items-end justify-content-between mx-2">
+                                <div class="d-flex align-items-end">
+                                    <img src="{% static 'images/team/01.jpg' %}" class="rounded-pill shadow border border-3 avatar avatar-medium" alt="">
+                                    <div class="ms-2">
+                                        <h5 class="mb-0">Mr. Saroj Patro</h5>
+                                        <p class="text-muted mb-0">Author & Writing Consultant</p>
+                                    </div>
+                                </div>
+                                <a href="{% url 'artist-profile-setting' %}" class="btn btn-sm btn-icon btn-pills btn-soft-primary"><i data-feather="settings" class="icons"></i></a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="container mt-4">
+                <div class="row g-4">
+                    <div class="col-lg-8 col-md-7 col-12">
+                        <h5 class="mb-4">Introduction:</h5>
+                        <p class="text-muted">I am <strong>Mr. Saroj Patro,</strong> an author and writing consultant based in Bhubaneswar, Odisha. With over 8 years of experience, I specialize in poetry, storytelling, and writing consultation in both Odia and English languages. I have authored several bestselling books and have guided many writers in their creative journeys.</p>
+                        <p class="text-muted">If you need help with writing, editing, or publishing your work, feel free to get in touch. I am passionate about helping people find their voices through literature and bring their stories to life.</p>
+
+                        <h5 class="mt-4">Skills:</h5>
+                        <div class="row">
+                              <ul class="list-unstyled">
+                            <li class="text-muted mt-2"><i data-feather="arrow-right" class="fea icon-sm text-primary me-2"></i>Creative Writing</li>
+                            <li class="text-muted mt-2"><i data-feather="arrow-right" class="fea icon-sm text-primary me-2"></i>Story Telling</li>
+                            <li class="text-muted mt-2"><i data-feather="arrow-right" class="fea icon-sm text-primary me-2"></i>Book Publishing</li>
+                            <li class="text-muted mt-2"><i data-feather="arrow-right" class="fea icon-sm text-primary me-2"></i>Editing</li>
+                            <li class="text-muted mt-2"><i data-feather="arrow-right" class="fea icon-sm text-primary me-2"></i>Proof Reading</li>
+                            <li class="text-muted mt-2"><i data-feather="arrow-right" class="fea icon-sm text-primary me-2"></i>Poetry Composition</li>
+                            <li class="text-muted mt-2"><i data-feather="arrow-right" class="fea icon-sm text-primary me-2"></i>Book Branding & Designing</li>
+                        </ul>
+                        </div>
+
+                        <h5 class="mt-4">Experience:</h5>
+                        <div class="row">
+                            <div class="col-12 mt-4">
+                                <div class="d-flex">
+                                    <div class="text-center">
+                                        <img src="{% static 'images/company/shree-logo.png' %}" class="avatar avatar-small bg-white shadow p-2 rounded" alt="">
+                                        <h6 class="text-muted mt-2 mb-0">2015-Present</h6>
+                                    </div>
+                                    <div class="ms-3">
+                                        <h6 class="mb-0">Freelance Author & Consultant</h6>
+                                        <p class="text-muted">Various Publishers - India</p>
+                                        <p class="text-muted mb-0">Collaborating with multiple publishers across India to help aspiring writers publish their books. Providing consultancy and writing services in both Odia and English.</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-12 mt-4">
+                                <div class="d-flex">
+                                    <div class="text-center">
+                                        <img src="{% static 'images/company/circle-logo.png' %}" class="avatar avatar-small bg-white shadow p-2 rounded" alt="">
+                                        <h6 class="text-muted mt-2 mb-0">2008-2014</h6>
+                                    </div>
+                                    <div class="ms-3">
+                                        <h6 class="mb-0">Literature Teacher</h6>
+                                        <p class="text-muted">Utkal University - Odisha</p>
+                                        <p class="text-muted mb-0">Taught literature at Utkal University, inspiring students and helping them develop their passion for creative writing and storytelling.</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-4 col-md-5 col-12">
+                        <div class="card bg-light p-4 rounded shadow sticky-bar">
+                            <h5 class="mb-0">Personal Detail:</h5>
+                            <div class="mt-3">
+                                <div class="d-flex align-items-center justify-content-between mt-3">
+                                    <span class="d-inline-flex align-items-center text-muted fw-medium"><i data-feather="mail" class="fea icon-sm me-2"></i> Email:</span>
+                                    <span class="fw-medium">saroj@accrosian.com</span>
+                                </div>
+                                <div class="d-flex align-items-center justify-content-between mt-3">
+                                    <span class="d-inline-flex align-items-center text-muted fw-medium"><i data-feather="gift" class="fea icon-sm me-2"></i> D.O.B.:</span>
+                                    <span class="fw-medium">25th Nov, 1979</span>
+                                </div>
+                                <div class="d-flex align-items-center justify-content-between mt-3">
+                                    <span class="d-inline-flex align-items-center text-muted fw-medium"><i data-feather="home" class="fea icon-sm me-2"></i> Address:</span>
+                                    <span class="fw-medium">Bhubaneswar, Odisha</span>
+                                </div>
+                                <div class="d-flex align-items-center justify-content-between mt-3">
+                                    <span class="d-inline-flex align-items-center text-muted fw-medium"><i data-feather="map-pin" class="fea icon-sm me-2"></i> City:</span>
+                                    <span class="fw-medium">Bhubaneswar</span>
+                                </div>
+                                <div class="d-flex align-items-center justify-content-between mt-3">
+                                    <span class="d-inline-flex align-items-center text-muted fw-medium"><i data-feather="globe" class="fea icon-sm me-2"></i> Country:</span>
+                                    <span class="fw-medium">India</span>
+                                </div>
+                                <div class="d-flex align-items-center justify-content-between mt-3">
+                                    <span class="d-inline-flex align-items-center text-muted fw-medium"><i data-feather="phone" class="fea icon-sm me-2"></i> Mobile:</span>
+                                    <span class="fw-medium">(+91) 7657809081</span>
+                                </div>
+                                <br>
+                                <div class="d-flex align-items-center justify-content-between mt-2">
+                                    <span class="text-muted fw-medium">Social:</span>
+                                    <ul class="list-unstyled social-icon text-sm-end mb-0">
+                                        <li class="list-inline-item"><a href="" target="_blank" class="rounded"><i data-feather="dribbble" class="fea icon-sm align-middle" title="dribbble"></i></a></li>
+                                        <li class="list-inline-item"><a href="" target="_blank" class="rounded"><i data-feather="linkedin" class="fea icon-sm align-middle" title="Linkedin"></i></a></li>
+                                        <li class="list-inline-item"><a href="" target="_blank" class="rounded"><i data-feather="facebook" class="fea icon-sm align-middle" title="facebook"></i></a></li>
+                                        <li class="list-inline-item"><a href="" target="_blank" class="rounded"><i data-feather="instagram" class="fea icon-sm align-middle" title="instagram"></i></a></li>
+                                        <li class="list-inline-item"><a href="" target="_blank" class="rounded"><i data-feather="twitter" class="fea icon-sm align-middle" title="twitter"></i></a></li>
+                                    </ul>
+                                </div>
+                                <div class="mt-4 pt-4 border-top">
+                                    <div class="employer-card position-relative bg-white rounded shadow p-4 mt-3">
+                                        <div class="employer-img d-flex justify-content-center align-items-center bg-white shadow-md rounded">
+                                            <img src="{% static 'images/company/snapchat.png' %}" class="avatar avatar-ex-small" alt="">
+                                        </div>
+            
+                                        <div class="content mt-3">
+                                            <a href="{% url 'services_prvdr-profile' %}" class="title text-dark h5">My Books Links</a>
+            
+                                            <p class="text-muted mt-2 mb-0">Odishara Itihasa</p>
+                                        </div>
+            
+                                   <ul class="list-unstyled d-flex justify-content-between align-items-center border-top mt-3 pt-3 mb-0">
+    <li class="text-muted d-inline-flex align-items-center">
+        <i class="fa-brands fa-amazon fea icon-sm me-1 align-middle"></i>
+        <a href="https://www.amazon.in/AM-Club-Your-Morning-Elevate/dp/9387944891/ref=sr_1_1_sspa?dib=eyJ2IjoiMSJ9.zfpnWasKSGMBFZPM4jngiLvyV_wTTjW1hDP-4huokjcbh8tjj2JFs_hSBmDC9is6b3Ph_wv_z7Cn2IFCWsKWcrxbu1ygZuhQ89Yj_zGOaV9owG2oyvqihqiWtra3MHVNTvNHwh3JRrm1ekxwYD-i9BTNBcbFgJzFb-LOdn_aOA6cYuqvEH43bbkhTVizHMmzoDYTfBcbq0BO6rK2-Xrw2dk60LwsVHWghJq5yFHamAE.12kq4l7LT_1rl9qeghXh58AeRSxeVMivKkT0lx6eOQE&dib_tag=se&keywords=books&qid=1732624766&sr=8-1-spons&sp_csd=d2lkZ2V0TmFtZT1zcF9hdGY&psc=1" target="_blank" class="text-decoration-none">Amazon - The 5 AM Club</a>
+    </li>
+    <li class="text-muted d-inline-flex align-items-center">
+        <i class="fa-brands fa-ebay fea icon-sm me-1 align-middle"></i>
+        <a href="https://www.flipkart.com/bhagavad-gita-telugu/p/itm6796dfaad9dff?pid=RBKG54BVZESGUWNP&lid=LSTRBKG54BVZESGUWNPVINCWA&marketplace=FLIPKART&store=bks&srno=b_1_2&otracker=browse&fm=organic&iid=en_7BXYKfgsoA-1va9AKLc36A3znXMWrGxY5dGonpdxw2X02SH6hz0gADwKxfLxEipakZZK4As6n7jgT8N_L-HrIA%3D%3D&ppt=None&ppn=None&ssid=1ookqghhq80000001732624799392" target="_blank" class="text-decoration-none">Flipkart - Bhagavad Gita </a>
+    </li>
+</ul>
+
+                                        
+                                        
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="container mt-100 mt-60">
+                <div class="row justify-content-center mb-4 pb-2">
+                    <div class="col-12">
+                        <div class="section-title text-center">
+                            <h4 class="title mb-3">Related Candidates</h4>
+                            <p class="text-muted para-desc mx-auto mb-0">Explore other authors and literary consultants based in Odisha who are making a difference in the literary world.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-lg-3 col-md-4 col-sm-6 col-12 mt-4 pt-2">
+                        <div class="candidate-card position-relative overflow-hidden text-center shadow rounded p-4">
+                            <div class="content">
+                                <img src="{% static 'images/team/02.jpg' %}" class="avatar avatar-md-md rounded-pill shadow-md" alt="">
+                                <div class="mt-3">
+                                    <a href="{% url 'artist-profile' %}" class="title h5 text-dark">Ms. Jaya Pradhan</a>
+                                    <p class="text-muted mt-1">Creative Writer</p>
+                                    <span class="badge bg-soft-primary rounded-pill">Odia Literature</span>
+                                    <span class="badge bg-soft-primary rounded-pill">Poetry</span>
+                                    <span class="badge bg-soft-primary rounded-pill">Editing</span>
+                                </div>
+                                <div class="mt-2 d-flex align-items-center justify-content-center">
+                                    <div class="text-center">
+                                        <p class="text-muted fw-medium mb-0">Experience:</p>
+                                        <p class="mb-0 fw-medium">5 Years</p>
+                                    </div>
+                                </div>
+                                <div class="mt-3">
+                                    <a href="{% url 'artist-profile' %}" class="btn btn-sm btn-primary me-1">View Profile</a>
+                                    <a href="https://wemakesoftwares.com/" class="btn btn-sm btn-icon btn-soft-primary"><i data-feather="message-circle" class="icons"></i></a>
+                                </div>
+                                <a href="javascript:void(0)" class="like"><i class="mdi mdi-heart align-middle fs-4"></i></a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-3 col-md-4 col-sm-6 col-12 mt-4 pt-2">
+                        <div class="candidate-card position-relative overflow-hidden text-center shadow rounded p-4">
+                            <div class="content">
+                                <img src="{% static 'images/team/03.jpg' %}" class="avatar avatar-md-md rounded-pill shadow-md" alt="">
+                                <div class="mt-3">
+                                    <a href="{% url 'artist-profile' %}" class="title h5 text-dark">Ms. Anita Dash</a>
+                                    <p class="text-muted mt-1">Storyteller & Poet</p>
+                                    <span class="badge bg-soft-primary rounded-pill">Odia Literature</span>
+                                    <span class="badge bg-soft-primary rounded-pill">Storytelling</span>
+                                    <span class="badge bg-soft-primary rounded-pill">Publishing</span>
+                                </div>
+                                <div class="mt-2 d-flex align-items-center justify-content-center">
+                                    <div class="text-center">
+                                        <p class="text-muted fw-medium mb-0">Experience:</p>
+                                        <p class="mb-0 fw-medium">7 Years</p>
+                                    </div>
+                                </div>
+                                <div class="mt-3">
+                                    <a href="{% url 'artist-profile' %}" class="btn btn-sm btn-primary me-1">View Profile</a>
+                                    <a href="{% url 'contactus' %}" class="btn btn-sm btn-icon btn-soft-primary"><i data-feather="message-circle" class="icons"></i></a>
+                                </div>
+                                <a href="javascript:void(0)" class="like"><i class="mdi mdi-heart align-middle fs-4"></i></a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-3 col-md-4 col-sm-6 col-12 mt-4 pt-2">
+                        <div class="candidate-card position-relative overflow-hidden text-center shadow rounded p-4">
+                            <div class="content">
+                                <img src="{% static 'images/team/04.jpg' %}" class="avatar avatar-md-md rounded-pill shadow-md" alt="">
+                                <div class="mt-3">
+                                    <a href="{% url 'artist-profile' %}" class="title h5 text-dark">Mr. Ankit Sahoo</a>
+                                    <p class="text-muted mt-1">Historical Fiction Writer</p>
+                                    <span class="badge bg-soft-primary rounded-pill">Historical Fiction</span>
+                                    <span class="badge bg-soft-primary rounded-pill">Odia Literature</span>
+                                </div>
+                                <div class="mt-2 d-flex align-items-center justify-content-center">
+                                    <div class="text-center">
+                                        <p class="text-muted fw-medium mb-0">Experience:</p>
+                                        <p class="mb-0 fw-medium">6 Years</p>
+                                    </div>
+                                </div>
+                                <div class="mt-3">
+                                    <a href="{% url 'artist-profile' %}" class="btn btn-sm btn-primary me-1">View Profile</a>
+                                    <a href="{% url 'contactus' %}" class="btn btn-sm btn-icon btn-soft-primary"><i data-feather="message-circle" class="icons"></i></a>
+                                </div>
+                                <a href="javascript:void(0)" class="like"><i class="mdi mdi-heart align-middle fs-4"></i></a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-3 col-md-4 col-sm-6 col-12 mt-4 pt-2">
+                        <div class="candidate-card position-relative overflow-hidden text-center shadow rounded p-4">
+                            <div class="content">
+                                <img src="{% static 'images/team/04.jpg' %}" class="avatar avatar-md-md rounded-pill shadow-md" alt="">
+                                <div class="mt-3">
+                                    <a href="{% url 'artist-profile' %}" class="title h5 text-dark">Mr. Satyajit Mohanty</a>
+                                    <p class="text-muted mt-1">Poetry and Lyricist</p>
+                                    <span class="badge bg-soft-primary rounded-pill">Poetry</span>
+                                    <span class="badge bg-soft-primary rounded-pill">Odia Lyrics</span>
+                                    <span class="badge bg-soft-primary rounded-pill">Sambalpuri Lyrics</span>
+                                </div>
+                                <div class="mt-2 d-flex align-items-center justify-content-center">
+                                    <div class="text-center">
+                                        <p class="text-muted fw-medium mb-0">Experience:</p>
+                                        <p class="mb-0 fw-medium">8 Years</p>
+                                    </div>
+                                </div>
+                                <div class="mt-3">
+                                    <a href="{% url 'artist-profile' %}" class="btn btn-sm btn-primary me-1">View Profile</a>
+                                    <a href="{% url 'contactus' %}" class="btn btn-sm btn-icon btn-soft-primary"><i data-feather="message-circle" class="icons"></i></a>
+                                </div>
+                                <a href="javascript:void(0)" class="like"><i class="mdi mdi-heart align-middle fs-4"></i></a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+       {% endblock %}

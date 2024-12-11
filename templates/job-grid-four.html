@@ -1,0 +1,579 @@
+{% extends "base.html" %}
+{% load static %}
+{% block content %}
+
+        <!-- Hero Start -->
+        <section class="bg-half-170 d-table w-100" style="background: url('{% static 'images/hero/bg.jpg' %}');">
+            <div class="bg-overlay bg-gradient-overlay"></div>
+            <div class="container">
+                <div class="row mt-5 justify-content-center">
+                    <div class="col-12">
+                        <div class="title-heading text-center">
+                            <h5 class="heading fw-semibold mb-0 sub-heading text-white title-dark">Job Vacancies</h5>
+                        </div>
+                    </div><!--end col-->
+                </div><!--end row-->
+            </div><!--end container-->
+        </section><!--end section-->
+        <div class="position-relative">
+            <div class="shape overflow-hidden text-white">
+                <svg viewBox="0 0 2880 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M0 48H1437.5H2880V0H2160C1442.5 52 720 0 720 0H0V48Z" fill="currentColor"></path>
+                </svg>
+            </div>
+        </div>
+        <!-- Hero End -->
+
+        <!-- Start -->
+        <section class="section">
+            <div class="container">
+                <div class="row g-4">
+                    <div class="col-lg-4 col-md-6 col-12">
+                        <div class="card bg-white p-4 rounded shadow sticky-bar">
+                            <!-- SEARCH -->
+                            <div>
+                                <h6 class="mb-0">Search Properties</h6>
+    
+                                <div class="search-bar mt-2">
+                                    <div id="itemSearch2" class="menu-search mb-0">
+                                        <form role="search" method="get" id="searchItemform2" class="searchform">
+                                            <input type="text" class="form-control rounded border" name="s" id="searchItem2" placeholder="Search...">
+                                            <input type="submit" id="searchItemsubmit2" value="Search">
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- SEARCH -->
+    
+                            <!-- Categories -->
+                            <div class="mt-4">
+                                <h6 class="mb-0">Categories</h6>
+                                <select class="form-select form-control border mt-2" aria-label="Default select example">
+                                    <option value="WD">Web Designer</option>
+                                    <option value="WD">Web Developer</option>
+                                    <option value="UI">UI / UX Desinger</option>
+                                </select>
+                            </div>
+                            <!-- Categories -->
+    
+                            <!-- Location -->
+                            <div class="mt-4">
+                                <h6 class="mb-0">Location</h6>
+    
+                                <select class="form-select form-control border mt-2" aria-label="Default select example">
+                                    <option value="NY">New York</option>
+                                    <option value="MC">North Carolina</option>
+                                    <option value="SC">South Carolina</option>
+                                </select>
+                            </div>
+                            <!-- Location -->
+
+                            <!-- Type Start -->
+                            <div class="mt-4">
+                                <h6>Job Types</h6>
+
+                                <div class="d-flex justify-content-between mt-2">
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" value="" id="Full">
+                                        <label class="form-check-label" for="Full">Full Time</label>
+                                    </div>
+
+                                    <span class="badge bg-soft-primary rounded-pill">3</span>
+                                </div>
+
+                                <div class="d-flex justify-content-between mt-2">
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" value="" id="Part">
+                                        <label class="form-check-label" for="Part">Part Time</label>
+                                    </div>
+
+                                    <span class="badge bg-soft-primary rounded-pill">7</span>
+                                </div>
+
+                                <div class="d-flex justify-content-between mt-2">
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" value="" id="Freelancer">
+                                        <label class="form-check-label" for="Freelancer">Freelancing</label>
+                                    </div>
+
+                                    <span class="badge bg-soft-primary rounded-pill">4</span>
+                                </div>
+
+                                <div class="d-flex justify-content-between mt-2">
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" value="" id="Fixed">
+                                        <label class="form-check-label" for="Fixed">Fixed Price</label>
+                                    </div>
+
+                                    <span class="badge bg-soft-primary rounded-pill">6</span>
+                                </div>
+
+                                <div class="d-flex justify-content-between mt-2">
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" value="" id="Remote">
+                                        <label class="form-check-label" for="Remote">Remote</label>
+                                    </div>
+
+                                    <span class="badge bg-soft-primary rounded-pill">7</span>
+                                </div>
+
+                                <div class="d-flex justify-content-between mt-2">
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" value="" id="Hourly">
+                                        <label class="form-check-label" for="Hourly">Hourly Basis</label>
+                                    </div>
+
+                                    <span class="badge bg-soft-primary rounded-pill">44</span>
+                                </div>
+                            </div>
+                            <!-- Type End -->
+    
+                            <!-- Salary -->
+                            <div class="mt-4">
+                                <h6 class="mb-0">Salary</h6>
+    
+                                <ul class="list-unstyled mt-2 mb-0">
+                                    <li class="mt-1">
+                                        <div class="custom-control custom-radio custom-control-inline">
+                                            <div class="form-check mb-0">
+                                                <input class="form-check-input" checked type="radio" name="flexRadioDefault" id="rent">
+                                                <label class="form-check-label" for="rent">10k - 15k</label>
+                                            </div>
+                                        </div>
+                                    </li>
+    
+                                    <li class="mt-1">
+                                        <div class="custom-control custom-radio custom-control-inline">
+                                            <div class="form-check mb-0">
+                                                <input class="form-check-input" checked type="radio" name="flexRadioDefault" id="buy">
+                                                <label class="form-check-label" for="buy">15k - 25k</label>
+                                            </div>
+                                        </div>
+                                    </li>
+    
+                                    <li class="mt-1">
+                                        <div class="custom-control custom-radio custom-control-inline">
+                                            <div class="form-check mb-0">
+                                                <input class="form-check-input" checked type="radio" name="flexRadioDefault" id="sell">
+                                                <label class="form-check-label" for="sell">more than 25K</label>
+                                            </div>
+                                        </div>
+                                    </li>
+                                </ul>
+                            </div>
+                            <!-- Salary -->
+    
+                            <div class="mt-4">
+                                <a href="" class="btn btn-primary w-100">Apply Filter</a>
+                            </div>
+                        </div>
+                    </div><!--end col-->
+    
+                    <div class="col-lg-8 col-md-6 col-12">
+                        <div class="row g-4">
+                            <div class="col-lg-6 col-12">
+                                <div class="job-post rounded shadow bg-white">
+                                    <div class="p-4">
+                                        <a href="{% url 'services-detail-two' %}" class="text-dark title h5">Web Designer / Developer</a>
+        
+                                        <p class="text-muted d-flex align-items-center small mt-3"><i data-feather="clock" class="fea icon-sm text-primary me-1"></i>Posted 3 Days ago</p>
+        
+                                        <ul class="list-unstyled d-flex justify-content-between align-items-center mb-0 mt-3">
+                                            <li class="list-inline-item"><span class="badge bg-soft-primary">Full Time</span></li>
+                                            <li class="list-inline-item"><span class="text-muted d-flex align-items-center small"><i data-feather="dollar-sign" class="fea icon-sm text-primary me-1"></i>$950 - $1100/mo</span></li>
+                                        </ul>
+                                    </div>
+                                    <div class="d-flex align-items-center p-4 border-top">
+                                        <img src="{% static 'images/company/facebook-logo.png' %}" class="avatar avatar-small rounded shadow p-3 bg-white" alt="">
+        
+                                        <div class="ms-3">
+                                            <a href="{% url 'services_prvdr-profile' %}" class="h5 company text-dark">Facebook</a>
+                                            <span class="text-muted d-flex align-items-center mt-1"><i data-feather="map-pin" class="fea icon-sm me-1"></i>Australia</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div><!--end col-->
+        
+                            <div class="col-lg-6 col-12">
+                                <div class="job-post rounded shadow bg-white">
+                                    <div class="p-4">
+                                        <a href="{% url 'services-detail-two' %}" class="text-dark title h5">Marketing Director</a>
+        
+                                        <p class="text-muted d-flex align-items-center small mt-3"><i data-feather="clock" class="fea icon-sm text-primary me-1"></i>Posted 3 Days ago</p>
+        
+                                        <ul class="list-unstyled d-flex justify-content-between align-items-center mb-0 mt-3">
+                                            <li class="list-inline-item"><span class="badge bg-soft-primary">Part Time</span></li>
+                                            <li class="list-inline-item"><span class="text-muted d-flex align-items-center small"><i data-feather="dollar-sign" class="fea icon-sm text-primary me-1"></i>$950 - $1100/mo</span></li>
+                                        </ul>
+                                    </div>
+                                    <div class="d-flex align-items-center p-4 border-top">
+                                        <img src="{% static 'images/company/google-logo.png' %}" class="avatar avatar-small rounded shadow p-3 bg-white" alt="">
+        
+                                        <div class="ms-3">
+                                            <a href="{% url 'services_prvdr-profile' %}" class="h5 company text-dark">Google</a>
+                                            <span class="text-muted d-flex align-items-center mt-1"><i data-feather="map-pin" class="fea icon-sm me-1"></i>Australia</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div><!--end col-->
+        
+                            <div class="col-lg-6 col-12">
+                                <div class="job-post rounded shadow bg-white">
+                                    <div class="p-4">
+                                        <a href="{% url 'services-detail-two' %}" class="text-dark title h5">Application Developer</a>
+        
+                                        <p class="text-muted d-flex align-items-center small mt-3"><i data-feather="clock" class="fea icon-sm text-primary me-1"></i>Posted 3 Days ago</p>
+        
+                                        <ul class="list-unstyled d-flex justify-content-between align-items-center mb-0 mt-3">
+                                            <li class="list-inline-item"><span class="badge bg-soft-primary">Remote</span></li>
+                                            <li class="list-inline-item"><span class="text-muted d-flex align-items-center small"><i data-feather="dollar-sign" class="fea icon-sm text-primary me-1"></i>$950 - $1100/mo</span></li>
+                                        </ul>
+                                    </div>
+                                    <div class="d-flex align-items-center p-4 border-top">
+                                        <img src="{% static 'images/company/android.png' %}" class="avatar avatar-small rounded shadow p-3 bg-white" alt="">
+        
+                                        <div class="ms-3">
+                                            <a href="{% url 'services_prvdr-profile' %}" class="h5 company text-dark">Android</a>
+                                            <span class="text-muted d-flex align-items-center mt-1"><i data-feather="map-pin" class="fea icon-sm me-1"></i>Australia</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div><!--end col-->
+                            
+                            <div class="col-lg-6 col-12">
+                                <div class="job-post rounded shadow bg-white">
+                                    <div class="p-4">
+                                        <a href="{% url 'services-detail-two' %}" class="text-dark title h5">Senior Product Designer</a>
+        
+                                        <p class="text-muted d-flex align-items-center small mt-3"><i data-feather="clock" class="fea icon-sm text-primary me-1"></i>Posted 3 Days ago</p>
+        
+                                        <ul class="list-unstyled d-flex justify-content-between align-items-center mb-0 mt-3">
+                                            <li class="list-inline-item"><span class="badge bg-soft-primary">WFH</span></li>
+                                            <li class="list-inline-item"><span class="text-muted d-flex align-items-center small"><i data-feather="dollar-sign" class="fea icon-sm text-primary me-1"></i>$950 - $1100/mo</span></li>
+                                        </ul>
+                                    </div>
+                                    <div class="d-flex align-items-center p-4 border-top">
+                                        <img src="{% static 'images/company/lenovo-logo.png' %}" class="avatar avatar-small rounded shadow p-3 bg-white" alt="">
+        
+                                        <div class="ms-3">
+                                            <a href="{% url 'services_prvdr-profile' %}" class="h5 company text-dark">Lenovo</a>
+                                            <span class="text-muted d-flex align-items-center mt-1"><i data-feather="map-pin" class="fea icon-sm me-1"></i>Australia</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div><!--end col-->
+        
+                            <div class="col-lg-6 col-12">
+                                <div class="job-post rounded shadow bg-white">
+                                    <div class="p-4">
+                                        <a href="{% url 'services-detail-two' %}" class="text-dark title h5">C++ Developer</a>
+        
+                                        <p class="text-muted d-flex align-items-center small mt-3"><i data-feather="clock" class="fea icon-sm text-primary me-1"></i>Posted 3 Days ago</p>
+        
+                                        <ul class="list-unstyled d-flex justify-content-between align-items-center mb-0 mt-3">
+                                            <li class="list-inline-item"><span class="badge bg-soft-primary">Full Time</span></li>
+                                            <li class="list-inline-item"><span class="text-muted d-flex align-items-center small"><i data-feather="dollar-sign" class="fea icon-sm text-primary me-1"></i>$950 - $1100/mo</span></li>
+                                        </ul>
+                                    </div>
+                                    <div class="d-flex align-items-center p-4 border-top">
+                                        <img src="{% static 'images/company/spotify.png' %}" class="avatar avatar-small rounded shadow p-3 bg-white" alt="">
+        
+                                        <div class="ms-3">
+                                            <a href="{% url 'services_prvdr-profile' %}" class="h5 company text-dark">Spotify</a>
+                                            <span class="text-muted d-flex align-items-center mt-1"><i data-feather="map-pin" class="fea icon-sm me-1"></i>Australia</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div><!--end col-->
+        
+                            <div class="col-lg-6 col-12">
+                                <div class="job-post rounded shadow bg-white">
+                                    <div class="p-4">
+                                        <a href="{% url 'services-detail-two' %}" class="text-dark title h5">Php Developer</a>
+        
+                                        <p class="text-muted d-flex align-items-center small mt-3"><i data-feather="clock" class="fea icon-sm text-primary me-1"></i>Posted 3 Days ago</p>
+        
+                                        <ul class="list-unstyled d-flex justify-content-between align-items-center mb-0 mt-3">
+                                            <li class="list-inline-item"><span class="badge bg-soft-primary">Remote</span></li>
+                                            <li class="list-inline-item"><span class="text-muted d-flex align-items-center small"><i data-feather="dollar-sign" class="fea icon-sm text-primary me-1"></i>$950 - $1100/mo</span></li>
+                                        </ul>
+                                    </div>
+                                    <div class="d-flex align-items-center p-4 border-top">
+                                        <img src="{% static 'images/company/linkedin.png' %}" class="avatar avatar-small rounded shadow p-3 bg-white" alt="">
+        
+                                        <div class="ms-3">
+                                            <a href="{% url 'services_prvdr-profile' %}" class="h5 company text-dark">Linkedin</a>
+                                            <span class="text-muted d-flex align-items-center mt-1"><i data-feather="map-pin" class="fea icon-sm me-1"></i>Australia</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div><!--end col-->
+        
+                            <div class="col-lg-6 col-12">
+                                <div class="job-post rounded shadow bg-white">
+                                    <div class="p-4">
+                                        <a href="{% url 'services-detail-two' %}" class="text-dark title h5">Web Designer / Developer</a>
+        
+                                        <p class="text-muted d-flex align-items-center small mt-3"><i data-feather="clock" class="fea icon-sm text-primary me-1"></i>Posted 3 Days ago</p>
+        
+                                        <ul class="list-unstyled d-flex justify-content-between align-items-center mb-0 mt-3">
+                                            <li class="list-inline-item"><span class="badge bg-soft-primary">Full Time</span></li>
+                                            <li class="list-inline-item"><span class="text-muted d-flex align-items-center small"><i data-feather="dollar-sign" class="fea icon-sm text-primary me-1"></i>$950 - $1100/mo</span></li>
+                                        </ul>
+                                    </div>
+                                    <div class="d-flex align-items-center p-4 border-top">
+                                        <img src="{% static 'images/company/circle-logo.png' %}" class="avatar avatar-small rounded shadow p-3 bg-white" alt="">
+        
+                                        <div class="ms-3">
+                                            <a href="{% url 'services_prvdr-profile' %}" class="h5 company text-dark">Circle CI</a>
+                                            <span class="text-muted d-flex align-items-center mt-1"><i data-feather="map-pin" class="fea icon-sm me-1"></i>Australia</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div><!--end col-->
+        
+                            <div class="col-lg-6 col-12">
+                                <div class="job-post rounded shadow bg-white">
+                                    <div class="p-4">
+                                        <a href="{% url 'services-detail-two' %}" class="text-dark title h5">Marketing Director</a>
+        
+                                        <p class="text-muted d-flex align-items-center small mt-3"><i data-feather="clock" class="fea icon-sm text-primary me-1"></i>Posted 3 Days ago</p>
+        
+                                        <ul class="list-unstyled d-flex justify-content-between align-items-center mb-0 mt-3">
+                                            <li class="list-inline-item"><span class="badge bg-soft-primary">Part Time</span></li>
+                                            <li class="list-inline-item"><span class="text-muted d-flex align-items-center small"><i data-feather="dollar-sign" class="fea icon-sm text-primary me-1"></i>$950 - $1100/mo</span></li>
+                                        </ul>
+                                    </div>
+                                    <div class="d-flex align-items-center p-4 border-top">
+                                        <img src="{% static 'images/company/skype.png' %}" class="avatar avatar-small rounded shadow p-3 bg-white" alt="">
+        
+                                        <div class="ms-3">
+                                            <a href="{% url 'services_prvdr-profile' %}" class="h5 company text-dark">Skype</a>
+                                            <span class="text-muted d-flex align-items-center mt-1"><i data-feather="map-pin" class="fea icon-sm me-1"></i>Australia</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div><!--end col-->
+        
+                            <div class="col-lg-6 col-12">
+                                <div class="job-post rounded shadow bg-white">
+                                    <div class="p-4">
+                                        <a href="{% url 'services-detail-two' %}" class="text-dark title h5">Application Developer</a>
+        
+                                        <p class="text-muted d-flex align-items-center small mt-3"><i data-feather="clock" class="fea icon-sm text-primary me-1"></i>Posted 3 Days ago</p>
+        
+                                        <ul class="list-unstyled d-flex justify-content-between align-items-center mb-0 mt-3">
+                                            <li class="list-inline-item"><span class="badge bg-soft-primary">Remote</span></li>
+                                            <li class="list-inline-item"><span class="text-muted d-flex align-items-center small"><i data-feather="dollar-sign" class="fea icon-sm text-primary me-1"></i>$950 - $1100/mo</span></li>
+                                        </ul>
+                                    </div>
+                                    <div class="d-flex align-items-center p-4 border-top">
+                                        <img src="{% static 'images/company/snapchat.png' %}" class="avatar avatar-small rounded shadow p-3 bg-white" alt="">
+        
+                                        <div class="ms-3">
+                                            <a href="{% url 'services_prvdr-profile' %}" class="h5 company text-dark">Snapchat</a>
+                                            <span class="text-muted d-flex align-items-center mt-1"><i data-feather="map-pin" class="fea icon-sm me-1"></i>Australia</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div><!--end col-->
+        
+                            <div class="col-lg-6 col-12">
+                                <div class="job-post rounded shadow bg-white">
+                                    <div class="p-4">
+                                        <a href="{% url 'services-detail-two' %}" class="text-dark title h5">Senior Product Designer</a>
+        
+                                        <p class="text-muted d-flex align-items-center small mt-3"><i data-feather="clock" class="fea icon-sm text-primary me-1"></i>Posted 3 Days ago</p>
+        
+                                        <ul class="list-unstyled d-flex justify-content-between align-items-center mb-0 mt-3">
+                                            <li class="list-inline-item"><span class="badge bg-soft-primary">WFH</span></li>
+                                            <li class="list-inline-item"><span class="text-muted d-flex align-items-center small"><i data-feather="dollar-sign" class="fea icon-sm text-primary me-1"></i>$950 - $1100/mo</span></li>
+                                        </ul>
+                                    </div>
+                                    <div class="d-flex align-items-center p-4 border-top">
+                                        <img src="{% static 'images/company/shree-logo.png' %}" class="avatar avatar-small rounded shadow p-3 bg-white" alt="">
+        
+                                        <div class="ms-3">
+                                            <a href="{% url 'services_prvdr-profile' %}" class="h5 company text-dark">Shreethemes</a>
+                                            <span class="text-muted d-flex align-items-center mt-1"><i data-feather="map-pin" class="fea icon-sm me-1"></i>Australia</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div><!--end col-->
+        
+                            <div class="col-lg-6 col-12">
+                                <div class="job-post rounded shadow bg-white">
+                                    <div class="p-4">
+                                        <a href="{% url 'services-detail-two' %}" class="text-dark title h5">C++ Developer</a>
+        
+                                        <p class="text-muted d-flex align-items-center small mt-3"><i data-feather="clock" class="fea icon-sm text-primary me-1"></i>Posted 3 Days ago</p>
+        
+                                        <ul class="list-unstyled d-flex justify-content-between align-items-center mb-0 mt-3">
+                                            <li class="list-inline-item"><span class="badge bg-soft-primary">Full Time</span></li>
+                                            <li class="list-inline-item"><span class="text-muted d-flex align-items-center small"><i data-feather="dollar-sign" class="fea icon-sm text-primary me-1"></i>$950 - $1100/mo</span></li>
+                                        </ul>
+                                    </div>
+                                    <div class="d-flex align-items-center p-4 border-top">
+                                        <img src="{% static 'images/company/telegram.png' %}" class="avatar avatar-small rounded shadow p-3 bg-white" alt="">
+        
+                                        <div class="ms-3">
+                                            <a href="{% url 'services_prvdr-profile' %}" class="h5 company text-dark">Telegram</a>
+                                            <span class="text-muted d-flex align-items-center mt-1"><i data-feather="map-pin" class="fea icon-sm me-1"></i>Australia</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div><!--end col-->
+        
+                            <div class="col-lg-6 col-12">
+                                <div class="job-post rounded shadow bg-white">
+                                    <div class="p-4">
+                                        <a href="{% url 'services-detail-two' %}" class="text-dark title h5">Php Developer</a>
+        
+                                        <p class="text-muted d-flex align-items-center small mt-3"><i data-feather="clock" class="fea icon-sm text-primary me-1"></i>Posted 3 Days ago</p>
+        
+                                        <ul class="list-unstyled d-flex justify-content-between align-items-center mb-0 mt-3">
+                                            <li class="list-inline-item"><span class="badge bg-soft-primary">Remote</span></li>
+                                            <li class="list-inline-item"><span class="text-muted d-flex align-items-center small"><i data-feather="dollar-sign" class="fea icon-sm text-primary me-1"></i>$950 - $1100/mo</span></li>
+                                        </ul>
+                                    </div>
+                                    <div class="d-flex align-items-center p-4 border-top">
+                                        <img src="{% static 'images/company/whatsapp.png' %}" class="avatar avatar-small rounded shadow p-3 bg-white" alt="">
+        
+                                        <div class="ms-3">
+                                            <a href="{% url 'services_prvdr-profile' %}" class="h5 company text-dark">Whatsapp</a>
+                                            <span class="text-muted d-flex align-items-center mt-1"><i data-feather="map-pin" class="fea icon-sm me-1"></i>Australia</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div><!--end col-->
+                        </div><!--end row-->
+        
+                        <div class="row">
+                            <div class="col-12 mt-4 pt-2">
+                                <ul class="pagination justify-content-center mb-0">
+                                    <li class="page-item">
+                                        <a class="page-link" href="#" aria-label="Previous">
+                                            <span aria-hidden="true"><i class="mdi mdi-chevron-left fs-6"></i></span>
+                                        </a>
+                                    </li>
+                                    <li class="page-item"><a class="page-link" href="#">1</a></li>
+                                    <li class="page-item active"><a class="page-link" href="#">2</a></li>
+                                    <li class="page-item"><a class="page-link" href="#">3</a></li>
+                                    <li class="page-item">
+                                        <a class="page-link" href="#" aria-label="Next">
+                                            <span aria-hidden="true"><i class="mdi mdi-chevron-right fs-6"></i></span>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </div><!--end col-->
+                        </div><!--end row-->
+                    </div>
+                </div>
+            </div><!--end container-->
+
+            <div class="container mt-100 mt-60">
+                <div class="row justify-content-center mb-4 pb-2">
+                    <div class="col-12">
+                        <div class="section-title text-center">
+                            <h4 class="title mb-3">Here's why you'll love it Jobnova</h4>
+                            <p class="text-muted para-desc mx-auto mb-0">Search all the open positions on the web. Get your own personalized salary estimate. Read reviews on over 30000+ companies worldwide.</p>
+                        </div>
+                    </div><!--end col-->
+                </div><!--end row-->
+
+                <div class="row">
+                    <div class="col-lg-3 col-md-4 col-sm-6 col-12 mt-4 pt-2">
+                        <div class="position-relative features text-center p-4 rounded shadow bg-white">
+                            <div class="feature-icon bg-soft-primary rounded shadow mx-auto position-relative overflow-hidden d-flex justify-content-center align-items-center">
+                                <i data-feather="phone" class="fea icon-ex-md"></i>
+                            </div>
+    
+                            <div class="mt-4">
+                                <a href="" class="title h5 text-dark">24/7 Support</a>
+                                <p class="text-muted mt-3 mb-0">Many desktop publishing now use and a search for job.</p>
+                                <div class="mt-3">
+                                    <a href="" class="btn btn-link primary text-dark">Read More <i class="mdi mdi-arrow-right"></i></a>
+                                </div>
+                            </div>
+                        </div>
+                    </div><!--end col-->
+                    
+                    <div class="col-lg-3 col-md-4 col-sm-6 col-12 mt-4 pt-2">
+                        <div class="position-relative features text-center p-4 rounded shadow bg-white">
+                            <div class="feature-icon bg-soft-primary rounded shadow mx-auto position-relative overflow-hidden d-flex justify-content-center align-items-center">
+                                <i data-feather="cpu" class="fea icon-ex-md"></i>
+                            </div>
+    
+                            <div class="mt-4">
+                                <a href="" class="title h5 text-dark">Tech & Startup Jobs</a>
+                                <p class="text-muted mt-3 mb-0">Many desktop publishing now use and a search for job.</p>
+                                <div class="mt-3">
+                                    <a href="" class="btn btn-link primary text-dark">Read More <i class="mdi mdi-arrow-right"></i></a>
+                                </div>
+                            </div>
+                        </div>
+                    </div><!--end col-->
+                    
+                    <div class="col-lg-3 col-md-4 col-sm-6 col-12 mt-4 pt-2">
+                        <div class="position-relative features text-center p-4 rounded shadow bg-white">
+                            <div class="feature-icon bg-soft-primary rounded shadow mx-auto position-relative overflow-hidden d-flex justify-content-center align-items-center">
+                                <i data-feather="activity" class="fea icon-ex-md"></i>
+                            </div>
+    
+                            <div class="mt-4">
+                                <a href="" class="title h5 text-dark">Quick & Easy</a>
+                                <p class="text-muted mt-3 mb-0">Many desktop publishing now use and a search for job.</p>
+                                <div class="mt-3">
+                                    <a href="" class="btn btn-link primary text-dark">Read More <i class="mdi mdi-arrow-right"></i></a>
+                                </div>
+                            </div>
+                        </div>
+                    </div><!--end col-->
+                    
+                    <div class="col-lg-3 col-md-4 col-sm-6 col-12 mt-4 pt-2">
+                        <div class="position-relative features text-center p-4 rounded shadow bg-white">
+                            <div class="feature-icon bg-soft-primary rounded shadow mx-auto position-relative overflow-hidden d-flex justify-content-center align-items-center">
+                                <i data-feather="clock" class="fea icon-ex-md"></i>
+                            </div>
+    
+                            <div class="mt-4">
+                                <a href="" class="title h5 text-dark">Save Time</a>
+                                <p class="text-muted mt-3 mb-0">Many desktop publishing now use and a search for job.</p>
+                                <div class="mt-3">
+                                    <a href="" class="btn btn-link primary text-dark">Read More <i class="mdi mdi-arrow-right"></i></a>
+                                </div>
+                            </div>
+                        </div>
+                    </div><!--end col-->
+                </div><!--end row-->
+            </div><!--end container-->
+        </section><!--end section-->
+        <!-- End -->
+
+        <!-- Footer Start -->
+        <footer class="bg-footer">
+            <div class="py-5">
+                <div class="container">
+                    <div class="row align-items-end">
+                        <div class="col-md-7">
+                            <div class="section-title">
+                                <div class="d-flex align-items-center">
+                                    <i data-feather="bookmark" class="fea icon-lg"></i>
+                                    <div class="flex-1 ms-3">
+                                        <h4 class="fw-bold text-white mb-2">Explore a job now!</h4>
+                                        <p class="text-white-50 mb-0">Search all the open positions on the web. Get your own personalized salary estimate. Read reviews on over 30000+ companies worldwide.</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div><!--end col-->
+
+                        <div class="col-md-5 mt-4 mt-sm-0">
+                            <div class="text-md-end ms-5 ms-sm-0">
+                                <a href="{% url 'services-apply' %}" class="btn btn-primary me-1 my-1">Apply Now</a>
+                                <a href="{% url 'contactus' %}" class="btn btn-soft-primary my-1">Contact Us</a>
+                            </div>
+                        </div><!--end col-->
+                    </div><!--end row-->
+                </div><!--end container-->
+            </div><!--end div-->
+           {% endblock %}
