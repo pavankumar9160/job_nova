@@ -17,4 +17,4 @@ jobs:
         server: lab.wemakesoftwares.com
         username: ${{ secrets.ftp_username }}
         password: ${{ secrets.ftp_password }}
-        server-dir: /sandbox.wemakesoftwares.com/job_nova/
+        server-dir: /lab.wemakesoftwares.com/job_nova/
