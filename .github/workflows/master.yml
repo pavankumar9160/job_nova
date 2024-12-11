@@ -17,4 +17,8 @@ jobs:
         server: lab.wemakesoftwares.com
         username: ${{ secrets.ftp_username }}
         password: ${{ secrets.ftp_password }}
+        exclude: |
+            *.log
+            temp/
+            node_modules/
         server-dir: /lab.wemakesoftwares.com/job_nova/
