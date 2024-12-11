@@ -289,6 +289,27 @@
         <script src="{% static 'js/gumshoe.polyfills.min.js' %}"></script>
         <script src="{% static 'js/swiper-bundle.min.js' %}"></script>
         <script src="{% static 'js/swiper.min.js' %}"></script>
-       
+
+      <script>
+        
+        document.addEventListener("DOMContentLoaded", function () { 
+            const logoDarkUrl = "{% static 'images/logo-dark.png' %}";
+            const logoLightUrl = "{% static 'images/logo-light.png' %}";
+            const specificPage = window.location.pathname.includes("artist-profile") || window.location.pathname.includes("services-detail-two") || window.location.pathname.includes("services-detail-three"); 
+           
+            if (specificPage) {
+                const logoElement = document.querySelector("a.logo");
+                const navLight = document.querySelector('.navigation-menu')
+                navLight.classList.remove('nav-light')
+                if (logoElement) {
+                    logoElement.innerHTML = `
+                        <img src="${logoDarkUrl}" class="logo-light-mode" alt="Logo">
+                        <img src="${logoLightUrl}" class="logo-dark-mode" alt="Logo">
+                    `;
+                }
+            }
+        });
+    </script>
+    
     </body>
 </html>
