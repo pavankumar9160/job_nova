@@ -1,11 +1,12 @@
-
 from django.contrib import admin
 from django.urls import path
 from myapp import views
+from django.conf.urls.static import static
+from django.conf import settings
 
 urlpatterns = [
 
-   path('',views.index,name="index"),
+   path('',views.index_three,name="index"),
    path('aboutus/',views.aboutus,name="aboutus"),
    path('blog-detail/',views.blog_detail,name="blog-detail"),
    path('blog-sidebar/',views.blog_sidebar,name="blog-sidebar"),
@@ -25,7 +26,7 @@ urlpatterns = [
    path('helpcenter-guides/',views.helpcenter_guides,name="helpcenter-guides"),
    path('helpcenter-overview/',views.helpcenter_overview,name="helpcenter-overview"),
    path('helpcenter-support/',views.helpcenter_support,name="helpcenter-support"),
-   path('index-three/',views.index_three,name="index-three"),
+   path('index-three/',views.index,name="index-three"),
    path('index-two/',views.index_two,name="index-two"),
    path('services-apply/',views.services_apply,name="services-apply"),
    path('services-categories/',views.services_categories,name="services-categories"),
@@ -40,15 +41,26 @@ urlpatterns = [
    path('services-list-two/',views.services_list_two,name="services-list-two"),
    path('services/',views.services_post,name="services-post"),
    path('lock-screen/',views.lock_screen,name="lock-screen"),
-   path('login/',views.login,name="login"),
+   path('login/',views.login_page,name="login"),
    path('maintenance/',views.maintenance,name="maintenance"),
    path('pricing/',views.pricing,name="pricing"),
    path('privacy/',views.privacy,name="privacy"),
    path('reset-password/',views.reset_password,name="reset-password"),
    path('services/',views.services,name="services"),
-   path('signup/',views.signup,name="signup"),
+   path('signup/',views.signup_page,name="signup"),
    path('terms/',views.terms,name="terms"),
-   
+    path('signup_api/', views.signup_api, name='signup_api'),
+    path('login_api/', views.login_api, name='login_api'),
+    path('logout/', views.logout_view, name='logout'),
+    path('update_personal_details_api/', views.update_personal_details_api, name='update_personal_details_api'),
+    path('update_professional_details_api/', views.update_professional_details_api, name='update_professional_details_api'),
+    path('update_other_details_api/', views.update_other_details_api, name='update_other_details_api'),
+     path('check-profile-completion/', views.check_profile_completion, name='check_profile_completion'),
+      path('search-artists/', views.search_artists, name='search_artists'),
+      path('filter-artists/', views.filter_artists, name='filter_artists'),
+
+
+
 
    
 
@@ -61,5 +73,6 @@ urlpatterns = [
  
   
 ]
-
-
+if settings.DEBUG:
+        urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)        
+        

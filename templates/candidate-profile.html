@@ -13,10 +13,10 @@
                             </div>
                             <div class="candidate-profile d-flex align-items-end justify-content-between mx-2">
                                 <div class="d-flex align-items-end">
-                                    <img src="{% static 'images/team/01.jpg' %}" class="rounded-pill shadow border border-3 avatar avatar-medium" alt="">
+                                    <img src="{% if profile_picture %}{{ profile_picture }}{% else %}{% static 'images/blank_pic.png' %}{% endif %}" class="rounded-pill shadow border border-3 avatar avatar-medium" alt="">
 
                                     <div class="ms-2">
-                                        <h5 class="mb-0">Mr. Calvin Carlo</h5>
+                                        <h5 class="mb-0">{{user.name}}</h5>
                                         <p class="text-muted mb-0">Web Designer</p>
                                     </div>
                                 </div>
@@ -179,17 +179,17 @@
                             <div class="mt-3">
                                 <div class="d-flex align-items-center justify-content-between mt-3">
                                     <span class="d-inline-flex align-items-center text-muted fw-medium"><i data-feather="mail" class="fea icon-sm me-2"></i> Email:</span>
-                                    <span class="fw-medium">thomas@mail.com</span>
+                                    <span class="fw-medium">{{user.email}}</span>
                                 </div>
 
                                 <div class="d-flex align-items-center justify-content-between mt-3">
                                     <span class="d-inline-flex align-items-center text-muted fw-medium"><i data-feather="gift" class="fea icon-sm me-2"></i> D.O.B.:</span>
-                                    <span class="fw-medium">31st Dec, 1996</span>
+                                    <span class="fw-medium">{{additional_info.dob}}</span>
                                 </div>
 
                                 <div class="d-flex align-items-center justify-content-between mt-3">
                                     <span class="d-inline-flex align-items-center text-muted fw-medium"><i data-feather="home" class="fea icon-sm me-2"></i> Address:</span>
-                                    <span class="fw-medium">15 Razy street</span>
+                                    <span class="fw-medium">{{additional_info.address}}</span>
                                 </div>
 
                                 <div class="d-flex align-items-center justify-content-between mt-3">
@@ -199,12 +199,12 @@
 
                                 <div class="d-flex align-items-center justify-content-between mt-3">
                                     <span class="d-inline-flex align-items-center text-muted fw-medium"><i data-feather="globe" class="fea icon-sm me-2"></i> Country:</span>
-                                    <span class="fw-medium">UK</span>
+                                    <span class="fw-medium">{{additional_info.country}}</span>
                                 </div>
 
                                 <div class="d-flex align-items-center justify-content-between mt-3">
                                     <span class="d-inline-flex align-items-center text-muted fw-medium"><i data-feather="phone" class="fea icon-sm me-2"></i> Mobile:</span>
-                                    <span class="fw-medium">(+125) 1542-8452</span>
+                                    <span class="fw-medium">{{user.contact_number}}</span>
                                 </div>
 
                                 <div class="d-flex align-items-center justify-content-between mt-3">
@@ -423,5 +423,28 @@
                     </div><!--end row-->
                 </div><!--end container-->
             </div><!--end div-->
+           <!-- Bootstrap Modal -->
+<div class="modal fade" id="profileAlertModal" tabindex="-1" aria-labelledby="profileAlertModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header bg-dark text-light">
+          <h5 class="modal-title fw-bold" id="profileAlertModalLabel">⚠️ Profile Incomplete</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" style="filter: invert(1);"></button>
+        </div>
+        <div class="modal-body text-center" style="color: #343a40; font-weight: 500;">
+          Your profile is incomplete. Please update your profile.
+        </div>
+        <div class="modal-footer d-flex justify-content-center">
+          <button type="button" class="btn btn-primary" id="updateProfileButton">Ok</button>
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">I will update later</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  
             
 {% endblock %}
+
+
+

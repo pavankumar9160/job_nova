@@ -23,9 +23,10 @@
         <link href="{% static 'css/style.min.css' %}" rel="stylesheet" type="text/css" />
         <link href="{% static 'css/swiper-bundle.min.css' %}" rel="stylesheet" type="text/css" />
         <link href="{% static 'css/swiper.min.css' %}" rel="stylesheet" type="text/css" />
-
         <!-- Custom  Css -->
 	    <link href="{% static 'css/style.css' %}" rel="stylesheet" type="text/css" id="theme-opt" />
+        <link href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css" rel="stylesheet" />
+        <!-- Style css -->
 
 	</head>
 
@@ -52,7 +53,7 @@
                         </a>
                     </div>
                 </div>
-
+                {% if user.is_authenticated %}
                 <ul class="buy-button list-inline mb-0">
                     <li class="list-inline-item ps-1 mb-0">
                         <div class="dropdown">
@@ -75,18 +76,25 @@
                     <li class="list-inline-item ps-1 mb-0">
                         <div class="dropdown dropdown-primary">
                             <button type="button" class="dropdown-toggle btn btn-sm btn-icon btn-pills btn-primary" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                <img src="{% static 'images/team/01.jpg' %}" class="img-fluid rounded-pill" alt="">
+                                <img src="{% if profile_picture %}{{ profile_picture }}{% else %}{% static 'images/blank_pic.png' %}{% endif %}" class="img-fluid rounded-pill" alt="Profile Picture">
                             </button>
                             <div class="dropdown-menu dd-menu dropdown-menu-end bg-white rounded shadow border-0 mt-3">
                                 <a href="{% url 'artist-profile' %}" class="dropdown-item fw-medium fs-6"><i data-feather="user" class="fea icon-sm me-2 align-middle"></i>Profile</a>
                                 <a href="{% url 'artist-profile-setting' %}" class="dropdown-item fw-medium fs-6"><i data-feather="settings" class="fea icon-sm me-2 align-middle"></i>Settings</a>
                                 <div class="dropdown-divider border-top"></div>
                                 <a href="{% url 'lock-screen' %}" class="dropdown-item fw-medium fs-6"><i data-feather="lock" class="fea icon-sm me-2 align-middle"></i>Lockscreen</a>
-                                <a href="{% url 'login' %}" class="dropdown-item fw-medium fs-6"><i data-feather="log-out" class="fea icon-sm me-2 align-middle"></i>Logout</a>
+                                <a href="{% url 'logout' %}" class="dropdown-item fw-medium fs-6"><i data-feather="log-out" class="fea icon-sm me-2 align-middle"></i>Logout</a>
                             </div>
                         </div>
                     </li>
                 </ul>
+                {% else %}
+    <ul class="buy-button list-inline mb-0">
+        <li class="list-inline-item ps-1 mb-0">
+            <a href="{% url 'login' %}" class="btn btn-sm btn-primary">Login</a>
+        </li>
+    </ul>
+{% endif %}
         
                 <div id="navigation">
                     <!-- Navigation Menu-->   
@@ -148,10 +156,10 @@
                         </li>
                 
                         <li class="has-submenu parent-menu-item">
-                            <a href="javascript:void(0)">Candidates</a><span class="menu-arrow"></span>
+                            <a href="javascript:void(0)">Artists</a><span class="menu-arrow"></span>
                             <ul class="submenu">
-                                <li><a href="{% url 'artists' %}" class="sub-menu-item">Candidates</a></li>
-                                <li><a href="{% url 'artist-profile' %}" class="sub-menu-item">Candidate Profile</a></li>
+                                <li><a href="{% url 'artists' %}" class="sub-menu-item">Artists</a></li>
+                                <li><a href="{% url 'artist-profile' %}" class="sub-menu-item">Artist Profile</a></li>
                                 <li><a href="{% url 'artist-profile-setting' %}" class="sub-menu-item">Profile Setting</a></li>
                             </ul>
                         </li>
@@ -289,9 +297,13 @@
         <script src="{% static 'js/gumshoe.polyfills.min.js' %}"></script>
         <script src="{% static 'js/swiper-bundle.min.js' %}"></script>
         <script src="{% static 'js/swiper.min.js' %}"></script>
-
-      <script>
+        <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+        <!-- Toastr JS -->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+         <script src="{% static 'js/customscript.js' %}"></script>
         
+      <script>
+        var STATIC_URL = "{% static '' %}";
         document.addEventListener("DOMContentLoaded", function () { 
             const logoDarkUrl = "{% static 'images/logo-dark.png' %}";
             const logoLightUrl = "{% static 'images/logo-light.png' %}";

@@ -50,6 +50,12 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
+RECAPTCHA_SECRET_KEY = '6LeAV5oqAAAAAL40pJA0L-cSwYlDCA07ZyWWflXc'
+# settings.py
+AUTH_USER_MODEL = 'myapp.ArtistMasterBasic' 
+
+LOGIN_URL = '/login/'
+
 ROOT_URLCONF = 'job_nova.urls'
 import os
 TEMPLATES = [
@@ -113,6 +119,16 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
+
+AUTHENTICATION_BACKENDS = [  # Replace 'myapp' with your actual app name
+    'django.contrib.auth.backends.ModelBackend',
+     'myapp.backends.EmailOrContactBackend',
+]
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+
+# Media settings
+MEDIA_URL = '/media/'  # URL for accessing media files
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media') 
 
 # Internationalization
 # https://docs.djangoproject.com/en/5.1/topics/i18n/

@@ -9,11 +9,9 @@ https://docs.djangoproject.com/en/5.1/howto/deployment/wsgi/
 
 import os
 from django.core.wsgi import get_wsgi_application
-from dj_static import Cling  # Import Cling to serve static files
+from dj_static import Cling 
 
-# Set the default settings module for the 'job_nova' project
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'job_nova.settings')
 
-# Wrap the application with Cling to handle static files
 application = Cling(get_wsgi_application())
 
