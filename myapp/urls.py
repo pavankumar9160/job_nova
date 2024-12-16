@@ -15,6 +15,8 @@ urlpatterns = [
    path('artist-profile-setting_updated_one/',views.artist_profile_setting_updated_one,name="artist-profile-setting_updated_one"),
    path('artist-profile-setting/',views.artist_profile_setting,name="artist-profile-setting"),
    path('artist-profile/',views.artist_profile,name="artist-profile"),
+   path('artist-profile/<int:id>/',views.artist_profile_Id,name="artist-profile_id"),
+
    path('artists/',views.artists,name="artists"),
    path('career/',views.career,name="career"),
    path('comingsoon/',views.comingsoon,name="comingsoon"),

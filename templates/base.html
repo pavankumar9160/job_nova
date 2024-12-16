@@ -321,6 +321,14 @@
                 }
             }
         });
+
+ 
+            {% if is_logged_in_user %}
+                var is_logged_in_user = true;
+            {% else %}
+                var is_logged_in_user = false;
+            {% endif %}
+    
     </script>
     
     </body>

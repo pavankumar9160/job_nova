@@ -26,7 +26,7 @@
                             </div>
                         </div>
                         <div class="ms-2">
-                            <h5 class="mb-0">{{user.name}}</h5>
+                            <h5 class="mb-0">{{ full_name|default:user.name }}</h5>
                             <p class="text-muted mb-0">Author & Writing Consultant</p>
                         </div>
                     </div>
@@ -73,13 +73,13 @@
                             <div class="col-md-6">
                                 <div class="mb-3">
                                     <label class="form-label fw-semibold">Phone Number:<span class="text-danger">*</span></label>
-                                    <input name="phone" id="phone" type="text" class="form-control" placeholder="Phone Number">
+                                    <input name="phone" id="phone" value="{{ user.contact_number }}" type="text" class="form-control" placeholder="Phone Number">
                                 </div>
                             </div>
                             <div class="col-md-6">
                                 <div class="mb-3">
                                     <label class="form-label fw-semibold">Email Address:<span class="text-danger">*</span></label>
-                                    <input name="email" id="email2" type="email" class="form-control" placeholder="Email Address">
+                                    <input name="email" id="email2" type="email" value="{{ user.email }}" class="form-control" placeholder="Email Address">
                                 </div>
                             </div>
                             <div class="col-md-6">
@@ -170,6 +170,7 @@
                             </div>
                             <div class="col-12">
                                 <input type="submit" class=" btn btn-primary" value="Update Details">
+                                <button type="button" class="btn btn-secondary" id="previewButton">Preview</button>
                             </div>
                         </div>
                     </form>
@@ -224,28 +225,73 @@
                                     <div class="col-lg-12">
                                         <div class="mb-3">
                                             <label class="fw-semibold">Skills:</label>
-                                            <div>
-                                                <label class="checkbox-inline mr-3">
-                                                    <input type="checkbox" value="Python" class="skill-checkbox"> Python
+                                            <div id="custom-multi-select" style="border: 1px solid #ced4da; padding: 15px; border-radius: 10px; max-height: 200px; overflow-y: auto;  scrollbar-width: 1px; -ms-overflow-style: none;">
+                                                <label style="display: block; margin: 5px 0; font-size: 14px;">
+                                                    <input type="checkbox" value="Writer" class="skill-checkbox" style="margin-right: 8px;"> Writer
                                                 </label>
-                                                <label class="checkbox-inline mr-3">
-                                                    <input type="checkbox" value="Javascript" class="skill-checkbox"> Javascript
+                                                <label style="display: block; margin: 5px 0; font-size: 14px;">
+                                                    <input type="checkbox" value="Editor" class="skill-checkbox" style="margin-right: 8px;"> Editor
                                                 </label>
-                                                <label class="checkbox-inline mr-3">
-                                                    <input type="checkbox" value="Java" class="skill-checkbox"> Java
+                                                <label style="display: block; margin: 5px 0; font-size: 14px;">
+                                                    <input type="checkbox" value="Poet" class="skill-checkbox" style="margin-right: 8px;"> Poet
                                                 </label>
-                                                <label class="checkbox-inline mr-3">
-                                                    <input type="checkbox" value="React Js" class="skill-checkbox"> React Js
+                                                <label style="display: block; margin: 5px 0; font-size: 14px;">
+                                                    <input type="checkbox" value="Blogger" class="skill-checkbox" style="margin-right: 8px;"> Blogger
                                                 </label>
-                                                <label class="checkbox-inline mr-3">
-                                                    <input type="checkbox" value="HTML" class="skill-checkbox"> HTML
+                                                <label style="display: block; margin: 5px 0; font-size: 14px;">
+                                                    <input type="checkbox" value="Novelist" class="skill-checkbox" style="margin-right: 8px;"> Novelist
                                                 </label>
-                                                <label class="checkbox-inline mr-3">
-                                                    <input type="checkbox" value="CSS" class="skill-checkbox"> CSS
+                                                <label style="display: block; margin: 5px 0; font-size: 14px;">
+                                                    <input type="checkbox" value="Copywriter" class="skill-checkbox" style="margin-right: 8px;"> Copywriter
+                                                </label>
+                                                <label style="display: block; margin: 5px 0; font-size: 14px;">
+                                                    <input type="checkbox" value="Content Creator" class="skill-checkbox" style="margin-right: 8px;"> Content Creator
+                                                </label>
+                                                <label style="display: block; margin: 5px 0; font-size: 14px;">
+                                                    <input type="checkbox" value="Short Story Writer" class="skill-checkbox" style="margin-right: 8px;"> Short Story Writer
+                                                </label>
+                                                <label style="display: block; margin: 5px 0; font-size: 14px;">
+                                                    <input type="checkbox" value="Motivational Speaker" class="skill-checkbox" style="margin-right: 8px;"> Motivational Speaker
+                                                </label>
+                                                <label style="display: block; margin: 5px 0; font-size: 14px;">
+                                                    <input type="checkbox" value="Literary Critic" class="skill-checkbox" style="margin-right: 8px;"> Literary Critic
+                                                </label>
+                                                <label style="display: block; margin: 5px 0; font-size: 14px;">
+                                                    <input type="checkbox" value="Ghostwriter" class="skill-checkbox" style="margin-right: 8px;"> Ghostwriter
+                                                </label>
+                                                <label style="display: block; margin: 5px 0; font-size: 14px;">
+                                                    <input type="checkbox" value="Screenwriter" class="skill-checkbox" style="margin-right: 8px;"> Screenwriter
+                                                </label>
+                                                <label style="display: block; margin: 5px 0; font-size: 14px;">
+                                                    <input type="checkbox" value="Audiobook Narrator" class="skill-checkbox" style="margin-right: 8px;"> Audiobook Narrator
+                                                </label>
+                                                <label style="display: block; margin: 5px 0; font-size: 14px;">
+                                                    <input type="checkbox" value="Book Designer" class="skill-checkbox" style="margin-right: 8px;"> Book Designer
+                                                </label>
+                                                <label style="display: block; margin: 5px 0; font-size: 14px;">
+                                                    <input type="checkbox" value="Translator" class="skill-checkbox" style="margin-right: 8px;"> Translator
                                                 </label>
                                             </div>
+                                            <small class="text-muted">You can select up to 6 skills.</small>
                                         </div>
                                     </div>
+                                    
+                                    
+                                    <script>
+                                        // Limit selection to 6 checkboxes
+                                        const checkboxes = document.querySelectorAll('.skill-checkbox');
+                                        checkboxes.forEach((checkbox) => {
+                                            checkbox.addEventListener('change', function () {
+                                                const selectedCheckboxes = document.querySelectorAll('.skill-checkbox:checked');
+                                                if (selectedCheckboxes.length > 6) {
+                                                    alert("You can only select up to 6 skills.");
+                                                    this.checked = false; // Uncheck the last selected one
+                                                }
+                                            });
+                                        });
+                                    </script>
+                                    
+                                    
                                     
                                     
                                     
@@ -354,4 +400,23 @@
         </div>
     </div>
 </section>
+
+<!-- Preview Modal (or section) -->
+<div class="modal fade" id="previewModal" tabindex="-1" aria-labelledby="previewModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-fullscreen">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="previewModalLabel">Profile Preview</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body" id="previewContent">
+                <!-- Preview content will be dynamically inserted here -->
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 {% endblock %}

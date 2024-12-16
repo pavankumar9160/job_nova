@@ -75,10 +75,16 @@ def artist_profile_setting_updated_one(request):
     try:
         additional_info = ArtistMasterAdditional.objects.get(user=user)
         profile_picture = additional_info.profile_picture.url if additional_info.profile_picture else None
+        firstname = additional_info.firstname if additional_info.firstname else None
+        lastname = additional_info.lastname if additional_info.lastname else None
+        full_name = f"{firstname} {lastname}" if firstname and lastname else (firstname or lastname)
+
+        full_name = full_name.strip() if full_name else None
+
     except ArtistMasterAdditional.DoesNotExist:
         profile_picture = None 
       
-    return render(request, 'candidate-profile-setting_updated_one.html',{"user":user,'profile_picture': profile_picture})
+    return render(request, 'candidate-profile-setting_updated_one.html',{"user":user,'profile_picture': profile_picture,'full_name':full_name})
 
 def artist_profile_setting(request):
     user = request.user
@@ -91,15 +97,65 @@ def artist_profile_setting(request):
     return render(request, 'candidate-profile-setting.html',{"user":user,'profile_picture': profile_picture})
 
 
+
+
+
 def artist_profile(request):
     user = request.user
+    profile_picture = None
+    additional_info = None
     try:
         additional_info = ArtistMasterAdditional.objects.get(user=user)
         profile_picture = additional_info.profile_picture.url if additional_info.profile_picture else None
+        firstname = additional_info.firstname if additional_info.firstname else None
+        lastname = additional_info.lastname if additional_info.lastname else None
+        full_name = f"{firstname} {lastname}" if firstname and lastname else (firstname or lastname)
+
+        full_name = full_name.strip() if full_name else None
     except ArtistMasterAdditional.DoesNotExist:
         profile_picture = None 
     
-    return render(request, 'candidate-profile.html',{"user":user,'profile_picture': profile_picture,'additional_info':additional_info})
+    return render(request, 'candidate-profile.html',{"user":user,'profile_picture': profile_picture,'additional_info':additional_info,'full_name':full_name, "is_logged_in_user": True,})
+
+
+from django.shortcuts import get_object_or_404
+from .models import ArtistMasterBasic, ArtistMasterAdditional
+
+def artist_profile_Id(request, id):
+    
+    logged_in_user = request.user
+    profile_picture = None
+    
+    try:
+        logged_in_additional_info = ArtistMasterAdditional.objects.get(user=logged_in_user)
+        profile_picture = logged_in_additional_info.profile_picture.url if logged_in_additional_info.profile_picture else None
+    except ArtistMasterAdditional.DoesNotExist:
+        profile_picture = None
+        
+    additional_info_user = None
+    profile_picture_user = None
+    full_name_user = None
+    artist_basic = get_object_or_404(ArtistMasterBasic, id=id)
+    
+    try:
+        additional_info_user = ArtistMasterAdditional.objects.get(user=artist_basic)
+        profile_picture_user = additional_info_user.profile_picture.url if additional_info_user.profile_picture else None
+        firstname_user = additional_info_user.firstname if additional_info_user.firstname else None
+        lastname_user = additional_info_user.lastname if additional_info_user.lastname else None
+        full_name_user = f"{firstname_user} {lastname_user}".strip() if firstname_user or lastname_user else None
+    except ArtistMasterAdditional.DoesNotExist:
+        profile_picture_user = None
+        full_name_user = None
+        
+    return render(request, 'candidate-profile.html', {
+        'user': artist_basic,
+        "profile_picture_user": profile_picture_user,
+        "additional_info_user": additional_info_user,
+        "full_name_user": full_name_user,
+        "is_logged_in_user": False,
+        "profile_picture":profile_picture,
+    })
+
 
 from django.db.models import Count
 
@@ -129,27 +185,22 @@ def artists(request):
         })
     skill_counts = (
         ArtistMasterAdditional.objects.prefetch_related('skills')
-        .values('skills__name')  # Group by skill name
-        .annotate(count=Count('skills'))  # Count each skill
-        .order_by('-count')  # Optional: Order by descending count
+        .values('skills__name')  
+        .annotate(count=Count('skills'))  
+        .order_by('-count') 
     )
 
     # Transform skill_counts to a dictionary for easier usage in templates
-    skill_counts_dict = {item['skills__name']: item['count'] for item in skill_counts if item['skills__name']}
+    skill_counts_dict = {item['skills__name'].replace(' ', '_'): item['count'] for item in skill_counts if item['skills__name']}
 
     context = {
         'user': user,
         'profile_picture': profile_picture,
         'artists_with_details': artists_with_details,
-        'skill_counts': skill_counts_dict,  # Add skill counts to the context
+        'skill_counts': skill_counts_dict, 
     }    
 
-    context = {
-        'user': user,
-        'profile_picture': profile_picture,
-        'artists_with_details': artists_with_details,
-        'skill_counts': skill_counts_dict
-    }
+    
     
     return render(request, 'candidates.html', context)
 
@@ -805,7 +856,6 @@ def search_artists(request):
     else:
         artists = ArtistMasterBasic.objects.all().prefetch_related('additional_info', 'additional_info__skills')
 
-    # Serialize the artists' data
     artists_data = []
     for artist in artists:
         additional_info = artist.additional_info.first()  
@@ -815,6 +865,7 @@ def search_artists(request):
 
         artists_data.append({
             'name': artist.name,
+            'id':artist.id,
             'skills': skills,  # Include skills in the response
             'job_title': additional_info.job_title if additional_info else '',
             'profile_picture': additional_info.profile_picture.url if additional_info.profile_picture else ''
@@ -840,8 +891,11 @@ def filter_artists(request):
         artists = artists.filter(country=location)
         
     if selected_skills:
+        
+        skill_filter = Q()
         for skill in selected_skills:
-            artists = artists.filter(skills__name=skill)   
+            skill_filter |= Q(skills__name=skill)  
+        artists = artists.filter(skill_filter)
 
     if artists.exists():
         artist_data = []
@@ -850,6 +904,7 @@ def filter_artists(request):
             skills = [skill.name for skill in additional_info.skills.all()] if additional_info else []
             artist_data.append({
                 'name': artist.user.name,
+                'id':artist.user.id,
                 'description': artist.description,
                 'skills': skills,
                 'job_title': artist.job_title   ,
@@ -859,6 +914,5 @@ def filter_artists(request):
 
         return JsonResponse({'artists_with_details': artist_data})
     else:
-        # Return an empty list if no artists match the filters
         return JsonResponse({'artists_with_details': []})
 
