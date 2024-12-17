@@ -121,6 +121,19 @@ AUTH_PASSWORD_VALIDATORS = [
 ]
 
 
+# settings.py
+
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+EMAIL_HOST_USER = 'pk939317@gmail.com'
+EMAIL_HOST_PASSWORD = 'qpqo hozw edur reyn'
+DEFAULT_FROM_EMAIL = 'support@creativecomune.com'
+
+
+
+
 AUTHENTICATION_BACKENDS = [  # Replace 'myapp' with your actual app name
     'django.contrib.auth.backends.ModelBackend',
      'myapp.backends.EmailOrContactBackend',

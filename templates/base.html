@@ -79,8 +79,8 @@
                                 <img src="{% if profile_picture %}{{ profile_picture }}{% else %}{% static 'images/blank_pic.png' %}{% endif %}" class="img-fluid rounded-pill" alt="Profile Picture">
                             </button>
                             <div class="dropdown-menu dd-menu dropdown-menu-end bg-white rounded shadow border-0 mt-3">
-                                <a href="{% url 'artist-profile' %}" class="dropdown-item fw-medium fs-6"><i data-feather="user" class="fea icon-sm me-2 align-middle"></i>Profile</a>
-                                <a href="{% url 'artist-profile-setting' %}" class="dropdown-item fw-medium fs-6"><i data-feather="settings" class="fea icon-sm me-2 align-middle"></i>Settings</a>
+                                <a href="{% url 'artist-profile_updated_one' %}" class="dropdown-item fw-medium fs-6"><i data-feather="user" class="fea icon-sm me-2 align-middle"></i>Profile</a>
+                                {% comment %} <a href="{% url 'artist-profile-setting' %}" class="dropdown-item fw-medium fs-6"><i data-feather="settings" class="fea icon-sm me-2 align-middle"></i>Settings</a> {% endcomment %}
                                 <div class="dropdown-divider border-top"></div>
                                 <a href="{% url 'lock-screen' %}" class="dropdown-item fw-medium fs-6"><i data-feather="lock" class="fea icon-sm me-2 align-middle"></i>Lockscreen</a>
                                 <a href="{% url 'logout' %}" class="dropdown-item fw-medium fs-6"><i data-feather="log-out" class="fea icon-sm me-2 align-middle"></i>Logout</a>
@@ -103,12 +103,12 @@
                             <a href="javascript:void(0)">Home</a><span class="menu-arrow"></span>
                             <ul class="submenu">
                                 <li><a href="{% url 'index' %}" class="sub-menu-item">Hero One</a></li>
-                                <li><a href="{% url 'index-two' %}" class="sub-menu-item">Hero Two</a></li>
-                                <li><a href="{% url 'index-three' %}" class="sub-menu-item">Hero Three</a></li>
+                                {% comment %} <li><a href="{% url 'index-two' %}" class="sub-menu-item">Hero Two</a></li>
+                                <li><a href="{% url 'index-three' %}" class="sub-menu-item">Hero Three</a></li> {% endcomment %}
                             </ul>
                         </li>
 
-                        <li class="has-submenu parent-parent-menu-item"><a href="javascript:void(0)"> Jobs </a><span class="menu-arrow"></span>
+                        {% comment %} <li class="has-submenu parent-parent-menu-item"><a href="javascript:void(0)"> Jobs </a><span class="menu-arrow"></span>
                             <ul class="submenu">
                                 <li><a href="{% url 'services-categories' %}" class="sub-menu-item">Job Categories</a></li>
                         
@@ -145,22 +145,22 @@
                 
                                 <li><a href="{% url 'career' %}" class="sub-menu-item">Career </a></li>
                             </ul>  
-                        </li>
+                        </li> {% endcomment %}
                 
-                        <li class="has-submenu parent-menu-item">
+                        {% comment %} <li class="has-submenu parent-menu-item">
                             <a href="javascript:void(0)">Employers</a><span class="menu-arrow"></span>
                             <ul class="submenu">
                                 <li><a href="{% url 'services_prvdr' %}" class="sub-menu-item">Employers</a></li>
                                 <li><a href="{% url 'services_prvdr-profile' %}" class="sub-menu-item">Employer Profile</a></li>
                             </ul>
-                        </li>
+                        </li> {% endcomment %}
                 
                         <li class="has-submenu parent-menu-item">
                             <a href="javascript:void(0)">Artists</a><span class="menu-arrow"></span>
                             <ul class="submenu">
                                 <li><a href="{% url 'artists' %}" class="sub-menu-item">Artists</a></li>
-                                <li><a href="{% url 'artist-profile' %}" class="sub-menu-item">Artist Profile</a></li>
-                                <li><a href="{% url 'artist-profile-setting' %}" class="sub-menu-item">Profile Setting</a></li>
+                                <li><a href="{% url 'artist-profile_updated_one' %}" class="sub-menu-item">Artist Profile</a></li>
+                                {% comment %} <li><a href="{% url 'artist-profile-setting' %}" class="sub-menu-item">Profile Setting</a></li> {% endcomment %}
                             </ul>
                         </li>
                 

@@ -6,7 +6,7 @@ from django.conf import settings
 
 urlpatterns = [
 
-   path('',views.index_three,name="index"),
+   path('',views.index,name="index"),
    path('aboutus/',views.aboutus,name="aboutus"),
    path('blog-detail/',views.blog_detail,name="blog-detail"),
    path('blog-sidebar/',views.blog_sidebar,name="blog-sidebar"),
@@ -15,7 +15,7 @@ urlpatterns = [
    path('artist-profile-setting_updated_one/',views.artist_profile_setting_updated_one,name="artist-profile-setting_updated_one"),
    path('artist-profile-setting/',views.artist_profile_setting,name="artist-profile-setting"),
    path('artist-profile/',views.artist_profile,name="artist-profile"),
-   path('artist-profile/<int:id>/',views.artist_profile_Id,name="artist-profile_id"),
+   path('artist-profile_updated_one/<int:id>/',views.artist_profile_updated_one_Id,name="artist-profile_updated_one_id"),
 
    path('artists/',views.artists,name="artists"),
    path('career/',views.career,name="career"),
@@ -47,7 +47,7 @@ urlpatterns = [
    path('maintenance/',views.maintenance,name="maintenance"),
    path('pricing/',views.pricing,name="pricing"),
    path('privacy/',views.privacy,name="privacy"),
-   path('reset-password/',views.reset_password,name="reset-password"),
+   path('reset-password/',views.reset_password_page,name="reset-password"),
    path('services/',views.services,name="services"),
    path('signup/',views.signup_page,name="signup"),
    path('terms/',views.terms,name="terms"),
@@ -60,6 +60,8 @@ urlpatterns = [
      path('check-profile-completion/', views.check_profile_completion, name='check_profile_completion'),
       path('search-artists/', views.search_artists, name='search_artists'),
       path('filter-artists/', views.filter_artists, name='filter_artists'),
+      path('reset-your-password/',views.reset_user_password,name="reset-your-password"),
+      path('reset-password/<int:user_id>/<str:token>/',views.reset_password, name='reset_password'),
 
 
 

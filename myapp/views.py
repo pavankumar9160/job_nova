@@ -2,6 +2,8 @@ from datetime import datetime
 
 from django.shortcuts import redirect, render
 
+
+
 # Create your views here.
 
 
@@ -59,7 +61,7 @@ def blogs(request):
     
     return render(request, 'blogs.html',{"user":user,'profile_picture': profile_picture})
 
-def artist_profile_updated_one(request):
+def artist_profile(request):
     user = request.user
     try:
         additional_info = ArtistMasterAdditional.objects.get(user=user)
@@ -68,7 +70,7 @@ def artist_profile_updated_one(request):
         profile_picture = None 
     
     
-    return render(request, 'candidate-profile_updated_one.html',{"user":user,'profile_picture': profile_picture})
+    return render(request, 'candidate-profile.html',{"user":user,'profile_picture': profile_picture})
 
 def artist_profile_setting_updated_one(request):
     user = request.user
@@ -100,10 +102,11 @@ def artist_profile_setting(request):
 
 
 
-def artist_profile(request):
+def artist_profile_updated_one(request):
     user = request.user
     profile_picture = None
     additional_info = None
+    skills = []
     try:
         additional_info = ArtistMasterAdditional.objects.get(user=user)
         profile_picture = additional_info.profile_picture.url if additional_info.profile_picture else None
@@ -112,19 +115,26 @@ def artist_profile(request):
         full_name = f"{firstname} {lastname}" if firstname and lastname else (firstname or lastname)
 
         full_name = full_name.strip() if full_name else None
+        skills = additional_info.skills.all()
     except ArtistMasterAdditional.DoesNotExist:
         profile_picture = None 
     
-    return render(request, 'candidate-profile.html',{"user":user,'profile_picture': profile_picture,'additional_info':additional_info,'full_name':full_name, "is_logged_in_user": True,})
+    return render(request,
+                  'candidate-profile_updated_one.html',
+                  {"user":user,'profile_picture': profile_picture,
+                   'additional_info':additional_info,'full_name':full_name, 
+                   "is_logged_in_user": True,
+                   'skills': skills})
 
 
 from django.shortcuts import get_object_or_404
 from .models import ArtistMasterBasic, ArtistMasterAdditional
 
-def artist_profile_Id(request, id):
+def artist_profile_updated_one_Id(request, id):
     
     logged_in_user = request.user
     profile_picture = None
+    skills = []
     
     try:
         logged_in_additional_info = ArtistMasterAdditional.objects.get(user=logged_in_user)
@@ -143,17 +153,20 @@ def artist_profile_Id(request, id):
         firstname_user = additional_info_user.firstname if additional_info_user.firstname else None
         lastname_user = additional_info_user.lastname if additional_info_user.lastname else None
         full_name_user = f"{firstname_user} {lastname_user}".strip() if firstname_user or lastname_user else None
+        skills = additional_info_user.skills.all()
     except ArtistMasterAdditional.DoesNotExist:
         profile_picture_user = None
         full_name_user = None
         
-    return render(request, 'candidate-profile.html', {
+    return render(request, 'candidate-profile_updated_one.html', {
         'user': artist_basic,
         "profile_picture_user": profile_picture_user,
         "additional_info_user": additional_info_user,
         "full_name_user": full_name_user,
         "is_logged_in_user": False,
         "profile_picture":profile_picture,
+        'skills': skills
+        
     })
 
 
@@ -287,12 +300,14 @@ def helpcenter_overview(request):
     return render(request, 'helpcenter-overview.html',{"user":user,'profile_picture': profile_picture})
 
 def helpcenter_support(request):
+    profile_picture = None 
     user = request.user
-    try:
-        additional_info = ArtistMasterAdditional.objects.get(user=user)
-        profile_picture = additional_info.profile_picture.url if additional_info.profile_picture else None
-    except ArtistMasterAdditional.DoesNotExist:
-        profile_picture = None 
+    if user.is_authenticated: 
+        try:
+            additional_info = ArtistMasterAdditional.objects.get(user=user)
+            profile_picture = additional_info.profile_picture.url if additional_info.profile_picture else None
+        except ArtistMasterAdditional.DoesNotExist:
+            profile_picture = None 
     
     return render(request, 'helpcenter-support.html',{"user":user,'profile_picture': profile_picture})
 
@@ -312,11 +327,13 @@ def index_three(request):
 
 def index_two(request):
     user = request.user
-    try:
-        additional_info = ArtistMasterAdditional.objects.get(user=user)
-        profile_picture = additional_info.profile_picture.url if additional_info.profile_picture else None
-    except ArtistMasterAdditional.DoesNotExist:
-        profile_picture = None 
+    profile_picture = None
+    if user.is_authenticated:  
+        try:
+            additional_info = ArtistMasterAdditional.objects.get(user=user)
+            profile_picture = additional_info.profile_picture.url if additional_info.profile_picture else None
+        except ArtistMasterAdditional.DoesNotExist:
+            profile_picture = None 
     
     return render(request, 'index-two.html',{"user":user,'profile_picture': profile_picture})
 
@@ -456,7 +473,7 @@ def lock_screen(request):
 
 def login_page(request):
     if request.user.is_authenticated:
-         return redirect('/artist-profile/')
+         return redirect('/artist-profile_updated_one/')
     
     return render(request,'login.html')
 
@@ -484,7 +501,10 @@ def privacy(request):
     
     return render(request, 'privacy.html',{"user":user,'profile_picture': profile_picture})
 
-def reset_password(request):
+from django.views.decorators.csrf import csrf_exempt
+
+@csrf_exempt
+def reset_password_page(request):
     
     return render(request, 'reset-password.html')
 
@@ -571,7 +591,7 @@ def login_api(request):
         if user is not None:        
             login(request,user)
             
-            return JsonResponse({'message': 'Login successful', 'redirect_url': '/artist-profile/'})
+            return JsonResponse({'message': 'Login successful', 'redirect_url': '/artist-profile_updated_one/'})
         
         else:
             return JsonResponse({'error': 'Invalid credentials'}, status=400)
@@ -916,3 +936,106 @@ def filter_artists(request):
     else:
         return JsonResponse({'artists_with_details': []})
 
+from django.views.decorators.csrf import csrf_exempt
+from django.contrib.auth.tokens import PasswordResetTokenGenerator
+
+from django.core.mail import send_mail
+@csrf_exempt
+def reset_user_password(request):
+    if request.method == "POST":
+        email = request.POST.get("email")
+
+        if not email:
+            return JsonResponse({"error": "Email field is empty."}, status=400)
+
+        try:
+            user = ArtistMasterBasic.objects.get(email=email)
+        except ArtistMasterBasic.DoesNotExist:
+            return JsonResponse({"error": "Email does not exist in our records."}, status=404)
+
+        # Generate the reset token
+        token_generator = PasswordResetTokenGenerator()
+        token = token_generator.make_token(user)
+        
+        # Generate the reset link
+        reset_link = f"http://127.0.0.1:8000/reset-password/{user.pk}/{token}/"  # Localhost link for testing
+        subject = "Reset Your Password - CreativeComune.com"
+        message = (
+            "Hello,\n\n"
+            "We received a request to reset your password for your account at CreativeComune.com.\n\n"
+            "To reset your password, click the link below:\n\n"
+            f"{reset_link}\n\n"
+            "This link will expire in 1 hour. If you did not request a password reset, please ignore this email, and your password will remain unchanged.\n\n"
+            "If you need help, feel free to contact our support team at support@creativecomune.com.\n\n"
+            "Thank you,\n"
+            "The CreativeComune Team"
+        )
+       
+        try:
+            send_mail(
+                subject=subject,
+                message=message,
+                from_email="support@creativecomune.com",  # Uses the sender email
+                recipient_list=[email],
+                fail_silently=False,
+            )
+            return JsonResponse({"message": "Password reset email sent successfully."})
+        except Exception as e:
+            return JsonResponse({"error": f"Failed to send email: {str(e)}"}, status=500)
+        
+        
+        
+from django.contrib.auth.tokens import PasswordResetTokenGenerator
+from django.http import JsonResponse
+from django.contrib.auth.hashers import make_password
+from .models import ArtistMasterBasic  # Import your custom user model
+
+@csrf_exempt
+def reset_password(request, user_id, token):
+    if request.method == "POST":
+        new_password = request.POST.get("password")
+
+        if not new_password:
+            return JsonResponse({"error": "Password field is empty."}, status=400)
+
+        try:
+            user = ArtistMasterBasic.objects.get(pk=user_id)
+        except ArtistMasterBasic.DoesNotExist:
+            return JsonResponse({"error": "Invalid user."}, status=404)
+
+        token_generator = PasswordResetTokenGenerator()
+        if not token_generator.check_token(user, token):
+            return JsonResponse({"error": "Invalid or expired token."}, status=400)
+
+        # Reset the password
+        user.password = make_password(new_password)
+        user.save()
+        
+        subject = "Your Password Has Been Reset Successfully - CreativeComune.com"
+        message = (
+            "Hello,\n\n"
+            "Your password for your CreativeComune.com account has been reset successfully. "
+            "You can now log in using your new password.\n\n"
+            "If you did not perform this action, please contact our support team immediately at support@creativecomune.com to secure your account.\n\n"
+            "For your security, we recommend keeping your password safe and updating it regularly.\n\n"
+            "Thank you,\n"
+            "The CreativeComune Team"
+        )
+
+        try:
+            send_mail(
+                subject=subject,
+                message=message,
+                from_email="support@creativecomune.com",  # Uses the sender email
+                recipient_list=[user.email],
+                fail_silently=False,
+            )
+            return JsonResponse({"message": "Password has been reset successfully, and the confirmation email has been sent."})
+        except Exception as e:
+            return JsonResponse({"error": f"Failed to send email: {str(e)}"}, status=500)
+    
+    
+    return render(request, "helpcenter-support.html", {"user_id": user_id, "token": token})
+        
+
+        

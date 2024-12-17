@@ -22,19 +22,91 @@
         <link href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css" rel="stylesheet" />
         <!-- Style css -->
 
-<style>
-    @media (min-width: 768px) {
-        #Signupform_container{
-            height: 90vh;
-             overflow-y: auto;
-             scrollbar-width: none;
-              -ms-overflow-style: none;
-              max-width: 100%;
+        <style>
+            @media (min-width: 768px) {
+                #Signupform_container {
+                    height: 90vh;
+                    overflow-y: auto;
+                    max-width: 100%;
+                    scrollbar-width: none;
+                    -ms-overflow-style: none;
+                }
             
-        }
-       
-      }
-</style>
+                /* Form-row adjustments for large screens */
+                .form-row {
+                    display: flex;
+                    align-items: center;
+                    justify-content: space-between;
+                }
+            
+                .form-label {
+                    width: 30%; /* Adjust label width */
+                    margin-right: 15px;
+                }
+            
+                .form-control {
+                    width: 65%; /* Adjust input field width */
+                }
+            
+                /* Centering the Register your account text */
+                h6.mb-3.text-uppercase.fw-semibold {
+                    text-align: center;
+                }
+            
+                /* Aligning reCAPTCHA with labels and input fields */
+                .g-recaptcha {
+
+                    margin-top: 15px;
+                    width: 100%; /* Set width to match label/input */
+                    display: flex; /* Reset flexbox styling */
+                    justify-content:center;
+                }
+            
+                .form-check {
+                    display: flex; 
+                    
+                    justify-content: center;
+                    width: 80%;
+                    margin-top: 15px;
+                    
+                }
+            
+                .form-check-input {
+                    margin-right: 10px; /* Space between checkbox and text */
+                    display: inline-block; /* Ensure checkbox is inline */
+
+                }
+            
+                .form-check-label {
+                    white-space: nowrap; /* Keep the label text on a single line */
+                    text-align: left; /* Align text to the left */
+                }
+            
+                /* Adjust the Register button size and center it */
+                .btn-primary {
+                    padding: 10px 20px; /* Adjust size */
+                    width: auto; /* Allow the button to resize based on content */
+                    margin: 15px auto 0; /* Center the button */
+                    display: block; /* Ensure it's a block element for centering */
+                }
+            }
+            
+            @media (max-width: 768px) {
+                /* For smaller screens, revert back to default styling */
+                .form-row {
+                    display: block;
+                }
+            
+                .form-label,
+                .form-control {
+                    width: 100%;
+                }
+            }
+            
+            
+            
+         </style>
+
     </head>
 
     <body>        
@@ -42,49 +114,51 @@
             <div class="bg-overlay bg-linear-gradient-2"></div>
             <div class="container">
                 <div class="row justify-content-center align-items-center" style="height: 100vh;">
-                    <div class="col-lg-4 col-md-5 col-12">
+                    <div class="col-lg-6 col-md-5 col-12">
                         <div class="p-4 bg-white rounded shadow-md mx-auto w-100" id="Signupform_container">
-                            <form id ="signupForm">
+                            <form id="signupForm">
                                 <a href="{% url 'index' %}"><img src="{% static 'images/logo-dark.png' %}" class="mb-4 d-block mx-auto" alt=""></a>
                                 <h6 class="mb-3 text-uppercase fw-semibold">Register your account</h6>
-                            
-                                <div class="mb-3">
-                                    <label class="form-label fw-semibold">Your Name</label>
-                                    <input name="name" id="name" type="text" class="form-control" placeholder="Enter your name" required>
+                                
+                                <div class="mb-3 form-row">
+                                    <label class="form-label fw-semibold col-form-label">Your Name</label>
+                                    <input name="name" id="name" type="text" class="form-control col" placeholder="Enter your name" required>
                                 </div>
-    
-                                <div class="mb-3">
-                                    <label class="form-label fw-semibold">Your Email</label>
-                                    <input name="email" id="email" type="email" class="form-control" placeholder="Enter your email" required>
+            
+                                <div class="mb-3 form-row">
+                                    <label class="form-label fw-semibold col-form-label">Your Email</label>
+                                    <input name="email" id="email" type="email" class="form-control col" placeholder="Enter your email" required>
                                 </div>
-    
-                                <div class="mb-3">
-                                    <label class="form-label fw-semibold" for="contact">Contact Number</label>
-                                    <input type="tel" class="form-control" id="contact" placeholder="Enter your contact number" required pattern="[0-9]{10}">
+            
+                                <div class="mb-3 form-row">
+                                    <label class="form-label fw-semibold col-form-label" for="contact">Contact Number</label>
+                                    <input type="tel" class="form-control col" id="contact" placeholder="Enter your contact number" required pattern="[0-9]{10}">
                                 </div>
-    
-                                <div class="mb-3">
-                                    <label class="form-label fw-semibold" for="loginpass">Password</label>
-                                    <input type="password" class="form-control" id="password" placeholder="Password" required>
+            
+                                <div class="mb-3 form-row">
+                                    <label class="form-label fw-semibold col-form-label" for="loginpass">Password</label>
+                                    <input type="password" class="form-control col" id="password" placeholder="Password" required>
                                 </div>
-    
-                                <div class="mb-3">
-                                    <label class="form-label fw-semibold" for="confirmpass">Confirm Password</label>
-                                    <input type="password" class="form-control" id="confirmPassword" placeholder="Confirm Password" required>
+            
+                                <div class="mb-3 form-row">
+                                    <label class="form-label fw-semibold col-form-label" for="confirmpass">Confirm Password</label>
+                                    <input type="password" class="form-control col" id="confirmPassword" placeholder="Confirm Password" required>
                                 </div>
                                 
+                                <!-- reCAPTCHA and Terms and Conditions centered -->
                                 <div class="g-recaptcha" data-sitekey="6LeAV5oqAAAAAGvSIJX-vuouZSzXMljjRzmGEk6u"></div>
                                 <input type="hidden" name="recaptcha_token" id="recaptcha_token">
-    
+                
                                 <div class="form-check mb-3">
-                                    <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault" required>
+                                    <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault" style="border:1px solid black" required>
                                     <label class="form-label form-check-label text-muted" for="flexCheckDefault">I Accept <a href="#" class="text-primary">Terms And Condition</a></label>
                                 </div>
                         
-                                <button class="btn btn-primary w-100" type="submit">Register</button>
-    
+                                <!-- Register button centered and resized -->
+                                <button class="btn btn-primary w-50" type="submit">Register</button>
+            
                                 <div class="col-12 text-center mt-3">
-                                    <span><span class="text-muted small me-2">Already have an account ? </span> <a href="{% url 'login' %}" class="text-dark fw-semibold small">Sign in</a></span>
+                                    <span><span class="text-muted small me-2">Already have an account? </span> <a href="{% url 'login' %}" class="text-dark fw-semibold small">Sign in</a></span>
                                 </div><!--end col-->
                             </form>
                         </div>
@@ -93,6 +167,105 @@
             </div><!--end container-->
         </section><!--end section-->
         <!-- ENd Hero -->
+
+
+<!-- Bootstrap Modal -->
+
+<div class="modal fade" id="termsModal" tabindex="-1" aria-labelledby="termsModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content border-0 shadow-lg">
+            <!-- Header -->
+            <div class="modal-header text-white" style="background: linear-gradient(90deg, #007BFF, #0056b3);">
+                <h5 class="modal-title" id="termsModalLabel">
+                    <i class="bi bi-info-circle me-2"></i> Terms and Conditions
+                </h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <!-- Body -->
+            <div class="modal-body px-4" style="max-height: 70vh; overflow-y: auto;">
+                <div class="terms-section">
+                    <h6 class="fw-bold text-primary">1. Acceptance of Terms</h6>
+                    <p class="text-muted">By registering on CreativeComune.com (“the Site”), you agree to these Terms and Conditions. If you do not agree, do not proceed with registration.</p>
+                </div>
+                <div class="terms-section">
+                    <h6 class="fw-bold text-primary">2. Eligibility</h6>
+                    <p class="text-muted">You must be 18+ or have parental/guardian consent if under 18. All provided information must be accurate and truthful. Fake or offensive details may lead to account suspension.</p>
+                </div>
+                <div class="terms-section">
+                    <h6 class="fw-bold text-primary">3. User Account</h6>
+                    <p class="text-muted">You are responsible for keeping your login credentials secure. Notify us immediately of unauthorized access. Sharing accounts is prohibited.</p>
+                </div>
+                <div class="terms-section">
+                    <h6 class="fw-bold text-primary">4. Content and Conduct</h6>
+                    <p class="text-muted">
+                        <strong>Content Ownership:</strong> You own your uploaded content but grant us a license to display and promote it.<br>
+                        <strong>Behavior:</strong> Respect others, avoid spam, scams, hacking, or harm to the Site.
+                    </p>
+                </div>
+                <div class="terms-section">
+                    <h6 class="fw-bold text-primary">5. Verification</h6>
+                    <p class="text-muted">The Site reserves the right to approve, reject, or verify user accounts and submissions.</p>
+                </div>
+                <div class="terms-section">
+                    <h6 class="fw-bold text-primary">6. Paid Services</h6>
+                    <p class="text-muted">
+                        Fees for premium features or ads will be clearly stated.<br>
+                        We may modify pricing with prior notice.
+                    </p>
+                </div>
+                <div class="terms-section">
+                    <h6 class="fw-bold text-primary">7. Termination</h6>
+                    <p class="text-muted">
+                        We may suspend or terminate accounts for violations of these terms. You may delete your account anytime, but content may remain per our retention policies.
+                    </p>
+                </div>
+                <div class="terms-section">
+                    <h6 class="fw-bold text-primary">8. Intellectual Property</h6>
+                    <p class="text-muted">Site content (designs, logos, features) is owned by CreativeComune.com and may not be copied or reproduced without permission.</p>
+                </div>
+                <div class="terms-section">
+                    <h6 class="fw-bold text-primary">9. Liability</h6>
+                    <p class="text-muted">
+                        We are not liable for any damages arising from:<br>
+                        - Site use or unavailability.<br>
+                        - Content inaccuracies or unauthorized access.
+                    </p>
+                </div>
+                <div class="terms-section">
+                    <h6 class="fw-bold text-primary">10. Privacy</h6>
+                    <p class="text-muted">By registering, you agree to our Privacy Policy, which details how we collect and use your data.</p>
+                </div>
+                <div class="terms-section">
+                    <h6 class="fw-bold text-primary">11. Changes to Terms</h6>
+                    <p class="text-muted">We may update these terms. Continued use signifies acceptance of changes.</p>
+                </div>
+                <div class="terms-section">
+                    <h6 class="fw-bold text-primary">12. Governing Law</h6>
+                    <p class="text-muted">These terms are governed by the laws of [Your Country/State], with disputes resolved in [City/State].</p>
+                </div>
+                <div class="terms-section">
+                    <h6 class="fw-bold text-primary">13. Contact Us</h6>
+                    <p class="text-muted">
+                        For queries, reach out to:<br>
+                        <strong>Email:</strong> <a href="mailto:support@creativecomune.com" class="text-decoration-none">support@creativecomune.com</a>
+                    </p>
+                </div>
+            </div>
+            <!-- Footer -->
+            <div class="modal-footer d-flex justify-content-end gap-2">
+                <button type="button" class="btn btn-outline-danger rounded-pill px-4 py-2 shadow-sm" data-bs-dismiss="modal">
+                    <i class="bi bi-x-circle"></i> Close
+                </button>
+                <button type="button" class="btn btn-success rounded-pill px-4 py-2 shadow-sm" id="acceptTermsBtn">
+                    <i class="bi bi-check-circle"></i> Accept Terms
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
         
         <!-- javascript -->
         <script src="{% static 'js/bootstrap.bundle.min.js' %}"></script>
@@ -172,10 +345,37 @@ $(document).ready(function() {
         });
     });
 
+});document.addEventListener("DOMContentLoaded", function () {
+    const checkbox = document.getElementById("flexCheckDefault");
+    const termsModal = new bootstrap.Modal(document.getElementById("termsModal"));
+    const acceptTermsBtn = document.getElementById("acceptTermsBtn");
+    let accepted = false; // Flag to track acceptance
 
+    // Open modal when checkbox is clicked
+    checkbox.addEventListener("change", function () {
+        if (checkbox.checked) {
+            termsModal.show();
+        } else {
+            termsModal.hide();
+        }
+    });
 
+    // Accept button in modal
+    acceptTermsBtn.addEventListener("click", function () {
+        accepted = true; // Mark terms as accepted
+        termsModal.hide();
+    });
+
+    // Ensure the checkbox gets unchecked when the modal is closed without "Accept"
+    document.getElementById("termsModal").addEventListener("hidden.bs.modal", function () {
+        if (!accepted) {
+            checkbox.checked = false; // Uncheck checkbox if not accepted
+        }
+        accepted = false; // Reset flag for next time
+    });
 });
-             
+
+    
 
 </script>
     </body>

@@ -472,7 +472,7 @@
                                         
                                         <div class="mt-3">
                                             <!-- Artist Name -->
-                                            <a href="{% url 'artist-profile_id' id=artist.basic.id  %}" class="title h5 text-dark">{{ artist.basic.name }}</a>
+                                            <a href="{% url 'artist-profile_updated_one_id' id=artist.basic.id  %}" class="title h5 text-dark">{{ artist.basic.name }}</a>
                                             <!-- Job Title -->
                                             <p class="text-muted mt-1">
                                                 {% if artist.additional and artist.additional.job_title %}
@@ -494,7 +494,7 @@
                     
                                         <div class="mt-3">
                                             <!-- View Profile Button -->
-                                            <a href="{% url 'artist-profile_id' id=artist.basic.id %}" class="btn btn-sm btn-primary me-1">View Profile</a>
+                                            <a href="{% url 'artist-profile_updated_one_id' id=artist.basic.id %}" class="btn btn-sm btn-primary me-1">View Profile</a>
                                             <!-- Contact Us Button -->
                                             <a href="{% url 'contactus' %}" class="btn btn-sm btn-icon btn-soft-primary">
                                                 <i data-feather="message-circle" class="icons"></i>

@@ -1,4 +1,4 @@
-{% extends "base.html" %}
+{% comment %} {% extends "base.html" %}
 {% load static %}
 {% block content %}
 
@@ -490,27 +490,11 @@
                 </div><!--end container-->
             </div><!--end div-->
            <!-- Bootstrap Modal -->
-<div class="modal fade" id="profileAlertModal" tabindex="-1" aria-labelledby="profileAlertModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered">
-      <div class="modal-content">
-        <div class="modal-header bg-dark text-light">
-          <h5 class="modal-title fw-bold" id="profileAlertModalLabel">⚠️ Profile Incomplete</h5>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" style="filter: invert(1);"></button>
-        </div>
-        <div class="modal-body text-center" style="color: #343a40; font-weight: 500;">
-          Your profile is incomplete. Please update your profile.
-        </div>
-        <div class="modal-footer d-flex justify-content-center">
-          <button type="button" class="btn btn-primary" id="updateProfileButton">Ok</button>
-          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">I will update later</button>
-        </div>
-      </div>
-    </div>
-  </div>
+
   
   
             
 {% endblock %}
 
 
-
+ {% endcomment %}

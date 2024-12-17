@@ -42,39 +42,33 @@
                         <div class="rounded p-4 shadow">
                             <div class="row">
                                 <div class="col-12">
-                                    <form>
+                                    <form id="ChangepasswordForm">
                                         <div class="row">
-                                            <div class="col-md-6">
-                                                <div class="mb-3">
-                                                    <label class="form-label fw-semibold">Your Name <span class="text-danger">*</span></label>
-                                                    <input name="name" id="name" type="text" class="form-control" placeholder="First Name :">
-                                                </div>
-                                            </div><!--end col-->
-                                            <div class="col-md-6">
-                                                <div class="mb-3">
-                                                    <label class="form-label fw-semibold">Your Email <span class="text-danger">*</span></label>
-                                                <input name="email" id="email" type="email" class="form-control" placeholder="Your email :">
-                                                </div> 
-                                            </div><!--end col-->
+                                            <!-- Password Field -->
                                             <div class="col-md-12">
                                                 <div class="mb-3">
-                                                    <label class="form-label fw-semibold">Subject</label>
-                                                    <input name="subject" id="subject" class="form-control" placeholder="Your subject :">
+                                                    <label class="form-label fw-semibold">Password <span class="text-danger">*</span></label>
+                                                    <input name="password" id="password" type="password" class="form-control" placeholder="Enter your password" required>
                                                 </div>
                                             </div><!--end col-->
+                                    
+                                            <!-- Confirm Password Field -->
                                             <div class="col-md-12">
                                                 <div class="mb-3">
-                                                    <label class="form-label fw-semibold">Comments</label>
-                                                    <textarea name="comments" id="comments" rows="4" class="form-control" placeholder="Your Message :"></textarea>
+                                                    <label class="form-label fw-semibold">Confirm Password <span class="text-danger">*</span></label>
+                                                    <input name="confirm_password" id="confirm_password" type="password" class="form-control" placeholder="Re-enter your password" required>
                                                 </div>
-                                            </div>
+                                            </div><!--end col-->
                                         </div><!--end row-->
+                                    
+                                        <!-- Submit Button -->
                                         <div class="row">
                                             <div class="col-sm-12">
-                                                <input type="submit" id="submit" name="send" class="btn btn-primary" value="Send Request">
+                                                <input type="submit" id="submit" name="send" class="btn btn-primary" value="Reset Password">
                                             </div><!--end col-->
                                         </div><!--end row-->
                                     </form><!--end form-->
+                                    
                                 </div><!--end col-->
                             </div><!--end row-->
                         </div>
@@ -83,4 +77,44 @@
             </div><!--end container-->
         </section><!--end section-->
         <!-- End Section -->
+        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+        <script>
+
+
+            $("#ChangepasswordForm").on('submit',function(e){
+
+
+                e.preventDefault();
+
+                var user_id = "{{ user_id }}"
+                var token = "{{ token }}"
+              var password =   $("#password").val();
+              var confirm_password =$("#confirm_password").val();
+
+              if(password !== confirm_password){
+                alert("password and confirm password do not match")
+                return
+              }
+
+              $.ajax({
+                url: "{% url 'reset_password' user_id=0 token='0' %}".replace("0", user_id).replace("0", token), // Dynamically replaces placeholders
+                type: "POST",            
+                data: {
+                    password: password,
+                },
+                success: function (response) {
+                    //alert(response.message); 
+                    toastr.success(response.message)
+                    window.location.href = "{% url 'login' %}"; 
+                },
+                error: function (xhr) {
+                    if (xhr.responseJSON && xhr.responseJSON.error) {
+                       // alert(xhr.responseJSON.error); // Display error message
+                    } else {
+                        toastr.error("An unexpected error occurred. Please try again.");
+                    }
+                }
+            });
+        });
+    </script>
 {% endblock %}
