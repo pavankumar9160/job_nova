@@ -1,6 +1,8 @@
 from datetime import datetime
 
 from django.shortcuts import redirect, render
+from django.contrib.auth.decorators import login_required
+
 
 
 
@@ -8,57 +10,68 @@ from django.shortcuts import redirect, render
 
 
 def index(request):
-    
+      
     user = request.user
-    print('user',user)
-    user = request.user
-    try:
-        additional_info = ArtistMasterAdditional.objects.get(user=user)
-        profile_picture = additional_info.profile_picture.url if additional_info.profile_picture else None
-    except ArtistMasterAdditional.DoesNotExist:
-        profile_picture = None 
-    
-    return render(request, 'index.html',{"user":user,'profile_picture': profile_picture})
+    profile_picture = None
+    if user.is_authenticated:  
+            try:
+                additional_info = ArtistMasterAdditional.objects.get(user=user)
+                profile_picture = additional_info.profile_picture.url if additional_info.profile_picture else None
+            except ArtistMasterAdditional.DoesNotExist:
+                profile_picture = None 
+        
+    return render(request, 'index-two.html',{"user":user,'profile_picture': profile_picture})
 
 def aboutus(request):
     user = request.user
-    try:
-        additional_info = ArtistMasterAdditional.objects.get(user=user)
-        profile_picture = additional_info.profile_picture.url if additional_info.profile_picture else None
-    except ArtistMasterAdditional.DoesNotExist:
-        profile_picture = None 
-    
+    if user.is_authenticated:
+        try:
+            additional_info = ArtistMasterAdditional.objects.get(user=user)
+            profile_picture = additional_info.profile_picture.url if additional_info.profile_picture else None
+        except ArtistMasterAdditional.DoesNotExist:
+            profile_picture = None 
+    else:
+       
+        profile_picture = None
     return render(request, 'aboutus.html',{"user":user,'profile_picture': profile_picture})
-
 
 def blog_detail(request):
     user = request.user
-    try:
-        additional_info = ArtistMasterAdditional.objects.get(user=user)
-        profile_picture = additional_info.profile_picture.url if additional_info.profile_picture else None
-    except ArtistMasterAdditional.DoesNotExist:
-        profile_picture = None  
-    
+    if user.is_authenticated:
+        try:
+            additional_info = ArtistMasterAdditional.objects.get(user=user)
+            profile_picture = additional_info.profile_picture.url if additional_info.profile_picture else None
+        except ArtistMasterAdditional.DoesNotExist:
+            profile_picture = None 
+    else:
+       
+        profile_picture = None
     return render(request, 'blog-detail.html',{"user":user,'profile_picture': profile_picture})
 
 def blog_sidebar(request):
     user = request.user
-    try:
-        additional_info = ArtistMasterAdditional.objects.get(user=user)
-        profile_picture = additional_info.profile_picture.url if additional_info.profile_picture else None
-    except ArtistMasterAdditional.DoesNotExist:
-        profile_picture = None 
-    
+    if user.is_authenticated:
+        try:
+            additional_info = ArtistMasterAdditional.objects.get(user=user)
+            profile_picture = additional_info.profile_picture.url if additional_info.profile_picture else None
+        except ArtistMasterAdditional.DoesNotExist:
+            profile_picture = None 
+    else:
+       
+        profile_picture = None
     return render(request, 'blog-sidebar.html',{"user":user,'profile_picture': profile_picture})
 
 def blogs(request):
     user = request.user
-    try:
-        additional_info = ArtistMasterAdditional.objects.get(user=user)
-        profile_picture = additional_info.profile_picture.url if additional_info.profile_picture else None
-    except ArtistMasterAdditional.DoesNotExist:
-        profile_picture = None 
-    
+    if user.is_authenticated:
+        try:
+            additional_info = ArtistMasterAdditional.objects.get(user=user)
+            profile_picture = additional_info.profile_picture.url if additional_info.profile_picture else None
+        except ArtistMasterAdditional.DoesNotExist:
+            profile_picture = None 
+    else:
+       
+        profile_picture = None
     return render(request, 'blogs.html',{"user":user,'profile_picture': profile_picture})
 
 def artist_profile(request):
@@ -72,6 +85,7 @@ def artist_profile(request):
     
     return render(request, 'candidate-profile.html',{"user":user,'profile_picture': profile_picture})
 
+@login_required
 def artist_profile_setting_updated_one(request):
     user = request.user
     try:
@@ -99,8 +113,7 @@ def artist_profile_setting(request):
     return render(request, 'candidate-profile-setting.html',{"user":user,'profile_picture': profile_picture})
 
 
-
-
+@login_required(login_url='/login/')  
 
 def artist_profile_updated_one(request):
     user = request.user
@@ -136,16 +149,21 @@ def artist_profile_updated_one_Id(request, id):
     profile_picture = None
     skills = []
     
-    try:
-        logged_in_additional_info = ArtistMasterAdditional.objects.get(user=logged_in_user)
-        profile_picture = logged_in_additional_info.profile_picture.url if logged_in_additional_info.profile_picture else None
-    except ArtistMasterAdditional.DoesNotExist:
-        profile_picture = None
+    if logged_in_user.is_authenticated:
+        try:
+            logged_in_additional_info = ArtistMasterAdditional.objects.get(user=logged_in_user)
+            profile_picture = (
+                logged_in_additional_info.profile_picture.url
+                if logged_in_additional_info.profile_picture
+                else None
+            )
+        except ArtistMasterAdditional.DoesNotExist:
+            profile_picture = None
         
+    artist_basic = get_object_or_404(ArtistMasterBasic, id=id)
     additional_info_user = None
     profile_picture_user = None
     full_name_user = None
-    artist_basic = get_object_or_404(ArtistMasterBasic, id=id)
     
     try:
         additional_info_user = ArtistMasterAdditional.objects.get(user=artist_basic)
@@ -159,7 +177,7 @@ def artist_profile_updated_one_Id(request, id):
         full_name_user = None
         
     return render(request, 'candidate-profile_updated_one.html', {
-        'user': artist_basic,
+        "artist_user": artist_basic,
         "profile_picture_user": profile_picture_user,
         "additional_info_user": additional_info_user,
         "full_name_user": full_name_user,
@@ -174,10 +192,15 @@ from django.db.models import Count
 
 def artists(request):
     user = request.user
-    try:
-        additional_info = ArtistMasterAdditional.objects.get(user=user)
-        profile_picture = additional_info.profile_picture.url if additional_info.profile_picture else None
-    except ArtistMasterAdditional.DoesNotExist:
+
+    # Handle profile picture logic based on authentication
+    if user.is_authenticated:
+        try:
+            additional_info = ArtistMasterAdditional.objects.get(user=user)
+            profile_picture = additional_info.profile_picture.url if additional_info.profile_picture else None
+        except ArtistMasterAdditional.DoesNotExist:
+            profile_picture = None
+    else:
         profile_picture = None
 
     artists = ArtistMasterBasic.objects.all().exclude(is_superuser=True)
@@ -207,7 +230,7 @@ def artists(request):
     skill_counts_dict = {item['skills__name'].replace(' ', '_'): item['count'] for item in skill_counts if item['skills__name']}
 
     context = {
-        'user': user,
+        "artist_user": user,
         'profile_picture': profile_picture,
         'artists_with_details': artists_with_details,
         'skill_counts': skill_counts_dict, 
@@ -223,12 +246,15 @@ def artists(request):
 
 def career(request):
     user = request.user
-    try:
-        additional_info = ArtistMasterAdditional.objects.get(user=user)
-        profile_picture = additional_info.profile_picture.url if additional_info.profile_picture else None
-    except ArtistMasterAdditional.DoesNotExist:
-        profile_picture = None 
-    
+    if user.is_authenticated:
+        try:
+            additional_info = ArtistMasterAdditional.objects.get(user=user)
+            profile_picture = additional_info.profile_picture.url if additional_info.profile_picture else None
+        except ArtistMasterAdditional.DoesNotExist:
+            profile_picture = None 
+    else:
+       
+        profile_picture = None
     return render(request, 'career.html',{"user":user,'profile_picture': profile_picture})
 
 def comingsoon(request):
@@ -237,12 +263,15 @@ def comingsoon(request):
 
 def contactus(request):
     user = request.user
-    try:
-        additional_info = ArtistMasterAdditional.objects.get(user=user)
-        profile_picture = additional_info.profile_picture.url if additional_info.profile_picture else None
-    except ArtistMasterAdditional.DoesNotExist:
-        profile_picture = None 
-    
+    if user.is_authenticated:
+        try:
+            additional_info = ArtistMasterAdditional.objects.get(user=user)
+            profile_picture = additional_info.profile_picture.url if additional_info.profile_picture else None
+        except ArtistMasterAdditional.DoesNotExist:
+            profile_picture = None 
+    else:
+       
+        profile_picture = None
     return render(request, 'contactus.html',{"user":user,'profile_picture': profile_picture})
 
 def services_prvdr_profile(request):
@@ -271,44 +300,54 @@ def error(request):
 
 def helpcenter_faqs(request):
     user = request.user
-    try:
-        additional_info = ArtistMasterAdditional.objects.get(user=user)
-        profile_picture = additional_info.profile_picture.url if additional_info.profile_picture else None
-    except ArtistMasterAdditional.DoesNotExist:
-        profile_picture = None 
-    
-    return render(request, 'helpcenter-faqs.html',{"user":user,'profile_picture': profile_picture})
-
-def helpcenter_guides(request):
-    user = request.user
-    try:
-        additional_info = ArtistMasterAdditional.objects.get(user=user)
-        profile_picture = additional_info.profile_picture.url if additional_info.profile_picture else None
-    except ArtistMasterAdditional.DoesNotExist:
-        profile_picture = None 
-    
-    return render(request, 'helpcenter-guides.html',{"user":user,'profile_picture': profile_picture})
-
-def helpcenter_overview(request):
-    user = request.user
-    try:
-        additional_info = ArtistMasterAdditional.objects.get(user=user)
-        profile_picture = additional_info.profile_picture.url if additional_info.profile_picture else None
-    except ArtistMasterAdditional.DoesNotExist:
-        profile_picture = None 
-    
-    return render(request, 'helpcenter-overview.html',{"user":user,'profile_picture': profile_picture})
-
-def helpcenter_support(request):
-    profile_picture = None 
-    user = request.user
-    if user.is_authenticated: 
+    if user.is_authenticated:
         try:
             additional_info = ArtistMasterAdditional.objects.get(user=user)
             profile_picture = additional_info.profile_picture.url if additional_info.profile_picture else None
         except ArtistMasterAdditional.DoesNotExist:
             profile_picture = None 
-    
+    else:
+       
+        profile_picture = None
+    return render(request, 'helpcenter-faqs.html',{"user":user,'profile_picture': profile_picture})
+
+def helpcenter_guides(request):
+    user = request.user
+    user = request.user
+    if user.is_authenticated:
+        try:
+            additional_info = ArtistMasterAdditional.objects.get(user=user)
+            profile_picture = additional_info.profile_picture.url if additional_info.profile_picture else None
+        except ArtistMasterAdditional.DoesNotExist:
+            profile_picture = None 
+    else:
+        profile_picture = None
+    return render(request, 'helpcenter-guides.html',{"user":user,'profile_picture': profile_picture})
+
+def helpcenter_overview(request):
+    user = request.user
+    if user.is_authenticated:
+        try:
+            additional_info = ArtistMasterAdditional.objects.get(user=user)
+            profile_picture = additional_info.profile_picture.url if additional_info.profile_picture else None
+        except ArtistMasterAdditional.DoesNotExist:
+            profile_picture = None 
+    else:
+       
+        profile_picture = None
+    return render(request, 'helpcenter-overview.html',{"user":user,'profile_picture': profile_picture})
+
+def helpcenter_support(request):
+    user = request.user
+    if user.is_authenticated:
+        try:
+            additional_info = ArtistMasterAdditional.objects.get(user=user)
+            profile_picture = additional_info.profile_picture.url if additional_info.profile_picture else None
+        except ArtistMasterAdditional.DoesNotExist:
+            profile_picture = None 
+    else:
+       
+        profile_picture = None
     return render(request, 'helpcenter-support.html',{"user":user,'profile_picture': profile_picture})
 
 def index_three(request):
@@ -459,12 +498,15 @@ def services_post(request):
 
 def services(request):
     user = request.user
-    try:
-        additional_info = ArtistMasterAdditional.objects.get(user=user)
-        profile_picture = additional_info.profile_picture.url if additional_info.profile_picture else None
-    except ArtistMasterAdditional.DoesNotExist:
-        profile_picture = None 
-    
+    if user.is_authenticated:
+        try:
+            additional_info = ArtistMasterAdditional.objects.get(user=user)
+            profile_picture = additional_info.profile_picture.url if additional_info.profile_picture else None
+        except ArtistMasterAdditional.DoesNotExist:
+            profile_picture = None 
+    else:
+       
+        profile_picture = None
     return render(request, 'services.html',{"user":user,'profile_picture': profile_picture})
 
 def lock_screen(request):
@@ -483,22 +525,28 @@ def maintenance(request):
 
 def pricing(request):
     user = request.user
-    try:
-        additional_info = ArtistMasterAdditional.objects.get(user=user)
-        profile_picture = additional_info.profile_picture.url if additional_info.profile_picture else None
-    except ArtistMasterAdditional.DoesNotExist:
-        profile_picture = None 
-    
+    if user.is_authenticated:
+        try:
+            additional_info = ArtistMasterAdditional.objects.get(user=user)
+            profile_picture = additional_info.profile_picture.url if additional_info.profile_picture else None
+        except ArtistMasterAdditional.DoesNotExist:
+            profile_picture = None 
+    else:
+       
+        profile_picture = None
     return render(request, 'pricing.html',{"user":user,'profile_picture': profile_picture})
 
 def privacy(request):
     user = request.user
-    try:
-        additional_info = ArtistMasterAdditional.objects.get(user=user)
-        profile_picture = additional_info.profile_picture.url if additional_info.profile_picture else None
-    except ArtistMasterAdditional.DoesNotExist:
-        profile_picture = None 
-    
+    if user.is_authenticated:
+        try:
+            additional_info = ArtistMasterAdditional.objects.get(user=user)
+            profile_picture = additional_info.profile_picture.url if additional_info.profile_picture else None
+        except ArtistMasterAdditional.DoesNotExist:
+            profile_picture = None 
+    else:
+       
+        profile_picture = None
     return render(request, 'privacy.html',{"user":user,'profile_picture': profile_picture})
 
 from django.views.decorators.csrf import csrf_exempt
@@ -518,12 +566,15 @@ def signup_page(request):
 
 def terms(request):
     user = request.user
-    try:
-        additional_info = ArtistMasterAdditional.objects.get(user=user)
-        profile_picture = additional_info.profile_picture.url if additional_info.profile_picture else None
-    except ArtistMasterAdditional.DoesNotExist:
-        profile_picture = None 
-    
+    if user.is_authenticated:
+        try:
+            additional_info = ArtistMasterAdditional.objects.get(user=user)
+            profile_picture = additional_info.profile_picture.url if additional_info.profile_picture else None
+        except ArtistMasterAdditional.DoesNotExist:
+            profile_picture = None 
+    else:
+       
+        profile_picture = None
     return render(request, 'terms.html',{"user":user,'profile_picture': profile_picture})
 
 
@@ -958,7 +1009,7 @@ def reset_user_password(request):
         token = token_generator.make_token(user)
         
         # Generate the reset link
-        reset_link = f"http://127.0.0.1:8000/reset-password/{user.pk}/{token}/"  # Localhost link for testing
+        reset_link = f"https://lab.wemakesoftwares.com/reset-password/{user.pk}/{token}/"  # Localhost link for testing
         subject = "Reset Your Password - CreativeComune.com"
         message = (
             "Hello,\n\n"
