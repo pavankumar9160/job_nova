@@ -73,17 +73,39 @@
                                 <h6 class="mb-0">Categories</h6>
                                 <select class="form-select form-control border mt-2" aria-label="Default select example" id="description">
                                            <option value="" selected> Select Category</option>
-                                          <option value="Writer">Writer</option>
-                                                <option value="Publisher">Publisher</option>
-                                                <option value="Editor">Editor</option>
-                                                <option value="Poet">Poet</option>
-                                                <option value="Essayist">Essayist</option>
-                                                <option value="Novelist">Novelist</option>
-                                                <option value="Blogger">Blogger</option>
-                                                <option value="Short Story Writer">Short Story Writer</option>
-                                                <option value="Motivational Speaker">Motivational Speaker</option>
-                                                <option value="Spiritual Leader">Spiritual Leader</option>
-                                                <option value="Literary Critic">Literary Critic</option>
+                                           <option value="Writer">Writer</option>
+                                           <option value="Publisher">Publisher</option>
+                                           <option value="Printer">Printer</option>
+                                           <option value="Editor">Editor</option>
+                                           <option value="Artist">Artist</option>
+                                           <option value="Digital Graphics Designer">Digital Graphics Designer</option>
+                                           <option value="Digital Content Creator">Digital Content Creator</option>
+                                           <option value="Spiritual Leader">Spiritual Leader</option>
+                                           <option value="Social Media Influencer">Social Media Influencer</option>
+                                           <option value="Digital Marketer">Digital Marketer</option>
+                                           <option value="Public Relations Manager">Public Relations Manager</option>
+                                           <option value="Event Manager">Event Manager</option>
+                                           <option value="Entertainment Troupe Owner">Entertainment Troupe Owner</option>
+                                           <option value="Standup Comedian">Standup Comedian</option>
+                                           <option value="Compere/Emcee">Compere/Emcee</option>
+                                           <option value="Book Store Owner">Book Store Owner</option>
+                                           <option value="Digital Marketplace/Platform">Digital Marketplace/Platform</option>
+                                           <option value="Poet">Poet</option>
+                                           <option value="Essayist">Essayist</option>
+                                           <option value="Blogger">Blogger</option>
+                                           <option value="Novelist">Novelist</option>
+                                           <option value="Copywriter">Copywriter</option>
+                                           <option value="Columnist">Columnist</option>
+                                           <option value="Journalist">Journalist</option>
+                                           <option value="Short Story Writer">Short Story Writer</option>
+                                           <option value="Motivational Speaker">Motivational Speaker</option>
+                                           <option value="Literary Critic">Literary Critic</option>
+                                           <option value="Literacy Reviewer">Literacy Reviewer</option>
+                                           <option value="Lyricist">Lyricist</option>
+                                           <option value="Scriptwriter-Drama">Scriptwriter-Drama</option>
+                                           <option value="Scriptwriter-Screen">Scriptwriter-Screen</option>
+                                           <option value="Translator">Translator</option>
+                                           
                                 </select>
                             </div>
                             <!-- Categories -->
@@ -189,7 +211,225 @@
                                             {% endif %}
                                         </span>
                                     </div>
-                                
+                                    <div class="d-flex justify-content-between mt-2">
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" value="Printer" id="printer">
+                                            <label class="form-check-label" for="printer">
+                                                Printer
+                                            </label>
+                                        </div>
+                                        <span class="badge bg-soft-primary rounded-pill">
+                                            {% if skill_counts.Printer %}
+                                                {{ skill_counts.Printer }}
+                                            {% else %}
+                                                0
+                                            {% endif %}
+                                        </span>
+                                    </div>
+                                    
+                                    <div class="d-flex justify-content-between mt-2">
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" value="Artist" id="artist">
+                                            <label class="form-check-label" for="artist">
+                                                Artist
+                                            </label>
+                                        </div>
+                                        <span class="badge bg-soft-primary rounded-pill">
+                                            {% if skill_counts.Artist %}
+                                                {{ skill_counts.Artist }}
+                                            {% else %}
+                                                0
+                                            {% endif %}
+                                        </span>
+                                    </div>
+                                    
+                                    <div class="d-flex justify-content-between mt-2">
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" value="Digital Graphic Designer" id="digital-graphic-designer">
+                                            <label class="form-check-label" for="digital-graphic-designer">
+                                                Digital Graphic Designer
+                                            </label>
+                                        </div>
+                                        <span class="badge bg-soft-primary rounded-pill">
+                                            {% if skill_counts.Digital_Graphic_Designer %}
+                                                {{ skill_counts.Digital_Graphic_Designer }}
+                                            {% else %}
+                                                0
+                                            {% endif %}
+                                        </span>
+                                    </div>
+                                    
+                                    <div class="d-flex justify-content-between mt-2">
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" value="Digital Content Creator" id="digital-content-creator">
+                                            <label class="form-check-label" for="digital-content-creator">
+                                                Digital Content Creator
+                                            </label>
+                                        </div>
+                                        <span class="badge bg-soft-primary rounded-pill">
+                                            {% if skill_counts.Digital_Content_Creator %}
+                                                {{ skill_counts.Digital_Content_Creator }}
+                                            {% else %}
+                                                0
+                                            {% endif %}
+                                        </span>
+                                    </div>
+                                    
+                                    <div class="d-flex justify-content-between mt-2">
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" value="Spiritual Leader" id="spiritual-leader">
+                                            <label class="form-check-label" for="spiritual-leader">
+                                                Spiritual Leader
+                                            </label>
+                                        </div>
+                                        <span class="badge bg-soft-primary rounded-pill">
+                                            {% if skill_counts.Spiritual_Leader %}
+                                                {{ skill_counts.Spiritual_Leader }}
+                                            {% else %}
+                                                0
+                                            {% endif %}
+                                        </span>
+                                    </div>
+                                    <div class="d-flex justify-content-between mt-2">
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" value="Social Media Influencer" id="social-media-influencer">
+                                            <label class="form-check-label" for="social-media-influencer">
+                                                Social Media Influencer
+                                            </label>
+                                        </div>
+                                        <span class="badge bg-soft-primary rounded-pill">
+                                            {% if skill_counts.Social_Media_Influencer %}
+                                                {{ skill_counts.Social_Media_Influencer }}
+                                            {% else %}
+                                                0
+                                            {% endif %}
+                                        </span>
+                                    </div>
+                                    <div class="d-flex justify-content-between mt-2">
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" value="Digital Marketer" id="digital-marketer">
+                                            <label class="form-check-label" for="digital-marketer">
+                                                Digital Marketer
+                                            </label>
+                                        </div>
+                                        <span class="badge bg-soft-primary rounded-pill">
+                                            {% if skill_counts.Digital_Marketer %}
+                                                {{ skill_counts.Digital_Marketer }}
+                                            {% else %}
+                                                0
+                                            {% endif %}
+                                        </span>
+                                    </div>
+                                    <div class="d-flex justify-content-between mt-2">
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" value="Public Relations Manager" id="public-relations-manager">
+                                            <label class="form-check-label" for="public-relations-manager">
+                                                Public Relations Manager
+                                            </label>
+                                        </div>
+                                        <span class="badge bg-soft-primary rounded-pill">
+                                            {% if skill_counts.Public_Relations_Manager %}
+                                                {{ skill_counts.Public_Relations_Manager }}
+                                            {% else %}
+                                                0
+                                            {% endif %}
+                                        </span>
+                                    </div>
+                                    <div class="d-flex justify-content-between mt-2">
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" value="Event Manager" id="event-manager">
+                                            <label class="form-check-label" for="event-manager">
+                                                Event Manager
+                                            </label>
+                                        </div>
+                                        <span class="badge bg-soft-primary rounded-pill">
+                                            {% if skill_counts.Event_Manager %}
+                                                {{ skill_counts.Event_Manager }}
+                                            {% else %}
+                                                0
+                                            {% endif %}
+                                        </span>
+                                    </div>
+                                    <div class="d-flex justify-content-between mt-2">
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" value="Entertainment Troupe Owner" id="entertainment-troupe-owner">
+                                            <label class="form-check-label" for="entertainment-troupe-owner">
+                                                Entertainment Troupe Owner
+                                            </label>
+                                        </div>
+                                        <span class="badge bg-soft-primary rounded-pill">
+                                            {% if skill_counts.Entertainment_Troupe_Owner %}
+                                                {{ skill_counts.Entertainment_Troupe_Owner }}
+                                            {% else %}
+                                                0
+                                            {% endif %}
+                                        </span>
+                                    </div>
+                                    
+                                    <div class="d-flex justify-content-between mt-2">
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" value="Standup Comedian" id="standup-comedian">
+                                            <label class="form-check-label" for="standup-comedian">
+                                                Standup Comedian
+                                            </label>
+                                        </div>
+                                        <span class="badge bg-soft-primary rounded-pill">
+                                            {% if skill_counts.Standup_Comedian %}
+                                                {{ skill_counts.Standup_Comedian }}
+                                            {% else %}
+                                                0
+                                            {% endif %}
+                                        </span>
+                                    </div>
+                                    
+                                    <div class="d-flex justify-content-between mt-2">
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" value="Compere/Emcee" id="compere-emcee">
+                                            <label class="form-check-label" for="compere-emcee">
+                                                Compere/Emcee
+                                            </label>
+                                        </div>
+                                        <span class="badge bg-soft-primary rounded-pill">
+                                            {% if skill_counts.Compere_Emcee %}
+                                                {{ skill_counts.Compere_Emcee }}
+                                            {% else %}
+                                                0
+                                            {% endif %}
+                                        </span>
+                                    </div>
+                                    
+                                    <div class="d-flex justify-content-between mt-2">
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" value="Book Store Owner" id="book-store-owner">
+                                            <label class="form-check-label" for="book-store-owner">
+                                                Book Store Owner
+                                            </label>
+                                        </div>
+                                        <span class="badge bg-soft-primary rounded-pill">
+                                            {% if skill_counts.Book_Store_Owner %}
+                                                {{ skill_counts.Book_Store_Owner }}
+                                            {% else %}
+                                                0
+                                            {% endif %}
+                                        </span>
+                                    </div>
+                                    
+                                    <div class="d-flex justify-content-between mt-2">
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" value="Digital Marketplace/Platform" id="digital-marketplace-platform">
+                                            <label class="form-check-label" for="digital-marketplace-platform">
+                                                Digital Marketplace/Platform
+                                            </label>
+                                        </div>
+                                        <span class="badge bg-soft-primary rounded-pill">
+                                            {% if skill_counts.Digital_Marketplace_Platform %}
+                                                {{ skill_counts.Digital_Marketplace_Platform }}
+                                            {% else %}
+                                                0
+                                            {% endif %}
+                                        </span>
+                                    </div>
+                                    
                             
                                     <div class="d-flex justify-content-between mt-2">
                                         <div class="form-check">
@@ -258,22 +498,7 @@
                                     </div>
                                 
 
-                                    <div class="d-flex justify-content-between mt-2">
-                                        <div class="form-check">
-                                            <input class="form-check-input" type="checkbox" value="Content Creator" id="content-creator">
-                                            <label class="form-check-label" for="content-creator">
-                                                Content Creator
-                                            </label>
-                                        </div>
-                                        <span class="badge bg-soft-primary rounded-pill">
-                                            {% if skill_counts.Content_Creator %}
-                                                {{ skill_counts.Content_Creator }}
-                                            {% else %}
-                                                0
-                                            {% endif %}
-                                        </span>
-                                     </div>
-                                
+                                    
 
                                     <div class="d-flex justify-content-between mt-2">
                                         <div class="form-check">
@@ -307,6 +532,118 @@
                                             {% endif %}
                                         </span>
                                      </div>
+                                     <div class="d-flex justify-content-between mt-2">
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" value="Essayist" id="essayist">
+                                            <label class="form-check-label" for="essayist">
+                                                Essayist
+                                            </label>
+                                        </div>
+                                        <span class="badge bg-soft-primary rounded-pill">
+                                            {% if skill_counts.Essayist %}
+                                                {{ skill_counts.Essayist }}
+                                            {% else %}
+                                                0
+                                            {% endif %}
+                                        </span>
+                                    </div>
+                                    
+                                    <div class="d-flex justify-content-between mt-2">
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" value="Columnist" id="columnist">
+                                            <label class="form-check-label" for="columnist">
+                                                Columnist
+                                            </label>
+                                        </div>
+                                        <span class="badge bg-soft-primary rounded-pill">
+                                            {% if skill_counts.Columnist %}
+                                                {{ skill_counts.Columnist }}
+                                            {% else %}
+                                                0
+                                            {% endif %}
+                                        </span>
+                                    </div>
+                                    
+                                    <div class="d-flex justify-content-between mt-2">
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" value="Journalist" id="journalist">
+                                            <label class="form-check-label" for="journalist">
+                                                Journalist
+                                            </label>
+                                        </div>
+                                        <span class="badge bg-soft-primary rounded-pill">
+                                            {% if skill_counts.Journalist %}
+                                                {{ skill_counts.Journalist }}
+                                            {% else %}
+                                                0
+                                            {% endif %}
+                                        </span>
+                                    </div>
+                                    
+                                    <div class="d-flex justify-content-between mt-2">
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" value="Literacy Reviewer" id="literacyReviewer">
+                                            <label class="form-check-label" for="literacyReviewer">
+                                                Literacy Reviewer
+                                            </label>
+                                        </div>
+                                        <span class="badge bg-soft-primary rounded-pill">
+                                            {% if skill_counts.Literacy_Reviewer %}
+                                                {{ skill_counts.Literacy_Reviewer }}
+                                            {% else %}
+                                                0
+                                            {% endif %}
+                                        </span>
+                                    </div>
+                                    
+                                    <div class="d-flex justify-content-between mt-2">
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" value="Lyricist" id="lyricist">
+                                            <label class="form-check-label" for="lyricist">
+                                                Lyricist
+                                            </label>
+                                        </div>
+                                        <span class="badge bg-soft-primary rounded-pill">
+                                            {% if skill_counts.Lyricist %}
+                                                {{ skill_counts.Lyricist }}
+                                            {% else %}
+                                                0
+                                            {% endif %}
+                                        </span>
+                                    </div>
+                                    
+                                    <div class="d-flex justify-content-between mt-2">
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" value="Scriptwriter-Drama" id="scriptwriterDrama">
+                                            <label class="form-check-label" for="scriptwriterDrama">
+                                                Scriptwriter-Drama
+                                            </label>
+                                        </div>
+                                        <span class="badge bg-soft-primary rounded-pill">
+                                            {% if skill_counts.Scriptwriter_Drama %}
+                                                {{ skill_counts.Scriptwriter_Drama }}
+                                            {% else %}
+                                                0
+                                            {% endif %}
+                                        </span>
+                                    </div>
+                                    
+                                    <div class="d-flex justify-content-between mt-2">
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" value="Scriptwriter-Screen" id="scriptwriterScreen">
+                                            <label class="form-check-label" for="scriptwriterScreen">
+                                                Scriptwriter-Screen
+                                            </label>
+                                        </div>
+                                        <span class="badge bg-soft-primary rounded-pill">
+                                            {% if skill_counts.Scriptwriter_Screen %}
+                                                {{ skill_counts.Scriptwriter_Screen }}
+                                            {% else %}
+                                                0
+                                            {% endif %}
+                                        </span>
+                                    </div>
+                                    
                                 
                                     <div class="d-flex justify-content-between mt-2">
                                         <div class="form-check">

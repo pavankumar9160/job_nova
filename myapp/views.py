@@ -20,7 +20,7 @@ def index(request):
             except ArtistMasterAdditional.DoesNotExist:
                 profile_picture = None 
         
-    return render(request, 'index-two.html',{"user":user,'profile_picture': profile_picture})
+    return render(request, 'index-three.html',{"user":user,'profile_picture': profile_picture})
 
 def aboutus(request):
     user = request.user
@@ -88,14 +88,14 @@ def artist_profile(request):
 @login_required
 def artist_profile_setting_updated_one(request):
     user = request.user
+    full_name = None
     try:
         additional_info = ArtistMasterAdditional.objects.get(user=user)
         profile_picture = additional_info.profile_picture.url if additional_info.profile_picture else None
         firstname = additional_info.firstname if additional_info.firstname else None
         lastname = additional_info.lastname if additional_info.lastname else None
-        full_name = f"{firstname} {lastname}" if firstname and lastname else (firstname or lastname)
-
-        full_name = full_name.strip() if full_name else None
+        if firstname or lastname:
+            full_name = f"{firstname} {lastname}".strip()
 
     except ArtistMasterAdditional.DoesNotExist:
         profile_picture = None 
@@ -120,21 +120,23 @@ def artist_profile_updated_one(request):
     profile_picture = None
     additional_info = None
     skills = []
+    full_name = None
     try:
         additional_info = ArtistMasterAdditional.objects.get(user=user)
         profile_picture = additional_info.profile_picture.url if additional_info.profile_picture else None
         firstname = additional_info.firstname if additional_info.firstname else None
         lastname = additional_info.lastname if additional_info.lastname else None
-        full_name = f"{firstname} {lastname}" if firstname and lastname else (firstname or lastname)
-
-        full_name = full_name.strip() if full_name else None
+        
+        if firstname or lastname:
+            full_name = f"{firstname} {lastname}".strip()
         skills = additional_info.skills.all()
     except ArtistMasterAdditional.DoesNotExist:
-        profile_picture = None 
+        profile_picture = None
+        full_name = None 
     
     return render(request,
                   'candidate-profile_updated_one.html',
-                  {"user":user,'profile_picture': profile_picture,
+                  {"artist_user":user,'profile_picture': profile_picture,
                    'additional_info':additional_info,'full_name':full_name, 
                    "is_logged_in_user": True,
                    'skills': skills})
@@ -189,6 +191,7 @@ def artist_profile_updated_one_Id(request, id):
 
 
 from django.db.models import Count
+import re
 
 def artists(request):
     user = request.user
@@ -227,7 +230,10 @@ def artists(request):
     )
 
     # Transform skill_counts to a dictionary for easier usage in templates
-    skill_counts_dict = {item['skills__name'].replace(' ', '_'): item['count'] for item in skill_counts if item['skills__name']}
+    skill_counts_dict =  {
+    re.sub(r'[\s/-]', '_', item['skills__name']): item['count'] 
+    for item in skill_counts if item['skills__name']
+}
 
     context = {
         "artist_user": user,
@@ -719,7 +725,7 @@ def update_personal_details_api(request):
             artist.introduction = request.POST.get('introduction')
         
         if request.POST.get('languages_read'):
-            artist.languages_read = request.POST.get('languages_read')
+            artist.languages_read =request.POST.get('languages_read')
         
         if request.POST.get('languages_write'):
             artist.languages_write = request.POST.get('languages_write')
@@ -727,7 +733,7 @@ def update_personal_details_api(request):
         if request.POST.get('languages_speak'):
             artist.languages_speak = request.POST.get('languages_speak')
         
-        if request.POST.get('facebook_link'):
+        if request.POST.getlist('facebook_link'):
             artist.facebook_link = request.POST.get('facebook_link')
         
         if request.POST.get('instagram_link'):
@@ -1009,7 +1015,7 @@ def reset_user_password(request):
         token = token_generator.make_token(user)
         
         # Generate the reset link
-        reset_link = f"https://lab.wemakesoftwares.com/reset-password/{user.pk}/{token}/"  # Localhost link for testing
+        reset_link = f"http://127.0.0.1:8000/reset-password/{user.pk}/{token}/"  # Localhost link for testing
         subject = "Reset Your Password - CreativeComune.com"
         message = (
             "Hello,\n\n"

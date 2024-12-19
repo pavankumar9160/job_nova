@@ -110,18 +110,39 @@
                                 <div class="mb-3">
                                     <label class="form-label fw-semibold">Role in Literary World:</label>
                                     <select class="form-control form-select" id="description" required>
-                                                <option value="Writer">Writer</option>
-                                                <option value="Publisher">Publisher</option>
-                                                <option value="Editor">Editor</option>
-                                                <option value="Poet">Poet</option>
-                                                <option value="Essayist">Essayist</option>
-                                                <option value="Novelist">Novelist</option>
-                                                <option value="Blogger">Blogger</option>
-                                                <option value="Short Story Writer">Short Story Writer</option>
-                                                <option value="Motivational Speaker">Motivational Speaker</option>
-                                                <option value="Spiritual Leader">Spiritual Leader</option>
-                                                <option value="Literary Critic">Literary Critic</option>
-                                            </select>
+                                        <option value="Writer">Writer</option>
+                                        <option value="Publisher">Publisher</option>
+                                        <option value="Printer">Printer</option>
+                                        <option value="Editor">Editor</option>
+                                        <option value="Artist">Artist</option>
+                                        <option value="Digital Graphics Designer">Digital Graphics Designer</option>
+                                        <option value="Digital Content Creator">Digital Content Creator</option>
+                                        <option value="Spiritual Leader">Spiritual Leader</option>
+                                        <option value="Social Media Influencer">Social Media Influencer</option>
+                                        <option value="Digital Marketer">Digital Marketer</option>
+                                        <option value="Public Relations Manager">Public Relations Manager</option>
+                                        <option value="Event Manager">Event Manager</option>
+                                        <option value="Entertainment Troupe Owner">Entertainment Troupe Owner</option>
+                                        <option value="Standup Comedian">Standup Comedian</option>
+                                        <option value="Compere/Emcee">Compere/Emcee</option>
+                                        <option value="Book Store Owner">Book Store Owner</option>
+                                        <option value="Digital Marketplace/Platform">Digital Marketplace/Platform</option>
+                                        <option value="Poet">Poet</option>
+                                        <option value="Essayist">Essayist</option>
+                                        <option value="Blogger">Blogger</option>
+                                        <option value="Novelist">Novelist</option>
+                                        <option value="Copywriter">Copywriter</option>
+                                        <option value="Columnist">Columnist</option>
+                                        <option value="Journalist">Journalist</option>
+                                        <option value="Short Story Writer">Short Story Writer</option>
+                                        <option value="Motivational Speaker">Motivational Speaker</option>
+                                        <option value="Literary Critic">Literary Critic</option>
+                                        <option value="Literacy Reviewer">Literacy Reviewer</option>
+                                        <option value="Lyricist">Lyricist</option>
+                                        <option value="Scriptwriter-Drama">Scriptwriter-Drama</option>
+                                        <option value="Scriptwriter-Screen">Scriptwriter-Screen</option>
+                                        <option value="Translator">Translator</option>
+                                        </select>
                                 </div>
                             </div>
                             <div class="col-12">
@@ -130,24 +151,66 @@
                                     <textarea name="introduction" id="introduction" rows="4" class="form-control" placeholder="Write a brief introduction about yourself..." required></textarea>
                                 </div>
                             </div>
-                            <div class="col-md-4">
+                            <div class="col-md-12">
                                 <div class="mb-3">
-                                    <label class="form-label fw-semibold">Languages you can Read:</label>
-                                    <textarea name="languages_read" id="languages_read" rows="2" class="form-control" placeholder="e.g., English, Hindi, Odia" required></textarea>
+                                    <label class="form-label fw-semibold">Languages:</label>
+                                    <table class="table table-bordered">
+                                        <thead>
+                                            <tr>
+                                                <th>Language</th>
+                                                <th>Read</th>
+                                                <th>Write</th>
+                                                <th>Speak</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <td>English</td>
+                                                <td><input type="checkbox" name="languages_read[]" value="English"></td>
+                                                <td><input type="checkbox" name="languages_write[]" value="English"></td>
+                                                <td><input type="checkbox" name="languages_speak[]" value="English"></td>
+                                            </tr>
+                                            <tr>
+                                                <td>Hindi</td>
+                                                <td><input type="checkbox" name="languages_read[]" value="Hindi"></td>
+                                                <td><input type="checkbox" name="languages_write[]" value="Hindi"></td>
+                                                <td><input type="checkbox" name="languages_speak[]" value="Hindi"></td>
+                                            </tr>
+                                            <tr>
+                                                <td>Odia</td>
+                                                <td><input type="checkbox" name="languages_read[]" value="Odia"></td>
+                                                <td><input type="checkbox" name="languages_write[]" value="Odia"></td>
+                                                <td><input type="checkbox" name="languages_speak[]" value="Odia"></td>
+                                            </tr>
+                                            <tr>
+                                                <td>Telugu</td>
+                                                <td><input type="checkbox" name="languages_read[]" value="Telugu"></td>
+                                                <td><input type="checkbox" name="languages_write[]" value="Telugu"></td>
+                                                <td><input type="checkbox" name="languages_speak[]" value="Telugu"></td>
+                                            </tr>
+                                            <tr>
+                                                <td>Tamil</td>
+                                                <td><input type="checkbox" name="languages_read[]" value="Tamil"></td>
+                                                <td><input type="checkbox" name="languages_write[]" value="Tamil"></td>
+                                                <td><input type="checkbox" name="languages_speak[]" value="Tamil"></td>
+                                            </tr>
+                                            <tr>
+                                                <td>Kannada</td>
+                                                <td><input type="checkbox" name="languages_read[]" value="Kannada"></td>
+                                                <td><input type="checkbox" name="languages_write[]" value="Kannada"></td>
+                                                <td><input type="checkbox" name="languages_speak[]" value="Kannada"></td>
+                                            </tr>
+                                            <tr>
+                                                <td>Malayalam</td>
+                                                <td><input type="checkbox" name="languages_read[]" value="Malayalam"></td>
+                                                <td><input type="checkbox" name="languages_write[]" value="Malayalam"></td>
+                                                <td><input type="checkbox" name="languages_speak[]" value="Malayalam"></td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
                                 </div>
                             </div>
-                            <div class="col-md-4">
-                                <div class="mb-3">
-                                    <label class="form-label fw-semibold">Languages you can Write:</label>
-                                    <textarea name="languages_write" id="languages_write" rows="2" class="form-control" placeholder="e.g., English, Hindi, Odia" required></textarea>
-                                </div>
-                            </div>
-                            <div class="col-md-4">
-                                <div class="mb-3">
-                                    <label class="form-label fw-semibold">Languages you can Speak:</label>
-                                    <textarea name="languages_speak" id="languages_speak" rows="2" class="form-control" placeholder="e.g., English, Hindi, Odia" required></textarea>
-                                </div>
-                            </div>
+                
                             <div class="col-12">
                                 <div class="mb-3">
                                     <label class="form-label fw-semibold">Social Media Links:</label>
@@ -225,56 +288,111 @@
                                     <div class="col-lg-12">
                                         <div class="mb-3">
                                             <label class="fw-semibold">Skills:</label>
-                                            <div id="custom-multi-select" style="border: 1px solid #ced4da; padding: 15px; border-radius: 10px; max-height: 200px; overflow-y: auto;  scrollbar-width: 1px; -ms-overflow-style: none;">
-                                                <label style="display: block; margin: 5px 0; font-size: 14px;">
-                                                    <input type="checkbox" value="Writer" class="skill-checkbox" style="margin-right: 8px;"> Writer
+                                            <div id="custom-multi-select" style="display: flex; flex-wrap: wrap; gap: 10px;">
+                                                <label style="display: flex; align-items: center;">
+                                                    <input type="checkbox" value="Writer" class="skill-checkbox" style="margin-right: 4px; vertical-align: middle;"> Writer
                                                 </label>
-                                                <label style="display: block; margin: 5px 0; font-size: 14px;">
-                                                    <input type="checkbox" value="Editor" class="skill-checkbox" style="margin-right: 8px;"> Editor
+                                                <label style="display: flex; align-items: center;">
+                                                    <input type="checkbox" value="Publisher" class="skill-checkbox" style="margin-right: 4px; vertical-align: middle;"> Publisher
                                                 </label>
-                                                <label style="display: block; margin: 5px 0; font-size: 14px;">
-                                                    <input type="checkbox" value="Poet" class="skill-checkbox" style="margin-right: 8px;"> Poet
+                                                <label style="display: flex; align-items: center;">
+                                                    <input type="checkbox" value="Printer" class="skill-checkbox" style="margin-right: 4px; vertical-align: middle;"> Printer
                                                 </label>
-                                                <label style="display: block; margin: 5px 0; font-size: 14px;">
-                                                    <input type="checkbox" value="Blogger" class="skill-checkbox" style="margin-right: 8px;"> Blogger
+                                                <label style="display: flex; align-items: center;">
+                                                    <input type="checkbox" value="Editor" class="skill-checkbox" style="margin-right: 4px; vertical-align: middle;"> Editor
                                                 </label>
-                                                <label style="display: block; margin: 5px 0; font-size: 14px;">
-                                                    <input type="checkbox" value="Novelist" class="skill-checkbox" style="margin-right: 8px;"> Novelist
+                                                <label style="display: flex; align-items: center;">
+                                                    <input type="checkbox" value="Artist" class="skill-checkbox" style="margin-right: 4px; vertical-align: middle;"> Artist
                                                 </label>
-                                                <label style="display: block; margin: 5px 0; font-size: 14px;">
-                                                    <input type="checkbox" value="Copywriter" class="skill-checkbox" style="margin-right: 8px;"> Copywriter
+                                                <label style="display: flex; align-items: center;">
+                                                    <input type="checkbox" value="Digital Graphics Designer" class="skill-checkbox" style="margin-right: 4px; vertical-align: middle;"> Digital Graphics Designer
                                                 </label>
-                                                <label style="display: block; margin: 5px 0; font-size: 14px;">
-                                                    <input type="checkbox" value="Content Creator" class="skill-checkbox" style="margin-right: 8px;"> Content Creator
+                                                <label style="display: flex; align-items: center;">
+                                                    <input type="checkbox" value="Digital Content Creator" class="skill-checkbox" style="margin-right: 4px; vertical-align: middle;"> Digital Content Creator
                                                 </label>
-                                                <label style="display: block; margin: 5px 0; font-size: 14px;">
-                                                    <input type="checkbox" value="Short Story Writer" class="skill-checkbox" style="margin-right: 8px;"> Short Story Writer
+                                                <label style="display: flex; align-items: center;">
+                                                    <input type="checkbox" value="Spiritual Leader" class="skill-checkbox" style="margin-right: 4px; vertical-align: middle;"> Spiritual Leader
                                                 </label>
-                                                <label style="display: block; margin: 5px 0; font-size: 14px;">
-                                                    <input type="checkbox" value="Motivational Speaker" class="skill-checkbox" style="margin-right: 8px;"> Motivational Speaker
+                                                <label style="display: flex; align-items: center;">
+                                                    <input type="checkbox" value="Social Media Influencer" class="skill-checkbox" style="margin-right: 4px; vertical-align: middle;"> Social Media Influencer
                                                 </label>
-                                                <label style="display: block; margin: 5px 0; font-size: 14px;">
-                                                    <input type="checkbox" value="Literary Critic" class="skill-checkbox" style="margin-right: 8px;"> Literary Critic
+                                                <label style="display: flex; align-items: center;">
+                                                    <input type="checkbox" value="Digital Marketer" class="skill-checkbox" style="margin-right: 4px; vertical-align: middle;"> Digital Marketer
                                                 </label>
-                                                <label style="display: block; margin: 5px 0; font-size: 14px;">
-                                                    <input type="checkbox" value="Ghostwriter" class="skill-checkbox" style="margin-right: 8px;"> Ghostwriter
+                                                <label style="display: flex; align-items: center;">
+                                                    <input type="checkbox" value="Public Relations Manager" class="skill-checkbox" style="margin-right: 4px; vertical-align: middle;"> Public Relations Manager
                                                 </label>
-                                                <label style="display: block; margin: 5px 0; font-size: 14px;">
-                                                    <input type="checkbox" value="Screenwriter" class="skill-checkbox" style="margin-right: 8px;"> Screenwriter
+                                                <label style="display: flex; align-items: center;">
+                                                    <input type="checkbox" value="Event Manager" class="skill-checkbox" style="margin-right: 4px; vertical-align: middle;"> Event Manager
                                                 </label>
-                                                <label style="display: block; margin: 5px 0; font-size: 14px;">
-                                                    <input type="checkbox" value="Audiobook Narrator" class="skill-checkbox" style="margin-right: 8px;"> Audiobook Narrator
+                                                <label style="display: flex; align-items: center;">
+                                                    <input type="checkbox" value="Entertainment Troupe Owner" class="skill-checkbox" style="margin-right: 4px; vertical-align: middle;"> Entertainment Troupe Owner
                                                 </label>
-                                                <label style="display: block; margin: 5px 0; font-size: 14px;">
-                                                    <input type="checkbox" value="Book Designer" class="skill-checkbox" style="margin-right: 8px;"> Book Designer
+                                                <label style="display: flex; align-items: center;">
+                                                    <input type="checkbox" value="Standup Comedian" class="skill-checkbox" style="margin-right: 4px; vertical-align: middle;"> Standup Comedian
                                                 </label>
-                                                <label style="display: block; margin: 5px 0; font-size: 14px;">
-                                                    <input type="checkbox" value="Translator" class="skill-checkbox" style="margin-right: 8px;"> Translator
+                                                <label style="display: flex; align-items: center;">
+                                                    <input type="checkbox" value="Compere/Emcee" class="skill-checkbox" style="margin-right: 4px; vertical-align: middle;"> Compere/Emcee
+                                                </label>
+                                                
+                                                <label style="display: flex; align-items: center;">
+                                                    <input type="checkbox" value="Book Store Owner" class="skill-checkbox" style="margin-right: 4px; vertical-align: middle;"> Book Store Owner
+                                                </label>
+                                                <label style="display: flex; align-items: center;">
+                                                    <input type="checkbox" value="Digital Marketplace/Platform" class="skill-checkbox" style="margin-right: 4px; vertical-align: middle;"> Digital Marketplace/Platform
+                                                </label>
+                                                <label style="display: flex; align-items: center;">
+                                                    <input type="checkbox" value="Poet" class="skill-checkbox" style="margin-right: 4px; vertical-align: middle;"> Poet
+                                                </label>
+                                                <label style="display: flex; align-items: center;">
+                                                    <input type="checkbox" value="Essayist" class="skill-checkbox" style="margin-right: 4px; vertical-align: middle;"> Essayist
+                                                </label>
+                                                <label style="display: flex; align-items: center;">
+                                                    <input type="checkbox" value="Blogger" class="skill-checkbox" style="margin-right: 4px; vertical-align: middle;"> Blogger
+                                                </label>
+
+                                                <label style="display: flex; align-items: center;">
+                                                    <input type="checkbox" value="Novelist" class="skill-checkbox" style="margin-right: 4px; vertical-align: middle;"> Novelist
+                                                </label>
+                                                <label style="display: flex; align-items: center;">
+                                                    <input type="checkbox" value="Copywriter" class="skill-checkbox" style="margin-right: 4px; vertical-align: middle;"> Copywriter
+                                                </label>
+                                                <label style="display: flex; align-items: center;">
+                                                    <input type="checkbox" value="Columnist" class="skill-checkbox" style="margin-right: 4px; vertical-align: middle;"> Columnist
+                                                </label>
+                                                <label style="display: flex; align-items: center;">
+                                                    <input type="checkbox" value="Journalist" class="skill-checkbox" style="margin-right: 4px; vertical-align: middle;"> Journalist
+                                                </label>
+                                                <label style="display: flex; align-items: center;">
+                                                    <input type="checkbox" value="Short Story Writer" class="skill-checkbox" style="margin-right: 4px; vertical-align: middle;"> Short Story Writer
+                                                </label>
+                                                <label style="display: flex; align-items: center;">
+                                                    <input type="checkbox" value="Motivational Speaker" class="skill-checkbox" style="margin-right: 4px; vertical-align: middle;"> Motivational Speaker
+                                                </label>
+                                                <label style="display: flex; align-items: center;">
+                                                    <input type="checkbox" value="Literary Critic" class="skill-checkbox" style="margin-right: 4px; vertical-align: middle;"> Literary Critic
+                                                </label>
+                                                <label style="display: flex; align-items: center;">
+                                                    <input type="checkbox" value="Literacy Reviewer" class="skill-checkbox" style="margin-right: 4px; vertical-align: middle;"> Literacy Reviewer
+                                                </label>
+                                                <label style="display: flex; align-items: center;">
+                                                    <input type="checkbox" value="Lyricist" class="skill-checkbox" style="margin-right: 4px; vertical-align: middle;"> Lyricist
+                                                </label>
+                                                <label style="display: flex; align-items: center;">
+                                                    <input type="checkbox" value="Scriptwriter-Drama" class="skill-checkbox" style="margin-right: 4px; vertical-align: middle;"> Scriptwriter-Drama
+                                                </label>
+                                                <label style="display: flex; align-items: center;">
+                                                    <input type="checkbox" value="Scriptwriter-Screen" class="skill-checkbox" style="margin-right: 4px; vertical-align: middle;"> Scriptwriter-Screen
+                                                </label>
+                                                <label style="display: flex; align-items: center;">
+                                                    <input type="checkbox" value="Translator" class="skill-checkbox" style="margin-right: 4px; vertical-align: middle;"> Translator
                                                 </label>
                                             </div>
                                             <small class="text-muted">You can select up to 6 skills.</small>
                                         </div>
                                     </div>
+                                    
+                                    
                                     
                                     
                                     <script>
@@ -285,7 +403,7 @@
                                                 const selectedCheckboxes = document.querySelectorAll('.skill-checkbox:checked');
                                                 if (selectedCheckboxes.length > 6) {
                                                     alert("You can only select up to 6 skills.");
-                                                    this.checked = false; // Uncheck the last selected one
+                                                    this.checked = false; 
                                                 }
                                             });
                                         });

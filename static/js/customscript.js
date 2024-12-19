@@ -13,15 +13,30 @@ $(document).ready(function() {
         var address = document.getElementById("address").value;
         var description = document.getElementById("description").value;
         var introduction = document.getElementById("introduction").value;
-        var languages_read = document.getElementById("languages_read").value;
-        var languages_write = document.getElementById("languages_write").value;
-        var languages_speak = document.getElementById("languages_speak").value;
         var facebook_link = document.getElementById("facebook_link").value;
         var instagram_link = document.getElementById("instagram_link").value;
         var linkedin_link = document.getElementById("linkedin_link").value;
         var email = document.getElementById("email2").value;
         var contact_number = document.getElementById("phone").value;
         var profile_picture = document.getElementById("profile_picture").files[0];
+
+        var languages_read = []
+        document.querySelectorAll('input[name="languages_read[]"]:checked').forEach(function(checkbox) {
+            languages_read.push(checkbox.value);
+        })
+        console.log(languages_read);
+
+        var languages_write = []
+        document.querySelectorAll('input[name="languages_write[]"]:checked').forEach(function(checkbox) {
+            languages_write.push(checkbox.value);
+        })
+        console.log(languages_write);
+
+        var languages_speak = []
+        document.querySelectorAll('input[name="languages_speak[]"]:checked').forEach(function(checkbox) {
+            languages_speak.push(checkbox.value);
+        })
+        console.log(languages_speak);
 
 
         var formData = new FormData();
@@ -34,9 +49,9 @@ $(document).ready(function() {
         formData.append('address', address);
         formData.append('description', description);
         formData.append('introduction', introduction);
-        formData.append('languages_read', languages_read);
-        formData.append('languages_write', languages_write);
-        formData.append('languages_speak', languages_speak);
+        formData.append('languages_read', languages_read.join(','));
+        formData.append('languages_write', languages_write.join(','));
+        formData.append('languages_speak', languages_speak.join(','));
         formData.append('facebook_link', facebook_link);
         formData.append('instagram_link', instagram_link);
         formData.append('linkedin_link', linkedin_link);
@@ -52,13 +67,13 @@ $(document).ready(function() {
             contentType: false,
             success: function(response) {
                 toastr.success('Personal Details Updated successfully!', 'Success');
-                const inputFields = ["firstname", "lastname", "gender", "dob", "Country", "address", "description", "introduction", "languages_read", "languages_write", "languages_speak", "facebook_link", "instagram_link", "linkedin_link", "email2", "phone", "profile_picture"];
+                const inputFields = ["firstname", "lastname", "gender", "dob", "Country", "address", "description", "introduction", "facebook_link", "instagram_link", "linkedin_link", "email2", "phone", "profile_picture"];
                 inputFields.forEach(fieldId => {
                     document.getElementById(fieldId).value = "";
-
-
-
                 });
+                document.querySelectorAll('input[type="checkbox"]:checked').forEach(function(checkbox) {
+                    checkbox.checked = false;
+                })
             },
             error: function(xhr) {
                 var errors = xhr.responseJSON;
@@ -418,9 +433,6 @@ $(document).ready(function() {
         var address = $('#address').val();
         var description = $('#description').val();
         var introduction = $('#introduction').val();
-        var languagesRead = $('#languages_read').val();
-        var languagesWrite = $('#languages_write').val();
-        var languagesSpeak = $('#languages_speak').val();
         var facebookLink = $('#facebook_link').val();
         var instagramLink = $('#instagram_link').val();
         var linkedinLink = $('#linkedin_link').val();
