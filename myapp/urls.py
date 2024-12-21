@@ -62,6 +62,7 @@ urlpatterns = [
       path('filter-artists/', views.filter_artists, name='filter_artists'),
       path('reset-your-password/',views.reset_user_password,name="reset-your-password"),
       path('reset-password/<int:user_id>/<str:token>/',views.reset_password, name='reset_password'),
+      
 
 
 

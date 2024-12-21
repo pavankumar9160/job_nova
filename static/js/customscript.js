@@ -253,6 +253,7 @@ $(document).ready(function() {
                 search_query: query
             },
             success: function(response) {
+                document.getElementById('searchItem2').value = "";
                 console.log(response.artists_with_details);
 
                 var container = $(".col-lg-8.col-md-6.col-12 .row.g-4");
@@ -324,6 +325,7 @@ $(document).ready(function() {
     $('#applyFilterBtn').click(function(e) {
         e.preventDefault();
 
+        // Get filter values
         var category = $('#description').val();
         var location = $('#Country').val();
         var selectedSkills = [];
@@ -331,6 +333,7 @@ $(document).ready(function() {
             selectedSkills.push($(this).val());
         });
 
+        // Prepare filter data
         var filterData = {
             'category': category,
             'location': location,
@@ -339,69 +342,69 @@ $(document).ready(function() {
 
         var artistProfileBaseURL = "/artist-profile_updated_one/"; // Base URL
 
+        // Send AJAX request to get filtered artists
         $.ajax({
             url: '/filter-artists/',
             type: 'GET',
             data: filterData,
             success: function(response) {
-                // $('input[type="checkbox"]:checked').prop('checked', false);
-                $('#description').val('');
-                $('#Country').val();
-                console.log(response.artists_with_details);
-
                 var container = $(".col-lg-8.col-md-6.col-12 .row.g-4");
 
                 container.empty();
 
+                $('#description').val('');
+                $('#Country').val('');
+                // $('input[type="checkbox"]:checked').prop('checked', false); // Uncheck all checkboxes
+
+                console.log(response.artists_with_details);
+
                 if (response.artists_with_details.length > 0) {
-
                     response.artists_with_details.forEach(function(artist) {
-
                         var skillBadges = '';
                         if (artist.skills && artist.skills.length > 0) {
                             artist.skills.forEach(function(skill) {
                                 skillBadges += `<span class="badge bg-soft-primary rounded-pill me-1">${skill}</span>`;
                             });
                         }
+
                         var artistProfileURL = artistProfileBaseURL + artist.id + "/"; // Construct URL dynamically
-
-
+                        // Build the artist HTML content
                         var artistHTML = `
-                                                <div class="col-md-6 col-12">
-                                                    <div class="candidate-card position-relative overflow-hidden text-center shadow rounded p-4">
-                                                        <div class="ribbon ribbon-left overflow-hidden">
-                                                            <span class="text-center d-block bg-warning shadow small h6">
-                                                                <i class="mdi mdi-star"></i>
-                                                            </span>
-                                                        </div>
-                                                        <div class="content">
-                                                            <!-- Profile Picture (if available, otherwise default) -->
-                                                            <img src="${artist.profile_picture ? artist.profile_picture : STATIC_URL + 'images/blank_pic.png'}" class="avatar avatar-md-md rounded-pill shadow-md" alt="">
-                                                            <div class="mt-3">
-                                                                <a href="${artistProfileURL}" class="title h5 text-dark">${artist.name}</a>
-                                                                <p class="text-muted mt-1">${artist.job_title || ''}</p>
-                                                                ${skillBadges}
-                                                            </div>
-                                                            <div class="mt-3">
-                                                                <a href="${artistProfileURL}" class="btn btn-sm btn-primary me-1">View Profile</a>
-                                                                <a href="/contactus/" class="btn btn-sm btn-icon btn-soft-primary">
-                                                                    <i data-feather="message-circle" class="icons"></i>
-                                                                </a>
-                                                            </div>
-                                                            <a href="javascript:void(0)" class="like"><i class="mdi mdi-heart align-middle fs-4"></i></a>
-                                                        </div>
-                                                    </div>
-                                                </div><!--end col-->
-                                            `;
+                            <div class="col-md-6 col-12">
+                                <div class="candidate-card position-relative overflow-hidden text-center shadow rounded p-4">
+                                    <div class="ribbon ribbon-left overflow-hidden">
+                                        <span class="text-center d-block bg-warning shadow small h6">
+                                            <i class="mdi mdi-star"></i>
+                                        </span>
+                                    </div>
+                                    <div class="content">
+                                        <!-- Profile Picture -->
+                                        <img src="${artist.profile_picture ? artist.profile_picture : STATIC_URL + 'images/blank_pic.png'}" class="avatar avatar-md-md rounded-pill shadow-md" alt="">
+                                        <div class="mt-3">
+                                            <a href="${artistProfileURL}" class="title h5 text-dark">${artist.name}</a>
+                                            <p class="text-muted mt-1">${artist.job_title || ''}</p>
+                                            ${skillBadges}
+                                        </div>
+                                        <div class="mt-3">
+                                            <a href="${artistProfileURL}" class="btn btn-sm btn-primary me-1">View Profile</a>
+                                            <a href="/contactus/" class="btn btn-sm btn-icon btn-soft-primary">
+                                                <i data-feather="message-circle" class="icons"></i>
+                                            </a>
+                                        </div>
+                                        <a href="javascript:void(0)" class="like"><i class="mdi mdi-heart align-middle fs-4"></i></a>
+                                    </div>
+                                </div>
+                            </div><!--end col-->
+                        `;
                         container.append(artistHTML);
                     });
                 } else {
-                    // If no artists found, display the "No artist found" message
+                    // If no artists found, display "No artists found" message
                     var noArtistsMessage = `
-                                            <div class="col-12 text-center">
-                                                <p class="h5 text-muted">No artist found</p>
-                                            </div>
-                                        `;
+                        <div class="col-12 text-center">
+                            <p class="h5 text-muted">No artists found</p>
+                        </div>
+                    `;
                     container.append(noArtistsMessage);
                 }
 
@@ -413,6 +416,7 @@ $(document).ready(function() {
             }
         });
     });
+
 
 
 });
@@ -969,3 +973,106 @@ $(document).ready(function() {
         }
     });
 });
+
+
+
+$(document).ready(function() {
+    // Check if there is a search query in the URL
+    var urlParams = new URLSearchParams(window.location.search);
+    var searchQuery = urlParams.get('search_query');
+
+    if (searchQuery) {
+        console.log("Search query:", searchQuery);
+
+        // After rendering the results (e.g., your AJAX request or template rendering), remove the query parameter
+        var newURL = window.location.origin + window.location.pathname; // Remove query string
+        window.history.replaceState({}, document.title, newURL); // Replace URL without query parameter
+    }
+});
+
+
+
+
+// $(document).ready(function() {
+//     $('#artistIndexSearch').on('submit', function(event) {
+
+//         console.log("clicked")
+//         event.preventDefault();
+//         var query = $("#job-keyword").val();
+//         var artistProfileBaseURL = "/artist-profile_updated_one/"; // Base URL
+//         if (query.trim() === "") {
+//             alert("Please enter a search query.");
+//             return; // Exit if no query is entered
+//         }
+//         $.ajax({
+//             url: '/artists/',
+//             type: "GET",
+//             data: {
+//                 search_query: query
+//             },
+//             success: function(response) {
+//                 console.log(response.artists_with_details);
+
+//                 var container = $(".col-lg-8.col-md-6.col-12 .row.g-4");
+//                 container.empty();
+
+//                 if (response.artists_with_details.length > 0) {
+
+//                     response.artists_with_details.forEach(function(artist) {
+
+//                         var skillBadges = '';
+//                         if (artist.skills && artist.skills.length > 0) {
+//                             artist.skills.forEach(function(skill) {
+//                                 skillBadges += `<span class="badge bg-soft-primary rounded-pill me-1">${skill}</span>`;
+//                             });
+//                         }
+//                         var artistProfileURL = artistProfileBaseURL + artist.id + "/"; // Construct URL dynamically
+//                         var artistHTML = `
+//                             <div class="col-md-6 col-12">
+//                                 <div class="candidate-card position-relative overflow-hidden text-center shadow rounded p-4">
+//                                     <div class="ribbon ribbon-left overflow-hidden">
+//                                         <span class="text-center d-block bg-warning shadow small h6">
+//                                             <i class="mdi mdi-star"></i>
+//                                         </span>
+//                                     </div>
+//                                     <div class="content">
+//                                         <!-- Profile Picture (if available, otherwise default) -->
+//                                         <img src="${artist.profile_picture ? artist.profile_picture : STATIC_URL + 'images/blank_pic.png'}" class="avatar avatar-md-md rounded-pill shadow-md" alt="">
+//                                         <div class="mt-3">
+//                                             <a href="${artistProfileURL}"  class="title h5 text-dark">${artist.name}</a>
+//                                             <p class="text-muted mt-1">${artist.job_title || ''}</p>
+//                                             ${skillBadges}
+//                                         </div>
+//                                         <div class="mt-3">
+//                                             <a href="${artistProfileURL}"  class="btn btn-sm btn-primary me-1">View Profile</a>
+//                                             <a href="/contactus/" class="btn btn-sm btn-icon btn-soft-primary">
+//                                                 <i data-feather="message-circle" class="icons"></i>
+//                                             </a>
+//                                         </div>
+//                                         <a href="javascript:void(0)" class="like"><i class="mdi mdi-heart align-middle fs-4"></i></a>
+//                                     </div>
+//                                 </div>
+//                             </div><!--end col-->
+//                         `;
+//                         container.append(artistHTML);
+//                     });
+//                 } else {
+//                     // If no artists found, display the "No artist found" message
+//                     var noArtistsMessage = `
+//                         <div class="col-12 text-center">
+//                             <p class="h5 text-muted">No artist found</p>
+//                         </div>
+//                     `;
+//                     container.append(noArtistsMessage);
+//                 }
+
+//                 // Replace feather icons (if any)
+//                 feather.replace();
+//             },
+//             error: function() {
+//                 alert("An error occurred while fetching data.");
+//             }
+//         });
+//     });
+
+// });

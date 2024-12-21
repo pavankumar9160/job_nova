@@ -8,11 +8,11 @@
                 <div class="row g-4 position-relative z-1">
                     <div class="col-lg-7 col-md-6 col-12 mt-lg-5">
                         <div class="title-heading">
-                            <h1 class="heading text-white title-dark mb-4">Connect, Collaborate, Create</h1>
-                            <p class="para-desc text-white-50">Join a vibrant community of artists, writers, editors, and creators. Find opportunities, collaborations, and inspiration.</p>
+                            <h1 class="heading text-white title-dark mb-4">Pioneering India's Most Comprehensive Creative Landscape</h1>
+                            <p class="para-desc text-white-50">Where all types of stakeholders can create their own profile, get visibility, and interact with each other for their requirements.</p>
                             
                             <div class="d-md-flex justify-content-between align-items-center bg-white shadow rounded p-2 mt-4">
-                                <form class="card-body text-start">
+                                <form class="card-body text-start" id="artistIndexSearch">
                                     <div class="registration-form text-dark text-start">
                                         <div class="row g-lg-0">
                                             <div class="col-lg-9 col-md-8 col-12">
@@ -32,6 +32,23 @@
                                     </div>
                                 </form><!--end form-->
                             </div>
+                            <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+                            <script>
+                                $('#artistIndexSearch').on('submit', function(event) {
+
+                                    console.log("clicked")
+                                    event.preventDefault();
+                                    var query = $("#job-keyword").val();
+                                   // var artistProfileBaseURL = "/artist-profile_updated_one/"; // Base URL
+                                    if (query.trim() === "") {
+                                        alert("Please enter a search query.");
+                                        return; // Exit if no query is entered
+                                    }
+                                    var url = '/artists/?search_query=' + encodeURIComponent(query);
+                                    window.location.href = url;
+                                    $("#job-keyword").val('');
+                                });
+                            </script>
                             <div class="mt-2">
                                 <span class="text-white-50"><span class="text-white">Popular Searches:</span> Writers, Editors, Poets, Creators</span>
                             </div>
@@ -89,75 +106,115 @@
                 </div>
             </div>
             <!--end container-->
-
-            <div class="container mt-100 mt-60">
-                <div class="row justify-content-center mb-4 pb-2">
+     
+            <div class="container mt-100 mb-10">
+                <div class="row justify-content-center mt-50 mb-4 pb-2">
                     <div class="col-12">
                         <div class="section-title text-center">
-                            <h4 class="title mb-3">Popular Artist Listings</h4>
-                            <p class="text-muted para-desc mx-auto mb-0">Explore exciting opportunities in the creative world. Whether you're looking for full-time, part-time, or freelance work, connect with top clients and build your career!</p>
+                            <h4 class="title mb-3">Why Creative Commune?</h4>
+                    <p class="text-muted para-desc mx-auto mb-0">
+                        A book, though written by an author, is finally read by a reader. While the writer and publisher are visible, dozens of creative professionals work behind the scenes—from designing the book to its distribution and delivery. Creative Commune aims to create a virtual landscape of all professionals, accessible to everyone.
+                    </p>
                         </div>
                     </div><!--end col-->
                 </div><!--end row-->
-            
-                <div class="row g-4 mt-0">
-                    <div class="col-lg-4 col-md-6 col-12">
-                        <div class="job-post rounded shadow bg-white">
-                            <div class="p-4">
-                                <a href="{% url 'services-detail-two' %}" class="text-dark title h5">Freelance Writing Projects</a>
-                                <p class="text-muted d-flex align-items-center small mt-3"><i data-feather="clock" class="fea icon-sm text-primary me-1"></i>Now Available</p>
-                                <ul class="list-unstyled d-flex justify-content-between align-items-center mb-0 mt-3">
-                                    <li class="list-inline-item"><span class="badge bg-soft-primary">Freelance</span></li>
-                                </ul>
-                            </div>
-                            <div class="d-flex align-items-center p-4 border-top">
-                                <img src="{% static 'images/company/facebook-logo.png' %}" class="avatar avatar-small rounded shadow p-3 bg-white" alt="">
-                                <div class="ms-3">
-                                    <a href="{% url 'services_prvdr-profile' %}" class="h5 company text-dark">Facebook Group Access for Writers</a>
-                                    <span class="text-muted d-flex align-items-center mt-1"><i data-feather="map-pin" class="fea icon-sm me-1"></i>Odisha</span>
+
+                <div class="row">
+                    <div class="col-12 mt-4">
+                        <div class="tiny-five-item">
+                            <div class="tiny-slide">
+                                <div class="card features rounded shadow position-relative overflow-hidden m-2">
+                                    <div class="card-body p-0">
+                                        <div class="card-img">
+                                            <img src="{% static 'images/work/01.jpg' %}" class="img-fluid" alt="">
+                                            <div class="card-overlay"></div>
+                                        </div>
+                
+                                        <div class="position-absolute bottom-0 start-0 m-3">
+                                            <a href="" class="title h5 text-white">Manuscript Editing</a>
+                                        </div>
+                                    </div>
                                 </div>
-                            </div>
-                        </div>
-                    </div><!--end col-->
-            
-                    <div class="col-lg-4 col-md-6 col-12">
-                        <div class="job-post rounded shadow bg-white">
-                            <div class="p-4">
-                                <a href="{% url 'services-detail-two' %}" class="text-dark title h5">Art & Literature Collaborations</a>
-                                <p class="text-muted d-flex align-items-center small mt-3"><i data-feather="clock" class="fea icon-sm text-primary me-1"></i>Open Now</p>
-                                <ul class="list-unstyled d-flex justify-content-between align-items-center mb-0 mt-3">
-                                    <li class="list-inline-item"><span class="badge bg-soft-primary">Part-Time</span></li>
-                                </ul>
-                            </div>
-                            <div class="d-flex align-items-center p-4 border-top">
-                                <img src="{% static 'images/company/linkedin.png' %}" class="avatar avatar-small rounded shadow p-3 bg-white" alt="">
-                                <div class="ms-3">
-                                    <a href="{% url 'services_prvdr-profile' %}" class="h5 company text-dark">LinkedIn Networking for Artists</a>
-                                    <span class="text-muted d-flex align-items-center mt-1"><i data-feather="map-pin" class="fea icon-sm me-1"></i>Nationwide</span>
+                            </div><!--end col-->
+                
+                            <div class="tiny-slide">
+                                <div class="card features rounded shadow position-relative overflow-hidden m-2">
+                                    <div class="card-body p-0">
+                                        <div class="card-img">
+                                            <img src="{% static 'images/work/02.jpg' %}" class="img-fluid" alt="">
+                                            <div class="card-overlay"></div>
+                                        </div>
+                
+                                        <div class="position-absolute bottom-0 start-0 m-3">
+                                            <a href="" class="title h5 text-white">Author Branding</a>
+                                        </div>
+                                    </div>
                                 </div>
-                            </div>
-                        </div>
-                    </div><!--end col-->
-            
-                    <div class="col-lg-4 col-md-6 col-12">
-                        <div class="job-post rounded shadow bg-white">
-                            <div class="p-4">
-                                <a href="{% url 'services-detail-two' %}" class="text-dark title h5">Global Freelance Opportunities</a>
-                                <p class="text-muted d-flex align-items-center small mt-3"><i data-feather="clock" class="fea icon-sm text-primary me-1"></i>Now Hiring</p>
-                                <ul class="list-unstyled d-flex justify-content-between align-items-center mb-0 mt-3">
-                                    <li class="list-inline-item"><span class="badge bg-soft-primary">Freelance</span></li>
-                                </ul>
-                            </div>
-                            <div class="d-flex align-items-center p-4 border-top">
-                                <img src="{% static 'images/company/spotify.png' %}" class="avatar avatar-small rounded shadow p-3 bg-white" alt="">
-                                <div class="ms-3">
-                                    <a href="{% url 'services_prvdr-profile' %}" class="h5 company text-dark">Freelance & Earning Opportunities</a>
-                                    <span class="text-muted d-flex align-items-center mt-1"><i data-feather="map-pin" class="fea icon-sm me-1"></i>Global</span>
+                            </div><!--end col-->
+                
+                            <div class="tiny-slide">
+                                <div class="card features rounded shadow position-relative overflow-hidden m-2">
+                                    <div class="card-body p-0">
+                                        <div class="card-img">
+                                            <img src="{% static 'images/work/03.jpg' %}" class="img-fluid" alt="">
+                                            <div class="card-overlay"></div>
+                                        </div>
+                
+                                        <div class="position-absolute bottom-0 start-0 m-3">
+                                            <a href="" class="title h5 text-white">Cover Design</a>
+                                        </div>
+                                    </div>
                                 </div>
-                            </div>
+                            </div><!--end col-->
+                
+                            <div class="tiny-slide">
+                                <div class="card features rounded shadow position-relative overflow-hidden m-2">
+                                    <div class="card-body p-0">
+                                        <div class="card-img">
+                                            <img src="{% static 'images/work/04.jpg' %}" class="img-fluid" alt="">
+                                            <div class="card-overlay"></div>
+                                        </div>
+                
+                                        <div class="position-absolute bottom-0 start-0 m-3">
+                                            <a href="" class="title h5 text-white">Publishing Assistance</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div><!--end col-->
+                
+                            <div class="tiny-slide">
+                                <div class="card features rounded shadow position-relative overflow-hidden m-2">
+                                    <div class="card-body p-0">
+                                        <div class="card-img">
+                                            <img src="{% static 'images/work/05.jpg' %}" class="img-fluid" alt="">
+                                            <div class="card-overlay"></div>
+                                        </div>
+                
+                                        <div class="position-absolute bottom-0 start-0 m-3">
+                                            <a href="" class="title h5 text-white">Creative Writing</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div><!--end col-->
+                
+                            <div class="tiny-slide">
+                                <div class="card features rounded shadow position-relative overflow-hidden m-2">
+                                    <div class="card-body p-0">
+                                        <div class="card-img">
+                                            <img src="{% static 'images/work/06.jpg' %}" class="img-fluid" alt="">
+                                            <div class="card-overlay"></div>
+                                        </div>
+                
+                                        <div class="position-absolute bottom-0 start-0 m-3">
+                                            <a href="" class="title h5 text-white">Marketing for Authors</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div><!--end col-->
                         </div>
-                    </div><!--end col-->
-                </div><!--end row-->
+                    </div>
+                </div>
+                
             </div>
             
             
@@ -219,7 +276,7 @@
             <div class="job-category job-category-two rounded shadow bg-light p-3">
                 <h5 class="mb-1">Writers & Bloggers</h5>
                 <p class="text-muted para mb-2">100+ Artists Available</p>
-                <a href="#" class="text-primary fw-medium link">Explore Artists <i class="mdi mdi-arrow-right"></i></a>
+                <a href="{% url 'artists' %}" class="text-primary fw-medium link">Explore Artists <i class="mdi mdi-arrow-right"></i></a>
             </div>
         </div><!--end col-->
 
@@ -228,7 +285,7 @@
             <div class="job-category job-category-two rounded shadow bg-light p-3">
                 <h5 class="mb-1">Poets & Literary Artists</h5>
                 <p class="text-muted para mb-2">50+ Artists Available</p>
-                <a href="#" class="text-primary fw-medium link">Explore Artists <i class="mdi mdi-arrow-right"></i></a>
+                <a href="{% url 'artists' %}" class="text-primary fw-medium link">Explore Artists <i class="mdi mdi-arrow-right"></i></a>
             </div>
         </div><!--end col-->
 
@@ -237,7 +294,7 @@
             <div class="job-category job-category-two rounded shadow bg-light p-3">
                 <h5 class="mb-1">Editors & Proofreaders</h5>
                 <p class="text-muted para mb-2">75+ Artists Available</p>
-                <a href="#" class="text-primary fw-medium link">Explore Artists <i class="mdi mdi-arrow-right"></i></a>
+                <a href="{% url 'artists' %}" class="text-primary fw-medium link">Explore Artists <i class="mdi mdi-arrow-right"></i></a>
             </div>
         </div><!--end col-->
 
@@ -246,7 +303,7 @@
             <div class="job-category job-category-two rounded shadow bg-light p-3">
                 <h5 class="mb-1">Visual Artists & Designers</h5>
                 <p class="text-muted para mb-2">90+ Artists Available</p>
-                <a href="#" class="text-primary fw-medium link">Explore Artists <i class="mdi mdi-arrow-right"></i></a>
+                <a href="{% url 'artists' %}" class="text-primary fw-medium link">Explore Artists <i class="mdi mdi-arrow-right"></i></a>
             </div>
         </div><!--end col-->
 
@@ -255,7 +312,7 @@
             <div class="job-category job-category-two rounded shadow bg-light p-3">
                 <h5 class="mb-1">Motivational Speakers</h5>
                 <p class="text-muted para mb-2">30+ Artists Available</p>
-                <a href="#" class="text-primary fw-medium link">Explore Artists <i class="mdi mdi-arrow-right"></i></a>
+                <a href="{% url 'artists' %}" class="text-primary fw-medium link">Explore Artists <i class="mdi mdi-arrow-right"></i></a>
             </div>
         </div><!--end col-->
 
@@ -264,7 +321,7 @@
             <div class="job-category job-category-two rounded shadow bg-light p-3">
                 <h5 class="mb-1">Literary Critics</h5>
                 <p class="text-muted para mb-2">20+ Artists Available</p>
-                <a href="#" class="text-primary fw-medium link">Explore Artists <i class="mdi mdi-arrow-right"></i></a>
+                <a href="{% url 'artists' %}" class="text-primary fw-medium link">Explore Artists <i class="mdi mdi-arrow-right"></i></a>
             </div>
         </div><!--end col-->
 
@@ -273,7 +330,7 @@
             <div class="job-category job-category-two rounded shadow bg-light p-3">
                 <h5 class="mb-1">Spiritual Leaders</h5>
                 <p class="text-muted para mb-2">15+ Artists Available</p>
-                <a href="#" class="text-primary fw-medium link">Explore Artists <i class="mdi mdi-arrow-right"></i></a>
+                <a href="{% url 'artists' %}" class="text-primary fw-medium link">Explore Artists <i class="mdi mdi-arrow-right"></i></a>
             </div>
         </div><!--end col-->
 
@@ -282,7 +339,7 @@
             <div class="job-category job-category-two rounded shadow bg-light p-3">
                 <h5 class="mb-1">Public Speakers & Trainers</h5>
                 <p class="text-muted para mb-2">60+ Artists Available</p>
-                <a href="#" class="text-primary fw-medium link">Explore Artists <i class="mdi mdi-arrow-right"></i></a>
+                <a href="{% url 'artists' %}" class="text-primary fw-medium link">Explore Artists <i class="mdi mdi-arrow-right"></i></a>
             </div>
         </div><!--end col-->
 
@@ -291,7 +348,7 @@
             <div class="job-category job-category-two rounded shadow bg-light p-3">
                 <h5 class="mb-1">Content Creators</h5>
                 <p class="text-muted para mb-2">80+ Artists Available</p>
-                <a href="#" class="text-primary fw-medium link">Explore Artists <i class="mdi mdi-arrow-right"></i></a>
+                <a href="{% url 'artists' %}" class="text-primary fw-medium link">Explore Artists <i class="mdi mdi-arrow-right"></i></a>
             </div>
         </div><!--end col-->
 
@@ -300,7 +357,7 @@
             <div class="job-category job-category-two rounded shadow bg-light p-3">
                 <h5 class="mb-1">Music Artists</h5>
                 <p class="text-muted para mb-2">40+ Artists Available</p>
-                <a href="#" class="text-primary fw-medium link">Explore Artists <i class="mdi mdi-arrow-right"></i></a>
+                <a href="{% url 'artists' %}" class="text-primary fw-medium link">Explore Artists <i class="mdi mdi-arrow-right"></i></a>
             </div>
         </div><!--end col-->
     </div><!--end row-->

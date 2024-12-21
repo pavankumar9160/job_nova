@@ -2,6 +2,7 @@ from datetime import datetime
 
 from django.shortcuts import redirect, render
 from django.contrib.auth.decorators import login_required
+from django.urls import reverse
 
 
 
@@ -193,10 +194,17 @@ def artist_profile_updated_one_Id(request, id):
 from django.db.models import Count
 import re
 
+from django.shortcuts import render
+from django.db.models import Count, Q
+import re
+
+
 def artists(request):
     user = request.user
+    search_query = request.GET.get('search_query', '').strip()
+    print("searched_query",search_query)# Get and clean search query
 
-    # Handle profile picture logic based on authentication
+    # Handle profile picture for authenticated users
     if user.is_authenticated:
         try:
             additional_info = ArtistMasterAdditional.objects.get(user=user)
@@ -206,45 +214,52 @@ def artists(request):
     else:
         profile_picture = None
 
-    artists = ArtistMasterBasic.objects.all().exclude(is_superuser=True)
+    # Filter artists based on the search query
+    if search_query:
+        artists = ArtistMasterBasic.objects.filter(
+            Q(additional_info__description__icontains=search_query)
+        ).exclude(is_superuser=True).distinct()
+    else:
+        # Return all artists if no search query is provided
+        artists = ArtistMasterBasic.objects.all().exclude(is_superuser=True)
 
-    additional_details = ArtistMasterAdditional.objects.select_related('user').prefetch_related('skills').all()
+    # Prefetch related additional details and skills
+    additional_details = ArtistMasterAdditional.objects.select_related('user').prefetch_related('skills')
 
     artists_with_details = []
     for artist in artists:
-
         additional_info = additional_details.filter(user=artist).first()
-        
         skills = additional_info.skills.all() if additional_info else []
-
         artists_with_details.append({
             'basic': artist,
             'additional': additional_info,
             'skills': skills
         })
+
+    # Get skill counts
     skill_counts = (
         ArtistMasterAdditional.objects.prefetch_related('skills')
-        .values('skills__name')  
-        .annotate(count=Count('skills'))  
-        .order_by('-count') 
+        .values('skills__name')
+        .annotate(count=Count('skills'))
+        .order_by('-count')
     )
 
-    # Transform skill_counts to a dictionary for easier usage in templates
-    skill_counts_dict =  {
-    re.sub(r'[\s/-]', '_', item['skills__name']): item['count'] 
-    for item in skill_counts if item['skills__name']
-}
+    skill_counts_dict = {
+        re.sub(r'[\s/-]', '_', item['skills__name']): item['count']
+        for item in skill_counts if item['skills__name']
+    }
 
     context = {
         "artist_user": user,
         'profile_picture': profile_picture,
         'artists_with_details': artists_with_details,
-        'skill_counts': skill_counts_dict, 
-    }    
+        'skill_counts': skill_counts_dict,
+        'search_query': search_query,  # Pass the search query to the template
+    }
 
-    
-    
     return render(request, 'candidates.html', context)
+
+
 
 
 
@@ -972,7 +987,7 @@ def filter_artists(request):
         skill_filter = Q()
         for skill in selected_skills:
             skill_filter |= Q(skills__name=skill)  
-        artists = artists.filter(skill_filter)
+        artists = artists.filter(skill_filter).distinct()
 
     if artists.exists():
         artist_data = []
@@ -1093,6 +1108,4 @@ def reset_password(request, user_id, token):
     
     
     return render(request, "helpcenter-support.html", {"user_id": user_id, "token": token})
-        
 
-        
