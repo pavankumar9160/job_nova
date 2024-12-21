@@ -324,6 +324,7 @@ $(document).ready(function() {
             contentType: false,
             success: function(response) {
                 toastr.success('Registration successful!', 'Success');
+                window.location.href = response.redirect_url; 
 
                 const inputFields = ["name", "contact","email", "password", "confirmPassword"];
                 inputFields.forEach(fieldId => {

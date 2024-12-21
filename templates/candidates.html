@@ -787,9 +787,28 @@
                             </div> {% endcomment %}
                             <!-- Salary -->
     
-                            <div class="mt-4">
-                                <button class="btn btn-primary w-100" id="applyFilterBtn">Apply Filter</button>
+                            <div class="row mt-4">
+                                <div class="col-auto">
+                                    <button class="btn btn-primary btn-sm" id="applyFilterBtn">Apply Filter</button>
+                                </div>
+                                <div class="col-auto">
+                                    <button class="btn btn-primary btn-sm" id="clearFilterBtn">Clear Filter</button>
+                                </div>
                             </div>
+                            <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+
+                            <script>
+                                $('#clearFilterBtn').click(function(e) {
+
+                                    e.preventDefault();
+                                
+                                    $('#description').val('');
+                                    $('#Country').val('');
+                                    $("#searchItem2").val('');
+                                    $('input[type="checkbox"]:checked').prop('checked', false); 
+                                })
+                            </script>
+                            
                         </div>
                     </div>
 

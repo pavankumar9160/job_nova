@@ -216,9 +216,10 @@ def artists(request):
 
     # Filter artists based on the search query
     if search_query:
-        artists = ArtistMasterBasic.objects.filter(
-            Q(additional_info__description__icontains=search_query)
-        ).exclude(is_superuser=True).distinct()
+        artists = ArtistMasterBasic.objects.filter(Q(additional_info__skills__name__icontains=search_query) |  # Search by skills
+            Q(additional_info__description__icontains=search_query) |  # Search by description
+            Q(name__icontains=search_query)  # Search by artist name
+        ).prefetch_related('additional_info', 'additional_info__skills').distinct().exclude(is_superuser=True).distinct()
     else:
         # Return all artists if no search query is provided
         artists = ArtistMasterBasic.objects.all().exclude(is_superuser=True)
@@ -643,7 +644,7 @@ def signup_api(request):
                         )
             user.set_password(password)
             user.save()
-            return JsonResponse({'message': 'Registration successful!'}, status=201)
+            return JsonResponse({'message': 'Registration successful!','redirect_url': '/login/'}, status=201)
         except Exception as e:
             return JsonResponse({'error': str(e)}, status=400)
         
