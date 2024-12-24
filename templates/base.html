@@ -37,10 +37,10 @@
             <div class="container">
                 <a class="logo" href="{% url 'index' %}">
                     <span class="logo-light-mode">
-                        <img src="{% static 'images/logo-dark.png' %}" class="l-dark" alt="">
-                        <img src="{% static 'images/logo-white.png' %}" class="l-light" alt="">
+                        <img src="{% static 'images/logo-dark.png' %}" class="l-dark" alt="" width="185" height="65">
+                        <img src="{% static 'images/logo-white.png' %}" class="l-light" alt="" width="185" height="65">
                     </span>
-                    <img src="{% static 'images/logo-white.png' %}" class="logo-dark-mode" alt="">
+                    <img src="{% static 'images/logo-white.png' %}" class="logo-dark-mode" alt="" width="185" height="65">
                 </a>
 
                 <div class="menu-extras">
@@ -248,17 +248,18 @@
                             <div class="row align-items-center">
                                 <div class="col-sm-3">
                                     <div class="text-center text-sm-start">
-                                        <a href=""><img src="{% static 'images/logo-light.png' %}" alt=""></a>
+                                        <a href=""><img src="{% static 'images/logo-light.png' %}" alt="" width="185" height="65"></a>
                                     </div>
                                 </div>
         
                                 <div class="col-sm-9 mt-4 mt-sm-0">
                                     <ul class="list-unstyled footer-list terms-service text-center text-sm-end mb-0">
                                         <li class="list-inline-item my-2"><a href="{% url 'index' %}" class="text-foot fs-6 fw-medium me-2"><i class="mdi mdi-circle-small"></i> Home</a></li>
-                                        <li class="list-inline-item my-2"><a href="{% url 'services' %}" class="text-foot fs-6 fw-medium me-2"><i class="mdi mdi-circle-small"></i> How it works</a></li>
-                                        <li class="list-inline-item my-2"><a href="{% url 'services-post' %}" class="text-foot fs-6 fw-medium me-2"><i class="mdi mdi-circle-small"></i> Publish a book</a></li>
+                                        <li class="list-inline-item my-2"><a href="{% url 'artists' %}" class="text-foot fs-6 fw-medium me-2"><i class="mdi mdi-circle-small"></i> Artists</a></li>
+                                        <li class="list-inline-item my-2"><a href="{% url 'contactus' %}" class="text-foot fs-6 fw-medium me-2"><i class="mdi mdi-circle-small"></i> Contact us</a></li>
+                                        {% comment %} <li class="list-inline-item my-2"><a href="{% url 'services-post' %}" class="text-foot fs-6 fw-medium me-2"><i class="mdi mdi-circle-small"></i> Publish a book</a></li> {% endcomment %}
                                         <li class="list-inline-item my-2"><a href="{% url 'aboutus' %}" class="text-foot fs-6 fw-medium me-2"><i class="mdi mdi-circle-small"></i> About us</a></li>
-                                        <li class="list-inline-item my-2"><a href="{% url 'pricing' %}" class="text-foot fs-6 fw-medium"><i class="mdi mdi-circle-small"></i> Pricing</a></li>
+                                        {% comment %} <li class="list-inline-item my-2"><a href="{% url 'pricing' %}" class="text-foot fs-6 fw-medium"><i class="mdi mdi-circle-small"></i> Pricing</a></li> {% endcomment %}
                                     </ul>
                                 </div><!--end col-->
                             </div><!--end row-->
@@ -330,8 +331,8 @@
                 navLight.classList.remove('nav-light')
                 if (logoElement) {
                     logoElement.innerHTML = `
-                        <img src="${logoDarkUrl}" class="logo-light-mode" alt="Logo">
-                        <img src="${logoLightUrl}" class="logo-dark-mode" alt="Logo">
+                        <img src="${logoDarkUrl}" class="logo-light-mode" alt="Logo" width="185" height="65">
+                        <img src="${logoLightUrl}" class="logo-dark-mode" alt="Logo" width="185" height="65">
                     `;
                 }
             }

@@ -46,11 +46,11 @@
                     <div class="img-two shadow rounded p-2 bg-white">
                         <img src="{% static 'images/about/ab02.jpg' %}" class="img-fluid rounded" alt="work-image">
 
-                        <div class="position-absolute top-0 start-50 translate-middle">
+                        {% comment %} <div class="position-absolute top-0 start-50 translate-middle">
                             <a href="#!" data-type="youtube" data-id="yba7hPeTSjk" class="avatar avatar-md-md rounded-pill shadow card d-flex justify-content-center align-items-center lightbox">
                                 <i class="mdi mdi-play mdi-24px text-primary"></i>
                             </a>
-                        </div>
+                        </div> {% endcomment %}
                     </div>
                 </div>
             </div><!--end col-->
@@ -86,11 +86,11 @@
 
         <div class="row">
             <div class="col-lg-3 col-md-4 col-sm-6 col-12 mt-4 pt-2">
-                <div class="position-relative features text-center p-4 rounded shadow bg-white">
+                <div class="position-relative features text-center p-4 rounded shadow bg-white" style="height: 100%;">
                     <div class="feature-icon bg-soft-primary rounded shadow mx-auto position-relative overflow-hidden d-flex justify-content-center align-items-center">
                         <i data-feather="phone" class="fea icon-ex-md"></i>
                     </div>
-
+        
                     <div class="mt-4">
                         <a href="" class="title h5 text-dark">24/7 Support</a>
                         <p class="text-muted mt-3 mb-0">We're here to assist you in showcasing your creative potential.</p>
@@ -102,11 +102,11 @@
             </div><!--end col-->
             
             <div class="col-lg-3 col-md-4 col-sm-6 col-12 mt-4 pt-2">
-                <div class="position-relative features text-center p-4 rounded shadow bg-white">
+                <div class="position-relative features text-center p-4 rounded shadow bg-white" style="height: 100%;">
                     <div class="feature-icon bg-soft-primary rounded shadow mx-auto position-relative overflow-hidden d-flex justify-content-center align-items-center">
                         <i data-feather="edit-3" class="fea icon-ex-md"></i>
                     </div>
-
+        
                     <div class="mt-4">
                         <a href="" class="title h5 text-dark">For Authors & Creators</a>
                         <p class="text-muted mt-3 mb-0">A dedicated space for storytellers, journalists, and artists.</p>
@@ -118,11 +118,11 @@
             </div><!--end col-->
             
             <div class="col-lg-3 col-md-4 col-sm-6 col-12 mt-4 pt-2">
-                <div class="position-relative features text-center p-4 rounded shadow bg-white">
+                <div class="position-relative features text-center p-4 rounded shadow bg-white" style="height: 100%;">
                     <div class="feature-icon bg-soft-primary rounded shadow mx-auto position-relative overflow-hidden d-flex justify-content-center align-items-center">
                         <i data-feather="activity" class="fea icon-ex-md"></i>
                     </div>
-
+        
                     <div class="mt-4">
                         <a href="" class="title h5 text-dark">Effortless Profile Creation</a>
                         <p class="text-muted mt-3 mb-0">Easily build your profile to attract collaborators and clients.</p>
@@ -134,11 +134,11 @@
             </div><!--end col-->
             
             <div class="col-lg-3 col-md-4 col-sm-6 col-12 mt-4 pt-2">
-                <div class="position-relative features text-center p-4 rounded shadow bg-white">
+                <div class="position-relative features text-center p-4 rounded shadow bg-white" style="height: 100%;">
                     <div class="feature-icon bg-soft-primary rounded shadow mx-auto position-relative overflow-hidden d-flex justify-content-center align-items-center">
                         <i data-feather="clock" class="fea icon-ex-md"></i>
                     </div>
-
+        
                     <div class="mt-4">
                         <a href="" class="title h5 text-dark">Save Time</a>
                         <p class="text-muted mt-3 mb-0">Streamlined tools to help you focus on your creative process.</p>
@@ -148,7 +148,8 @@
                     </div>
                 </div>
             </div><!--end col-->
-        </div><!--end row-->
+        </div>
+        <!--end row-->
     </div><!--end container-->
 </section><!--end section-->
 <!-- End -->

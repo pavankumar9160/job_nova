@@ -18,7 +18,8 @@
                                     {% with additional_info as info %}
                                     <img src="{% if profile_picture %}{{ profile_picture }}{% else %}{% static 'images/blank_pic.png' %}{% endif %}" class="rounded-pill shadow border border-3 avatar avatar-medium" alt="">
                                     <div class="ms-2">
-                                        <h5 class="mb-0">{{ full_name|default:artist_user.name }}</h5>
+                                        <h5 class="mb-0">{{ full_name|default_if_none:''|default:artist_user.name }}</h5>
+
                                         <p class="text-muted mb-0">{{ info.description }}</p>
                                     </div>
                                     {% endwith %}
@@ -26,7 +27,8 @@
                                     {% with additional_info_user as info %}
                                     <img src="{% if profile_picture_user %}{{ profile_picture_user }}{% else %}{% static 'images/blank_pic.png' %}{% endif %}" class="rounded-pill shadow border border-3 avatar avatar-medium" alt="">
                                     <div class="ms-2">
-                                        <h5 class="mb-0">{{ full_name_user }}</h5>
+                                        <h5 class="mb-0">{{ full_name_user|default_if_none:''|default:artist_user.name }}</h5>
+
                                         <p class="text-muted mb-0">{{ info.description }}</p>
                                     </div>
                                     {% endwith %}
@@ -58,7 +60,39 @@
                             <span>No skills available.</span>
                         {% endif %}
                         </div>
-                        
+                        <h5 class="mt-4">Books Published:</h5>
+                        <div class="d-flex flex-wrap gap-2">
+                            <span>No Books Published.</span>
+                        </div>
+                        <h5 class="mt-4">Experience Details:</h5>
+                        <div class="d-flex flex-column gap-3">
+                            {% if info.experience_details.all %}
+                                {% for experience in info.experience_details.all %}
+                                    <div class="card shadow-sm p-3 mb-2 bg-light rounded">
+                                        <div class="d-flex justify-content-between align-items-center">
+                                            <h6 class="card-title mb-2">{{ experience.designation }} at {{ experience.company }}</h6>
+                                            <span class="badge bg-info text-white">
+                                                {% if experience.end_date %}
+                                                    {{ experience.start_date }} - {{ experience.end_date }}
+                                                {% else %}
+                                                    {{ experience.start_date }} - Present
+                                                {% endif %}
+                                            </span>
+                                        </div>
+                                        <p class="card-text">
+                                            <strong>Start Date:</strong> {{ experience.start_date|date:"F j, Y" }}<br>
+                                            {% if experience.end_date %}
+                                                <strong>End Date:</strong> {{ experience.end_date|date:"F j, Y" }}<br>
+                                            {% endif %}
+                                            <strong>Company:</strong> {{ experience.company }}<br>
+                                        </p>
+                                    </div>
+                                {% endfor %}
+                            {% else %}
+                                <p>No experience available.</p>
+                            {% endif %}
+                        </div>
+
                         
 
                         {% comment %} <h5 class="mt-4">Experience:</h5>
@@ -109,6 +143,39 @@
                             <span>No skills available.</span>
                         {% endif %}
                         </div>
+                        <h5 class="mt-4">Books Published:</h5>
+                        <div class="d-flex flex-wrap gap-2">
+                            <span>No Books Published.</span>
+                        </div>
+                        <h5 class="mt-4">Experience Details:</h5>
+                            <div class="d-flex flex-column gap-3">
+                                {% if info.experience_details.all %}
+                                    {% for experience in info.experience_details.all %}
+                                        <div class="card shadow-sm p-3 mb-2 bg-light rounded">
+                                            <div class="d-flex justify-content-between align-items-center">
+                                                <h6 class="card-title mb-2">{{ experience.designation }} at {{ experience.company }}</h6>
+                                                <span class="badge bg-info text-white">
+                                                    {% if experience.end_date %}
+                                                        {{ experience.start_date }} - {{ experience.end_date }}
+                                                    {% else %}
+                                                        {{ experience.start_date }} - Present
+                                                    {% endif %}
+                                                </span>
+                                            </div>
+                                            <p class="card-text">
+                                                <strong>Start Date:</strong> {{ experience.start_date|date:"F j, Y" }}<br>
+                                                {% if experience.end_date %}
+                                                    <strong>End Date:</strong> {{ experience.end_date|date:"F j, Y" }}<br>
+                                                {% endif %}
+                                                <strong>Company:</strong> {{ experience.company }}<br>
+                                            </p>
+                                        </div>
+                                    {% endfor %}
+                                {% else %}
+                                    <p>No experience available.</p>
+                                {% endif %}
+                            </div>
+
                         
 
                         {% comment %} <h5 class="mt-4">Experience:</h5>
@@ -158,10 +225,12 @@
                                         <span class="d-inline-flex align-items-center text-muted fw-medium"><i data-feather="gift" class="fea icon-sm me-2"></i> D.O.B.:</span>
                                         <span class="fw-medium">{{ info.dob }}</span>
                                     </div>
-                                    <div class="d-flex align-items-center justify-content-between mt-3">
-                                        <span class="d-inline-flex align-items-center text-muted fw-medium"><i data-feather="home" class="fea icon-sm me-2"></i> Address:</span>
-                                        <span class="fw-medium">{{ info.address }}</span>
+                                    <div class="d-flex align-items-start justify-content-between mt-3" style="flex-wrap: wrap; line-height: 1.5; word-break: break-word;">
+                                        <span class="d-inline-flex align-items-center text-muted fw-medium" style="margin-right: 10px; white-space: nowrap;"><i data-feather="home" class="fea icon-sm me-2"></i> Address:</span>
+                                        <span class="fw-medium" style="flex: 1; line-height: 1.5; text-align: right;">{{ info.address }}</span>
                                     </div>
+                                    
+                                    
                                     <div class="d-flex align-items-center justify-content-between mt-3">
                                         <span class="d-inline-flex align-items-center text-muted fw-medium"><i data-feather="map-pin" class="fea icon-sm me-2"></i> City:</span>
                                         <span class="fw-medium">{{ info.city }}</span>
@@ -175,6 +244,14 @@
                                         <span class="fw-medium">{{ artist_user.contact_number }}</span>
                                     </div>
                                     <div class="d-flex align-items-center justify-content-between mt-3">
+                                        <span class="d-inline-flex align-items-center text-muted fw-medium"><i data-feather="briefcase" class="fea icon-sm me-2"></i> Experience:</span>
+                                        <span class="fw-medium">{{ info.experience }}</span>
+                                    </div>
+                                    <div class="d-flex align-items-center justify-content-between mt-3">
+                                        <span class="d-inline-flex align-items-center text-muted fw-medium"><i data-feather="award" class="fea icon-sm me-2"></i> Awards:</span>
+                                        <span class="fw-medium">{{ info.awards }}</span>
+                                    </div>
+                                    <div class="d-flex align-items-center justify-content-between mt-3">
                                         <span class="text-muted fw-medium">Social:</span>
                                         
                                         <ul class="list-unstyled social-icon text-sm-end mb-0">
@@ -185,7 +262,24 @@
                                             <li class="list-inline-item"><a href="https://twitter.com/shreethemes" target="_blank" class="rounded"><i data-feather="twitter" class="fea icon-sm align-middle" title="twitter"></i></a></li>
                                         </ul><!--end icon-->
                                     </div>
-                                    <div class="mt-4 pt-4 border-top">
+                                    <div class="mt-4">
+                                        <h5 class="mb-3">Gallery:</h5>
+                                        <div class="row">
+                                            {% for image in images %}
+                                                <div class="col-6 col-md-3 mb-4">
+                                                    <div class="image-block border rounded p-1">
+                                                        <img src="{{ image.file_name.url }}" alt="Artist Image" class="img-fluid rounded" style="width: 100%; height: 100%; object-fit: cover;">
+                                                    </div>
+                                                </div>
+                                            {% endfor %}
+                                        </div>
+                                    </div>
+                                    
+                        
+                                </div>
+                            </div>
+                        </div>
+                                    {% comment %} <div class="mt-4 pt-4 border-top">
                                         <div class="employer-card position-relative bg-white rounded shadow p-4 mt-3">
                                             <div class="employer-img d-flex justify-content-center align-items-center bg-white shadow-md rounded">
                                                 <img src="{% static 'images/company/snapchat.png' %}" class="avatar avatar-ex-small" alt="">
@@ -209,10 +303,8 @@
                                         </ul>
             
                                      </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+                                    </div> {% endcomment %}
+                               
                     {% endwith %}
                 {% else %}
                     {% with additional_info_user as info %}
@@ -228,10 +320,12 @@
                                         <span class="d-inline-flex align-items-center text-muted fw-medium"><i data-feather="gift" class="fea icon-sm me-2"></i> D.O.B.:</span>
                                         <span class="fw-medium">{{ info.dob }}</span>
                                     </div>
-                                    <div class="d-flex align-items-center justify-content-between mt-3">
-                                        <span class="d-inline-flex align-items-center text-muted fw-medium"><i data-feather="home" class="fea icon-sm me-2"></i> Address:</span>
-                                        <span class="fw-medium">{{ info.address }}</span>
+                                    <div class="d-flex align-items-start justify-content-between mt-3" style="flex-wrap: wrap; line-height: 1.5; word-break: break-word;">
+                                        <span class="d-inline-flex align-items-center text-muted fw-medium" style="margin-right: 10px; white-space: nowrap;"><i data-feather="home" class="fea icon-sm me-2"></i> Address:</span>
+                                        <span class="fw-medium" style="flex: 1; line-height: 1.5; text-align: right;">{{ info.address }}</span>
                                     </div>
+                                    
+                                    
                                     <div class="d-flex align-items-center justify-content-between mt-3">
                                         <span class="d-inline-flex align-items-center text-muted fw-medium"><i data-feather="map-pin" class="fea icon-sm me-2"></i> City:</span>
                                         <span class="fw-medium">{{ info.city }}</span>
@@ -245,6 +339,14 @@
                                         <span class="fw-medium">{{ artist_user.contact_number }}</span>
                                     </div>
                                     <div class="d-flex align-items-center justify-content-between mt-3">
+                                        <span class="d-inline-flex align-items-center text-muted fw-medium"><i data-feather="briefcase" class="fea icon-sm me-2"></i> Experience:</span>
+                                        <span class="fw-medium">{{ info.experience }}</span>
+                                    </div>
+                                    <div class="d-flex align-items-center justify-content-between mt-3">
+                                        <span class="d-inline-flex align-items-center text-muted fw-medium"><i data-feather="award" class="fea icon-sm me-2"></i> Awards:</span>
+                                        <span class="fw-medium">{{ info.awards }}</span>
+                                    </div>
+                                    <div class="d-flex align-items-center justify-content-between mt-3">
                                         <span class="text-muted fw-medium">Social:</span>
                                         
                                         <ul class="list-unstyled social-icon text-sm-end mb-0">
@@ -255,7 +357,23 @@
                                             <li class="list-inline-item"><a href="https://twitter.com/shreethemes" target="_blank" class="rounded"><i data-feather="twitter" class="fea icon-sm align-middle" title="twitter"></i></a></li>
                                         </ul><!--end icon-->
                                     </div>
-                                    <div class="mt-4 pt-4 border-top">
+                                    <div class="mt-4">
+                                        <h5 class="mb-3">Gallery:</h5>
+                                        <div class="row">
+                                            {% for image in images %}
+                                                <div class="col-6 col-md-3 mb-4">
+                                                    <div class="image-block border rounded p-1">
+                                                        <img src="{{ image.file_name.url }}" alt="Artist Image" class="img-fluid rounded" style="width: 100%; height: 100%; object-fit: cover;">
+                                                    </div>
+                                                </div>
+                                            {% endfor %}
+                                        </div>
+                                    </div>
+                        
+                                </div>
+                            </div>
+                        </div>
+                                    {% comment %} <div class="mt-4 pt-4 border-top">
                                         <div class="employer-card position-relative bg-white rounded shadow p-4 mt-3">
                                             <div class="employer-img d-flex justify-content-center align-items-center bg-white shadow-md rounded">
                                                 <img src="{% static 'images/company/snapchat.png' %}" class="avatar avatar-ex-small" alt="">
@@ -278,10 +396,8 @@
                                             </li>
                                         </ul>   
                                         </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+                                    </div> {% endcomment %}
+                                
                     {% endwith %}
                 {% endif %}
                 

@@ -117,7 +117,7 @@
                     <div class="col-lg-6 col-md-5 col-12">
                         <div class="p-4 bg-white rounded shadow-md mx-auto w-100" id="Signupform_container">
                             <form id="signupForm">
-                                <a href="{% url 'index' %}"><img src="{% static 'images/logo-dark.png' %}" class="mb-4 d-block mx-auto" alt=""></a>
+                                <a href="{% url 'index' %}"><img src="{% static 'images/logo-dark.png' %}" class="mb-4 d-block mx-auto" alt="" width="150" height="50"></a>
                                 <h6 class="mb-3 text-uppercase fw-semibold">Register your account</h6>
                                 
                                 <div class="mb-3 form-row">
@@ -132,8 +132,9 @@
             
                                 <div class="mb-3 form-row">
                                     <label class="form-label fw-semibold col-form-label" for="contact">Contact Number</label>
-                                    <input type="tel" class="form-control col" id="contact" placeholder="Enter your contact number" required pattern="[0-9]{10}">
+                                    <input type="text" class="form-control col" id="contact" placeholder="Enter your contact number" required pattern="^[0-9]{10,12}$"  title="Please enter a valid phone number" oninput="this.value = this.value.replace(/[^0-9]/g, '')">
                                 </div>
+                                
             
                                 <div class="mb-3 form-row">
                                     <label class="form-label fw-semibold col-form-label" for="loginpass">Password</label>

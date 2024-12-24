@@ -54,14 +54,15 @@ urlpatterns = [
     path('signup_api/', views.signup_api, name='signup_api'),
     path('login_api/', views.login_api, name='login_api'),
     path('logout/', views.logout_view, name='logout'),
-    path('update_personal_details_api/', views.update_personal_details_api, name='update_personal_details_api'),
-    path('update_professional_details_api/', views.update_professional_details_api, name='update_professional_details_api'),
+    path('update_artist_details_api/', views.update_artist_details_api, name='update_artist_details_api'),
+#     path('update_professional_details_api/', views.update_professional_details_api, name='update_professional_details_api'),
     path('update_other_details_api/', views.update_other_details_api, name='update_other_details_api'),
      path('check-profile-completion/', views.check_profile_completion, name='check_profile_completion'),
       path('search-artists/', views.search_artists, name='search_artists'),
       path('filter-artists/', views.filter_artists, name='filter_artists'),
       path('reset-your-password/',views.reset_user_password,name="reset-your-password"),
       path('reset-password/<int:user_id>/<str:token>/',views.reset_password, name='reset_password'),
+     
       
 
 
@@ -73,9 +74,6 @@ urlpatterns = [
 
 
 
-   
-   
- 
   
 ]
 if settings.DEBUG:

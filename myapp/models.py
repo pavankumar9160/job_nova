@@ -44,6 +44,24 @@ class Skill(models.Model):
 
     def __str__(self):
         return self.name
+    
+from django.db import models
+
+class Experience(models.Model):
+    designation = models.CharField(max_length=255)
+    company = models.CharField(max_length=255)
+    start_date = models.DateField()
+    end_date = models.DateField(null=True, blank=True)
+    
+    
+    def __str__(self):
+        return f"{self.designation} at {self.company}"
+    
+class Gallery(models.Model):
+    file_name = models.ImageField(upload_to='gallery/', blank=True, null=True)
+    def __str__(self):
+        return self.file_name.url if self.file_name else "No image"
+    
 
 class ArtistMasterAdditional(models.Model):
     
@@ -93,11 +111,14 @@ class ArtistMasterAdditional(models.Model):
     linkedin_link = models.URLField(blank=True, null=True)
     job_title = models.CharField(max_length=255, blank=True, null=True)
     company_name = models.CharField(max_length=255, blank=True, null=True)
-    experience = models.IntegerField(blank=True, null=True)  
+    experience = models.CharField(blank=True, null=True,max_length=500)
+    experience_details = models.ManyToManyField(Experience, related_name='artist_experiences', blank=True)  
     portfolio = models.URLField(blank=True, null=True) 
     short_bio = models.TextField(blank=True, null=True) 
     availability = models.CharField(max_length=50, choices=availability_choices,blank=True,null=True)
     skills = models.ManyToManyField(Skill, related_name='skills', blank=True)    
+    images = models.ManyToManyField(Gallery, related_name='images', blank=True)    
+ 
     certifications = models.TextField(blank=True, null=True)  
     published_works = models.TextField(blank=True, null=True) 
     awards = models.TextField(blank=True, null=True) 

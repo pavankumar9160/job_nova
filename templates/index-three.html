@@ -60,11 +60,11 @@
                         <div class="bg-white rounded shadow p-2 position-relative">
                             <img src="{% static 'images/hero.jpg' %}" class="img-fluid rounded" alt="">
 
-                            <div class="position-absolute top-50 start-50 translate-middle">
+                            {% comment %} <div class="position-absolute top-50 start-50 translate-middle">
                                 <a href="#!" data-type="youtube" data-id="yba7hPeTSjk" class="avatar avatar-md-md rounded-pill shadow card d-flex justify-content-center align-items-center lightbox">
                                     <i class="mdi mdi-play mdi-24px text-primary"></i>
                                 </a>
-                            </div>
+                            </div> {% endcomment %}
                         </div>
                     </div><!--end col-->
                 </div><!--end row-->
@@ -231,11 +231,11 @@
                             <div class="img-two shadow rounded p-2 bg-white">
                                 <img src="{% static 'images/about/ab02.jpg' %}" class="img-fluid rounded" alt="work-image">
             
-                                <div class="position-absolute top-0 start-50 translate-middle">
+                                {% comment %} <div class="position-absolute top-0 start-50 translate-middle">
                                     <a href="#!" data-type="youtube" data-id="yba7hPeTSjk" class="avatar avatar-md-md rounded-pill shadow card d-flex justify-content-center align-items-center lightbox">
                                         <i class="mdi mdi-play mdi-24px text-primary"></i>
                                     </a>
-                                </div>
+                                </div> {% endcomment %}
                             </div>
                         </div>
                     </div><!--end col-->
@@ -273,94 +273,95 @@
     <div class="row row-cols-lg-5 row-cols-md-3 row-cols-sm-2 row-cols-1 g-4 mt-0">
         <!-- Writers -->
         <div class="col">
-            <div class="job-category job-category-two rounded shadow bg-light p-3">
+            <div class="job-category job-category-two rounded shadow bg-light p-3" style="display: flex; flex-direction: column; justify-content: space-between; height: 100%;">
                 <h5 class="mb-1">Writers & Bloggers</h5>
                 <p class="text-muted para mb-2">100+ Artists Available</p>
                 <a href="{% url 'artists' %}" class="text-primary fw-medium link">Explore Artists <i class="mdi mdi-arrow-right"></i></a>
             </div>
         </div><!--end col-->
-
+    
         <!-- Poets -->
         <div class="col">
-            <div class="job-category job-category-two rounded shadow bg-light p-3">
+            <div class="job-category job-category-two rounded shadow bg-light p-3" style="display: flex; flex-direction: column; justify-content: space-between; height: 100%;">
                 <h5 class="mb-1">Poets & Literary Artists</h5>
                 <p class="text-muted para mb-2">50+ Artists Available</p>
                 <a href="{% url 'artists' %}" class="text-primary fw-medium link">Explore Artists <i class="mdi mdi-arrow-right"></i></a>
             </div>
         </div><!--end col-->
-
+    
         <!-- Editors -->
         <div class="col">
-            <div class="job-category job-category-two rounded shadow bg-light p-3">
+            <div class="job-category job-category-two rounded shadow bg-light p-3" style="display: flex; flex-direction: column; justify-content: space-between; height: 100%;">
                 <h5 class="mb-1">Editors & Proofreaders</h5>
                 <p class="text-muted para mb-2">75+ Artists Available</p>
                 <a href="{% url 'artists' %}" class="text-primary fw-medium link">Explore Artists <i class="mdi mdi-arrow-right"></i></a>
             </div>
         </div><!--end col-->
-
+    
         <!-- Artists (Visual) -->
         <div class="col">
-            <div class="job-category job-category-two rounded shadow bg-light p-3">
+            <div class="job-category job-category-two rounded shadow bg-light p-3" style="display: flex; flex-direction: column; justify-content: space-between; height: 100%;">
                 <h5 class="mb-1">Visual Artists & Designers</h5>
                 <p class="text-muted para mb-2">90+ Artists Available</p>
                 <a href="{% url 'artists' %}" class="text-primary fw-medium link">Explore Artists <i class="mdi mdi-arrow-right"></i></a>
             </div>
         </div><!--end col-->
-
+    
         <!-- Motivational Speakers -->
         <div class="col">
-            <div class="job-category job-category-two rounded shadow bg-light p-3">
+            <div class="job-category job-category-two rounded shadow bg-light p-3" style="display: flex; flex-direction: column; justify-content: space-between; height: 100%;">
                 <h5 class="mb-1">Motivational Speakers</h5>
                 <p class="text-muted para mb-2">30+ Artists Available</p>
                 <a href="{% url 'artists' %}" class="text-primary fw-medium link">Explore Artists <i class="mdi mdi-arrow-right"></i></a>
             </div>
         </div><!--end col-->
-
+    
         <!-- Literary Critics -->
         <div class="col">
-            <div class="job-category job-category-two rounded shadow bg-light p-3">
+            <div class="job-category job-category-two rounded shadow bg-light p-3" style="display: flex; flex-direction: column; justify-content: space-between; height: 100%;">
                 <h5 class="mb-1">Literary Critics</h5>
                 <p class="text-muted para mb-2">20+ Artists Available</p>
                 <a href="{% url 'artists' %}" class="text-primary fw-medium link">Explore Artists <i class="mdi mdi-arrow-right"></i></a>
             </div>
         </div><!--end col-->
-
+    
         <!-- Spiritual Leaders -->
         <div class="col">
-            <div class="job-category job-category-two rounded shadow bg-light p-3">
+            <div class="job-category job-category-two rounded shadow bg-light p-3" style="display: flex; flex-direction: column; justify-content: space-between; height: 100%;">
                 <h5 class="mb-1">Spiritual Leaders</h5>
                 <p class="text-muted para mb-2">15+ Artists Available</p>
                 <a href="{% url 'artists' %}" class="text-primary fw-medium link">Explore Artists <i class="mdi mdi-arrow-right"></i></a>
             </div>
         </div><!--end col-->
-
+    
         <!-- Public Speakers -->
         <div class="col">
-            <div class="job-category job-category-two rounded shadow bg-light p-3">
+            <div class="job-category job-category-two rounded shadow bg-light p-3" style="display: flex; flex-direction: column; justify-content: space-between; height: 100%;">
                 <h5 class="mb-1">Public Speakers & Trainers</h5>
                 <p class="text-muted para mb-2">60+ Artists Available</p>
                 <a href="{% url 'artists' %}" class="text-primary fw-medium link">Explore Artists <i class="mdi mdi-arrow-right"></i></a>
             </div>
         </div><!--end col-->
-
+    
         <!-- Content Creators -->
         <div class="col">
-            <div class="job-category job-category-two rounded shadow bg-light p-3">
+            <div class="job-category job-category-two rounded shadow bg-light p-3" style="display: flex; flex-direction: column; justify-content: space-between; height: 100%;">
                 <h5 class="mb-1">Content Creators</h5>
                 <p class="text-muted para mb-2">80+ Artists Available</p>
                 <a href="{% url 'artists' %}" class="text-primary fw-medium link">Explore Artists <i class="mdi mdi-arrow-right"></i></a>
             </div>
         </div><!--end col-->
-
+    
         <!-- Music Artists -->
         <div class="col">
-            <div class="job-category job-category-two rounded shadow bg-light p-3">
+            <div class="job-category job-category-two rounded shadow bg-light p-3" style="display: flex; flex-direction: column; justify-content: space-between; height: 100%;">
                 <h5 class="mb-1">Music Artists</h5>
                 <p class="text-muted para mb-2">40+ Artists Available</p>
                 <a href="{% url 'artists' %}" class="text-primary fw-medium link">Explore Artists <i class="mdi mdi-arrow-right"></i></a>
             </div>
         </div><!--end col-->
     </div><!--end row-->
+    
 
     <div class="row mt-4">
         <div class="col-12">

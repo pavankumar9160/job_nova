@@ -27,7 +27,7 @@
                         </div>
                         <div class="ms-2">
                             <h5 class="mb-0">{{ full_name|default:user.name }}</h5>
-                            <p class="text-muted mb-0">Author & Writing Consultant</p>
+                            <p class="text-muted mb-0">{{ description }}</p>
                         </div>
                     </div>
                 </div>
@@ -39,19 +39,19 @@
         <div class="row">
             <div class="col-12">
                 <div class="rounded shadow p-4">
-                    <form id="personalDetailsForm">
+                    <form id="ArtistDetailsForm">
                         <h5>Personal Details:</h5>
                         <div class="row mt-4">
                             <div class="col-md-6">
                                 <div class="mb-3">
                                     <label class="form-label fw-semibold">First Name:<span class="text-danger" >*</span></label>
-                                    <input name="firstname" id="firstname" type="text" class="form-control" placeholder="First Name" required>
+                                    <input name="firstname" id="firstname" type="text" class="form-control" maxlength="15" placeholder="First Name" required>
                                 </div>
                             </div>
                             <div class="col-md-6">
                                 <div class="mb-3">
                                     <label class="form-label fw-semibold">Last Name:<span class="text-danger" >*</span></label>
-                                    <input name="lastname" id="lastname" type="text" class="form-control" placeholder="Last Name" required>
+                                    <input name="lastname" id="lastname" type="text" class="form-control" maxlength="15" placeholder="Last Name" required>
                                 </div>
                             </div>
                             <div class="col-md-6">
@@ -73,19 +73,19 @@
                             <div class="col-md-6">
                                 <div class="mb-3">
                                     <label class="form-label fw-semibold">Phone Number:<span class="text-danger">*</span></label>
-                                    <input name="phone" id="phone" value="{{ user.contact_number }}" type="text" class="form-control" placeholder="Phone Number">
+                                    <input name="phone" id="phone" value="{{ user.contact_number }}" type="text" maxlength="12" class="form-control" placeholder="Phone Number" required pattern="^[0-9]{10,12}$" title="Please enter a valid phone number" oninput="this.value = this.value.replace(/[^0-9]/g, '')">
                                 </div>
                             </div>
                             <div class="col-md-6">
                                 <div class="mb-3">
                                     <label class="form-label fw-semibold">Email Address:<span class="text-danger">*</span></label>
-                                    <input name="email" id="email2" type="email" value="{{ user.email }}" class="form-control" placeholder="Email Address">
+                                    <input name="email" id="email2" type="email" value="{{ user.email }}" class="form-control" maxlength="30" placeholder="Email Address" required>
                                 </div>
                             </div>
                             <div class="col-md-6">
                                 <div class="mb-3">
                                     <label class="form-label fw-semibold">Location:</label>
-                                    <select class="form-control form-select" id="Country" required>
+                                    <select class="form-control form-select" id="Country">
                                                 <option value="India">India</option>
                                                 <option value="USA">USA</option>
                                                 <option value="Canada">Canada</option>
@@ -103,7 +103,7 @@
                             <div class="col-12">
                                 <div class="mb-3">
                                     <label class="form-label fw-semibold">Complete Address:</label>
-                                    <textarea name="address" id="address" rows="4" class="form-control" placeholder="e.g., Full Address" required></textarea>
+                                    <textarea name="address" id="address" rows="4" class="form-control" maxlength="150" placeholder="e.g., Full Address"></textarea>
                                 </div>
                             </div>
                             <div class="col-md-6">
@@ -131,7 +131,7 @@
                                         <option value="Essayist">Essayist</option>
                                         <option value="Blogger">Blogger</option>
                                         <option value="Novelist">Novelist</option>
-                                        <option value="Copywriter">Copywriter</option>
+                                        
                                         <option value="Columnist">Columnist</option>
                                         <option value="Journalist">Journalist</option>
                                         <option value="Short Story Writer">Short Story Writer</option>
@@ -145,10 +145,26 @@
                                         </select>
                                 </div>
                             </div>
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label class="form-label fw-semibold">Gallery:<span class="text-danger">*</span></label>
+                                    <input
+                                        name="documents[]"
+                                        id="documents"
+                                        type="file"
+                                        class="form-control"
+                                        accept="image/*"
+                                        multiple
+                                    >
+                                    <small class="form-text text-muted">You can select multiple image files.</small>
+                                    <ul id="file-list" class="mt-2 list-unstyled"></ul>
+                                </div>
+                            </div>
+                            
                             <div class="col-12">
                                 <div class="mb-3">
                                     <label class="form-label fw-semibold">Brief Introduction:</label>
-                                    <textarea name="introduction" id="introduction" rows="4" class="form-control" placeholder="Write a brief introduction about yourself..." required></textarea>
+                                    <textarea name="introduction" id="introduction" rows="4" maxlength="500" class="form-control" placeholder="Write a brief introduction about yourself..." ></textarea>
                                 </div>
                             </div>
                             <div class="col-md-12">
@@ -217,20 +233,246 @@
                                     <div class="d-flex flex-column">
                                         <div class="mb-2 d-flex align-items-center">
                                             <i data-feather="facebook" class="fea icon-sm align-middle me-2" title="facebook"></i>
-                                            <input type="url" class="form-control" id="facebook_link" placeholder="Facebook URL" required>
+                                            <input type="url" class="form-control" id="facebook_link" maxlength="100" placeholder="Facebook URL" >
                                         </div>
                                         <div class="mb-2 d-flex align-items-center">
                                             <i data-feather="instagram" class="fea icon-sm align-middle me-2" title="instagram"></i>
-                                            <input type="url" class="form-control" id="instagram_link" placeholder="Instagram URL" required>
+                                            <input type="url" class="form-control" id="instagram_link" maxlength="100" placeholder="Instagram URL" >
                                         </div>
                                         <div class="mb-2 d-flex align-items-center">
                                             <i data-feather="linkedin" class="fea icon-sm align-middle me-2" title="linkedin"></i>
-                                            <input type="url" class="form-control" id="linkedin_link" placeholder="LinkedIn URL" required>
+                                            <input type="url" class="form-control" id="linkedin_link" maxlength="100" placeholder="LinkedIn URL" >
                                         </div>
 
                                     </div>
                                 </div>
                             </div>
+                        </div>
+                            <h5>Professional Details:</h5>
+                            <div class="row mt-4">
+                            <div class="col-lg-12">
+                                <div class="mb-3">
+                                    <label class="form-label fw-semibold">Professional Title:</label>
+                                    <input name="job_title" id="job_title" type="text" class="form-control" maxlength="30" placeholder="Professional Title" >
+                                </div>
+                            </div>
+                            <div class="col-lg-12">
+                                <div class="mb-3">
+                                    <label class="form-label fw-semibold">Company / Organization (if applicable):</label>
+                                    <input name="company_name" id="company_name" type="text" class="form-control"  maxlength="30" placeholder="Company / Organization" >
+                                </div>
+                            </div>
+                            <div class="col-lg-12">
+                                <div class="mb-3">
+                                    <label class="form-label fw-semibold">Years of Experience:</label>
+                                    <input name="experience" id="experience" type="text" class="form-control"  placeholder="Years of Experience" readonly>
+                                </div>
+                            </div>
+                            
+                                <!-- Experience list -->
+                                <div class="col-lg-12">
+                                <label class="form-label fw-semibold">Experience List:</label>
+                                <ul id="experienceList" class="list-group"></ul>
+                            </div>
+                            <div class="col-lg-12">
+                                <button type="button" class="btn btn-primary mb-3" data-bs-toggle="modal" data-bs-target="#experienceModal" onclick="openAddModal()">
+                                    Add Experience
+                                </button>
+                            </div>
+                            <div class="col-lg-12">
+                                <div class="mb-3">
+                                    <label class="form-label fw-semibold">Portfolio Links / Website:</label>
+                                    <input name="portfolio" id="portfolio" type="url" class="form-control" maxlength="50" placeholder="Portfolio URL">
+                                </div>
+                            </div>
+                            <div class="col-lg-12">
+                                <div class="mb-3">
+                                    <label class="form-label fw-semibold">Short Bio:</label>
+                                    <textarea name="short_bio" id="short_bio" class="form-control" maxlength="300" placeholder="Brief description of your professional background"></textarea>
+                                </div>
+                            </div>
+                            <div class="col-lg-12">
+                                <div class="mb-3">
+                                    <label class="form-label fw-semibold">Availability:</label>
+                                    <select name="availability" id="availability" class="form-control">
+                                                    <option value="full_time">Full-time</option>
+                                                    <option value="part_time">Part-time</option>
+                                                    <option value="freelance">Freelance</option>
+                                                </select>
+                                </div>
+                            </div>
+                            <div class="col-lg-12">
+                                <div class="mb-3">
+                                    <label class="fw-semibold">Skills:</label>
+                                    <div id="custom-multi-select" style="display: flex; flex-wrap: wrap; gap: 10px;" required>
+                                        <label style="display: flex; align-items: center;">
+                                            <input type="checkbox" value="Writer" class="skill-checkbox" style="margin-right: 4px; vertical-align: middle;"> Writer
+                                        </label>
+                                        <label style="display: flex; align-items: center;">
+                                            <input type="checkbox" value="Publisher" class="skill-checkbox" style="margin-right: 4px; vertical-align: middle;"> Publisher
+                                        </label>
+                                        <label style="display: flex; align-items: center;">
+                                            <input type="checkbox" value="Printer" class="skill-checkbox" style="margin-right: 4px; vertical-align: middle;"> Printer
+                                        </label>
+                                        <label style="display: flex; align-items: center;">
+                                            <input type="checkbox" value="Editor" class="skill-checkbox" style="margin-right: 4px; vertical-align: middle;"> Editor
+                                        </label>
+                                        <label style="display: flex; align-items: center;">
+                                            <input type="checkbox" value="Artist" class="skill-checkbox" style="margin-right: 4px; vertical-align: middle;"> Artist
+                                        </label>
+                                        <label style="display: flex; align-items: center;">
+                                            <input type="checkbox" value="Digital Graphics Designer" class="skill-checkbox" style="margin-right: 4px; vertical-align: middle;"> Digital Graphics Designer
+                                        </label>
+                                        <label style="display: flex; align-items: center;">
+                                            <input type="checkbox" value="Digital Content Creator" class="skill-checkbox" style="margin-right: 4px; vertical-align: middle;"> Digital Content Creator
+                                        </label>
+                                        <label style="display: flex; align-items: center;">
+                                            <input type="checkbox" value="Spiritual Leader" class="skill-checkbox" style="margin-right: 4px; vertical-align: middle;"> Spiritual Leader
+                                        </label>
+                                        <label style="display: flex; align-items: center;">
+                                            <input type="checkbox" value="Social Media Influencer" class="skill-checkbox" style="margin-right: 4px; vertical-align: middle;"> Social Media Influencer
+                                        </label>
+                                        <label style="display: flex; align-items: center;">
+                                            <input type="checkbox" value="Digital Marketer" class="skill-checkbox" style="margin-right: 4px; vertical-align: middle;"> Digital Marketer
+                                        </label>
+                                        <label style="display: flex; align-items: center;">
+                                            <input type="checkbox" value="Public Relations Manager" class="skill-checkbox" style="margin-right: 4px; vertical-align: middle;"> Public Relations Manager
+                                        </label>
+                                        <label style="display: flex; align-items: center;">
+                                            <input type="checkbox" value="Event Manager" class="skill-checkbox" style="margin-right: 4px; vertical-align: middle;"> Event Manager
+                                        </label>
+                                        <label style="display: flex; align-items: center;">
+                                            <input type="checkbox" value="Entertainment Troupe Owner" class="skill-checkbox" style="margin-right: 4px; vertical-align: middle;"> Entertainment Troupe Owner
+                                        </label>
+                                        <label style="display: flex; align-items: center;">
+                                            <input type="checkbox" value="Standup Comedian" class="skill-checkbox" style="margin-right: 4px; vertical-align: middle;"> Standup Comedian
+                                        </label>
+                                        <label style="display: flex; align-items: center;">
+                                            <input type="checkbox" value="Compere/Emcee" class="skill-checkbox" style="margin-right: 4px; vertical-align: middle;"> Compere/Emcee
+                                        </label>
+                                        
+                                        <label style="display: flex; align-items: center;">
+                                            <input type="checkbox" value="Book Store Owner" class="skill-checkbox" style="margin-right: 4px; vertical-align: middle;"> Book Store Owner
+                                        </label>
+                                        <label style="display: flex; align-items: center;">
+                                            <input type="checkbox" value="Digital Marketplace/Platform" class="skill-checkbox" style="margin-right: 4px; vertical-align: middle;"> Digital Marketplace/Platform
+                                        </label>
+                                        <label style="display: flex; align-items: center;">
+                                            <input type="checkbox" value="Poet" class="skill-checkbox" style="margin-right: 4px; vertical-align: middle;"> Poet
+                                        </label>
+                                        <label style="display: flex; align-items: center;">
+                                            <input type="checkbox" value="Essayist" class="skill-checkbox" style="margin-right: 4px; vertical-align: middle;"> Essayist
+                                        </label>
+                                        <label style="display: flex; align-items: center;">
+                                            <input type="checkbox" value="Blogger" class="skill-checkbox" style="margin-right: 4px; vertical-align: middle;"> Blogger
+                                        </label>
+
+                                        <label style="display: flex; align-items: center;">
+                                            <input type="checkbox" value="Novelist" class="skill-checkbox" style="margin-right: 4px; vertical-align: middle;"> Novelist
+                                        </label>
+                                       
+                                        <label style="display: flex; align-items: center;">
+                                            <input type="checkbox" value="Columnist" class="skill-checkbox" style="margin-right: 4px; vertical-align: middle;"> Columnist
+                                        </label>
+                                        <label style="display: flex; align-items: center;">
+                                            <input type="checkbox" value="Journalist" class="skill-checkbox" style="margin-right: 4px; vertical-align: middle;"> Journalist
+                                        </label>
+                                        <label style="display: flex; align-items: center;">
+                                            <input type="checkbox" value="Short Story Writer" class="skill-checkbox" style="margin-right: 4px; vertical-align: middle;"> Short Story Writer
+                                        </label>
+                                        <label style="display: flex; align-items: center;">
+                                            <input type="checkbox" value="Motivational Speaker" class="skill-checkbox" style="margin-right: 4px; vertical-align: middle;"> Motivational Speaker
+                                        </label>
+                                        <label style="display: flex; align-items: center;">
+                                            <input type="checkbox" value="Literary Critic" class="skill-checkbox" style="margin-right: 4px; vertical-align: middle;"> Literary Critic
+                                        </label>
+                                        <label style="display: flex; align-items: center;">
+                                            <input type="checkbox" value="Literacy Reviewer" class="skill-checkbox" style="margin-right: 4px; vertical-align: middle;"> Literacy Reviewer
+                                        </label>
+                                        <label style="display: flex; align-items: center;">
+                                            <input type="checkbox" value="Lyricist" class="skill-checkbox" style="margin-right: 4px; vertical-align: middle;"> Lyricist
+                                        </label>
+                                        <label style="display: flex; align-items: center;">
+                                            <input type="checkbox" value="Scriptwriter-Drama" class="skill-checkbox" style="margin-right: 4px; vertical-align: middle;"> Scriptwriter-Drama
+                                        </label>
+                                        <label style="display: flex; align-items: center;">
+                                            <input type="checkbox" value="Scriptwriter-Screen" class="skill-checkbox" style="margin-right: 4px; vertical-align: middle;"> Scriptwriter-Screen
+                                        </label>
+                                        <label style="display: flex; align-items: center;">
+                                            <input type="checkbox" value="Translator" class="skill-checkbox" style="margin-right: 4px; vertical-align: middle;"> Translator
+                                        </label>
+                                    </div>
+                                    <small class="text-muted">You can select up to 6 skills.</small>
+                                </div>
+                            </div>
+                            
+                            
+                            
+                            
+                            <script>
+                                // Limit selection to 6 checkboxes
+                                const checkboxes = document.querySelectorAll('.skill-checkbox');
+                                checkboxes.forEach((checkbox) => {
+                                    checkbox.addEventListener('change', function () {
+                                        const selectedCheckboxes = document.querySelectorAll('.skill-checkbox:checked');
+                                        if (selectedCheckboxes.length > 6) {
+                                            alert("You can only select up to 6 skills.");
+                                            this.checked = false; 
+                                        }
+                                    });
+                                });
+
+                                document.addEventListener('DOMContentLoaded', function () {
+                                    const fileInput = document.getElementById('documents');
+                                    const fileList = document.getElementById('file-list');
+                                
+                                    fileInput.addEventListener('change', function () {
+                                        fileList.innerHTML = '';
+                                
+                                        const files = fileInput.files;
+                                        console.log(files);
+                                
+                                        if (files.length > 0) {
+                                            for (let i = 0; i < files.length; i++) {
+                                                const listItem = document.createElement('li');
+                                                listItem.textContent = files[i].name;
+                                                fileList.appendChild(listItem);
+                                            }
+                                        } else {
+                                            const noFilesMessage = document.createElement('li');
+                                            noFilesMessage.textContent = 'No files selected.';
+                                            fileList.appendChild(noFilesMessage);
+                                        }
+                                    });
+                                });
+                                
+                            </script>
+                            
+                            
+                            
+                            
+                            
+                            <div class="col-lg-12">
+                                <div class="mb-3">
+                                    <label class="form-label fw-semibold">Certifications:</label>
+                                    <input type="text" id="certifications" class="form-control" maxlength="200" placeholder="Certifications">
+                                </div>
+                            </div>
+                            <div class="col-lg-12">
+                                <div class="mb-3">
+                                    <label class="form-label fw-semibold">Published Works / Projects:</label>
+                                    <textarea name="published_works" id="published_works"  maxlength="200" class="form-control" placeholder="Add details about published works (Title, Date, etc.)"></textarea>
+                                </div>
+                            </div>
+                            <div class="col-lg-12">
+                                <div class="mb-3">
+                                    <label class="form-label fw-semibold">Awards / Recognitions:</label>
+                                    <textarea name="awards" id="awards" class="form-control" maxlength="200" placeholder="Mention any awards or achievements"></textarea>
+                                </div>
+                            </div>
+
+
+
                             <div class="col-12">
                                 <input type="submit" class=" btn btn-primary" value="Update Details">
                                 <button type="button" class="btn btn-secondary" id="previewButton">Preview</button>
@@ -238,7 +480,7 @@
                         </div>
                     </form>
                 </div>
-                <div class="rounded shadow p-4 mt-4">
+                {% comment %} <div class="rounded shadow p-4 mt-4">
 
                     <div class="row">
                         <div class="col-md-12 mt-4 pt-2">
@@ -260,19 +502,27 @@
                                     <div class="col-lg-12">
                                         <div class="mb-3">
                                             <label class="form-label fw-semibold">Years of Experience:</label>
-                                            <input name="experience" id="experience" type="number" class="form-control" placeholder="Years of Experience" required>
+                                            <input name="experience" id="experience" type="text" class="form-control" placeholder="Years of Experience" readonly>
                                         </div>
+                                    </div>
+                                    <div class="col-lg-12">
+                                        <button type="button" class="btn btn-primary mb-3" data-bs-toggle="modal" data-bs-target="#experienceModal" onclick="openAddModal()">
+                                            Add Experience
+                                        </button>
+                                    
+                                        <!-- Experience list -->
+                                        <ul id="experienceList" class="list-group"></ul>
                                     </div>
                                     <div class="col-lg-12">
                                         <div class="mb-3">
                                             <label class="form-label fw-semibold">Portfolio Links / Website:</label>
-                                            <input name="portfolio" id="portfolio" type="url" class="form-control" placeholder="Portfolio URL" required>
+                                            <input name="portfolio" id="portfolio" type="url" class="form-control" placeholder="Portfolio URL">
                                         </div>
                                     </div>
                                     <div class="col-lg-12">
                                         <div class="mb-3">
                                             <label class="form-label fw-semibold">Short Bio:</label>
-                                            <textarea name="short_bio" id="short_bio" class="form-control" placeholder="Brief description of your professional background" required></textarea>
+                                            <textarea name="short_bio" id="short_bio" class="form-control" placeholder="Brief description of your professional background"></textarea>
                                         </div>
                                     </div>
                                     <div class="col-lg-12">
@@ -288,7 +538,7 @@
                                     <div class="col-lg-12">
                                         <div class="mb-3">
                                             <label class="fw-semibold">Skills:</label>
-                                            <div id="custom-multi-select" style="display: flex; flex-wrap: wrap; gap: 10px;">
+                                            <div id="custom-multi-select" style="display: flex; flex-wrap: wrap; gap: 10px;" required>
                                                 <label style="display: flex; align-items: center;">
                                                     <input type="checkbox" value="Writer" class="skill-checkbox" style="margin-right: 4px; vertical-align: middle;"> Writer
                                                 </label>
@@ -354,9 +604,7 @@
                                                 <label style="display: flex; align-items: center;">
                                                     <input type="checkbox" value="Novelist" class="skill-checkbox" style="margin-right: 4px; vertical-align: middle;"> Novelist
                                                 </label>
-                                                <label style="display: flex; align-items: center;">
-                                                    <input type="checkbox" value="Copywriter" class="skill-checkbox" style="margin-right: 4px; vertical-align: middle;"> Copywriter
-                                                </label>
+                                               
                                                 <label style="display: flex; align-items: center;">
                                                     <input type="checkbox" value="Columnist" class="skill-checkbox" style="margin-right: 4px; vertical-align: middle;"> Columnist
                                                 </label>
@@ -440,7 +688,7 @@
                         </div>
                     </div>
 
-                </div>
+                </div> {% endcomment %}
                 <div class="rounded shadow p-4 mt-4">
                     <h5>Others:</h5>
                     <form id="otherDetails">
@@ -518,6 +766,158 @@
         </div>
     </div>
 </section>
+
+<!----experience modal----->
+<div class="modal fade" id="experienceModal" tabindex="-1" aria-labelledby="experienceModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="experienceModalLabel">Add/Edit Experience</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form id="experienceForm">
+                    <input type="hidden" id="experienceId" value="">
+                    <div class="mb-3">
+                        <label for="designation" class="form-label">Designation</label>
+                        <input type="text" id="designation" class="form-control" placeholder="Designation" >
+                    </div>
+                    <div class="mb-3">
+                        <label for="company" class="form-label">Company Name</label>
+                        <input type="text" id="company" class="form-control" placeholder="Company Name" >
+                    </div>
+                    <div class="mb-3">
+                        <label for="startDate" class="form-label">Start Date</label>
+                        <input type="date" id="startDate" class="form-control" >
+                    </div>
+                    <div class="mb-3">
+                        <label for="endDate" class="form-label">End Date</label>
+                        <input type="date" id="endDate" class="form-control">
+                    </div>
+                    <div class="form-check mb-3">
+                        <input type="checkbox" id="currentlyWorking" class="form-check-input" onchange="toggleEndDate()">
+                        <label for="currentlyWorking" class="form-check-label">Currently Working</label>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-primary" onclick="saveExperience()">Save</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    window.experiences = [];
+
+    function toggleEndDate() {
+        const currentlyWorking = document.getElementById('currentlyWorking').checked;
+        document.getElementById('endDate').disabled = currentlyWorking;
+        if (currentlyWorking) document.getElementById('endDate').value = '';
+    }
+
+    function openAddModal() {
+        document.getElementById('experienceId').value = '';
+        document.getElementById('designation').value = '';
+        document.getElementById('company').value = '';
+        document.getElementById('startDate').value = '';
+        document.getElementById('endDate').value = '';
+        document.getElementById('currentlyWorking').checked = false;
+        toggleEndDate();
+    }
+
+    function openEditModal(index) {
+        const experience = experiences[index];
+        document.getElementById('experienceId').value = index;
+        document.getElementById('designation').value = experience.designation;
+        document.getElementById('company').value = experience.company;
+        document.getElementById('startDate').value = experience.startDate;
+        document.getElementById('endDate').value = experience.endDate || '';
+        document.getElementById('currentlyWorking').checked = experience.currentlyWorking;
+        toggleEndDate();
+        const modal = new bootstrap.Modal(document.getElementById('experienceModal'));
+        modal.show();
+    }
+
+    function saveExperience() {
+        const id = document.getElementById('experienceId').value;
+        const designation = document.getElementById('designation').value;
+        const company = document.getElementById('company').value;
+        const startDate = document.getElementById('startDate').value;
+        const currentlyWorking = document.getElementById('currentlyWorking').checked;
+        const endDate = currentlyWorking ? null : document.getElementById('endDate').value;
+
+        if (id) {
+            experiences[id] = { designation, company, startDate, endDate, currentlyWorking };
+        } else {
+            experiences.push({ designation, company, startDate, endDate, currentlyWorking });
+        }
+
+        const modal = bootstrap.Modal.getInstance(document.getElementById('experienceModal'));
+        modal.hide();
+
+        renderExperienceList();
+        calculateTotalExperience();
+        console.log(experiences);
+    }
+
+    function deleteExperience(index) {
+        experiences.splice(index, 1);
+        renderExperienceList();
+        calculateTotalExperience();
+    }
+
+    function renderExperienceList() {
+        const experienceList = document.getElementById('experienceList');
+        experienceList.innerHTML = '';
+    
+        experiences.forEach((experience, index) => {
+            const start = new Date(experience.startDate);
+            const end = experience.currentlyWorking ? new Date() : new Date(experience.endDate || new Date());
+    
+            const totalMonths = (end.getFullYear() - start.getFullYear()) * 12 + (end.getMonth() - start.getMonth());
+            const years = Math.floor(totalMonths / 12);
+            const months = totalMonths % 12;
+    
+            const duration = `${years > 0 ? `${years} year${years > 1 ? 's' : ''} ` : ''}${months > 0 ? `${months} month${months > 1 ? 's' : ''}` : ''}`.trim();
+    
+            const listItem = document.createElement('li');
+            listItem.className = 'list-group-item-experience d-flex justify-content-between align-items-center';
+            listItem.innerHTML = `
+                <div>
+                    <strong>${experience.designation}</strong> at ${experience.company} 
+                    (${experience.startDate}  to  ${experience.currentlyWorking ? 'Present' : experience.endDate}) 
+                    <span class="text-muted">[${duration}]</span>
+                </div>
+                <div>
+                    <button class="btn btn-sm btn-warning me-2" onclick="openEditModal(${index})">Edit</button>
+                    <button class="btn btn-sm btn-danger" onclick="deleteExperience(${index})">Delete</button>
+                </div>
+            `;
+            experienceList.appendChild(listItem);
+        });
+    }
+    
+
+    function calculateTotalExperience() {
+        let totalMonths = 0;
+
+        experiences.forEach((experience) => {
+            const start = new Date(experience.startDate);
+            const end = experience.currentlyWorking ? new Date() : new Date(experience.endDate || new Date());
+
+            const months = (end.getFullYear() - start.getFullYear()) * 12 + (end.getMonth() - start.getMonth());
+            totalMonths += months;
+        });
+
+        const years = Math.floor(totalMonths / 12);
+        const months = totalMonths % 12;
+
+        document.getElementById('experience').value = `${years} years ${months} months`;
+    }
+   
+</script>
 
 <!-- Preview Modal (or section) -->
 <div class="modal fade" id="previewModal" tabindex="-1" aria-labelledby="previewModalLabel" aria-hidden="true">

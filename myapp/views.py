@@ -1,4 +1,5 @@
 from datetime import datetime
+import json
 
 from django.shortcuts import redirect, render
 from django.contrib.auth.decorators import login_required
@@ -93,6 +94,7 @@ def artist_profile_setting_updated_one(request):
     try:
         additional_info = ArtistMasterAdditional.objects.get(user=user)
         profile_picture = additional_info.profile_picture.url if additional_info.profile_picture else None
+        description = additional_info.description if additional_info and additional_info.description else ''
         firstname = additional_info.firstname if additional_info.firstname else None
         lastname = additional_info.lastname if additional_info.lastname else None
         if firstname or lastname:
@@ -101,7 +103,7 @@ def artist_profile_setting_updated_one(request):
     except ArtistMasterAdditional.DoesNotExist:
         profile_picture = None 
       
-    return render(request, 'candidate-profile-setting_updated_one.html',{"user":user,'profile_picture': profile_picture,'full_name':full_name})
+    return render(request, 'candidate-profile-setting_updated_one.html',{"user":user,'profile_picture': profile_picture,'full_name':full_name,'description':description})
 
 def artist_profile_setting(request):
     user = request.user
@@ -121,6 +123,8 @@ def artist_profile_updated_one(request):
     profile_picture = None
     additional_info = None
     skills = []
+    experience_details = []
+    images = []
     full_name = None
     try:
         additional_info = ArtistMasterAdditional.objects.get(user=user)
@@ -131,6 +135,10 @@ def artist_profile_updated_one(request):
         if firstname or lastname:
             full_name = f"{firstname} {lastname}".strip()
         skills = additional_info.skills.all()
+        experience_details = additional_info.experience_details.all()
+        images = additional_info.images.all()
+       
+
     except ArtistMasterAdditional.DoesNotExist:
         profile_picture = None
         full_name = None 
@@ -140,17 +148,19 @@ def artist_profile_updated_one(request):
                   {"artist_user":user,'profile_picture': profile_picture,
                    'additional_info':additional_info,'full_name':full_name, 
                    "is_logged_in_user": True,
-                   'skills': skills})
+                   'skills': skills,'experience_details':experience_details,'images':images})
 
 
 from django.shortcuts import get_object_or_404
-from .models import ArtistMasterBasic, ArtistMasterAdditional
+from .models import ArtistMasterBasic, ArtistMasterAdditional, Experience, Gallery
 
 def artist_profile_updated_one_Id(request, id):
     
     logged_in_user = request.user
     profile_picture = None
     skills = []
+    experience_details = [] # Initialize a list for experience details
+    images=[]
     
     if logged_in_user.is_authenticated:
         try:
@@ -175,6 +185,8 @@ def artist_profile_updated_one_Id(request, id):
         lastname_user = additional_info_user.lastname if additional_info_user.lastname else None
         full_name_user = f"{firstname_user} {lastname_user}".strip() if firstname_user or lastname_user else None
         skills = additional_info_user.skills.all()
+        experience_details = additional_info_user.experience_details.all()
+        images = additional_info_user.images.all()
     except ArtistMasterAdditional.DoesNotExist:
         profile_picture_user = None
         full_name_user = None
@@ -186,7 +198,9 @@ def artist_profile_updated_one_Id(request, id):
         "full_name_user": full_name_user,
         "is_logged_in_user": False,
         "profile_picture":profile_picture,
-        'skills': skills
+        'skills': skills,
+        'experience_details': experience_details,
+        'images':images
         
     })
 
@@ -197,12 +211,14 @@ import re
 from django.shortcuts import render
 from django.db.models import Count, Q
 import re
+from django.core.paginator import Paginator
 
 
 def artists(request):
     user = request.user
     search_query = request.GET.get('search_query', '').strip()
     print("searched_query",search_query)# Get and clean search query
+    page = request.GET.get('page', 1)
 
     # Handle profile picture for authenticated users
     if user.is_authenticated:
@@ -236,6 +252,9 @@ def artists(request):
             'additional': additional_info,
             'skills': skills
         })
+    # Paginate the artists_with_details list
+    paginator = Paginator(artists_with_details, 10)  # Show 10 artists per page
+    paginated_artists = paginator.get_page(page)    
 
     # Get skill counts
     skill_counts = (
@@ -253,7 +272,7 @@ def artists(request):
     context = {
         "artist_user": user,
         'profile_picture': profile_picture,
-        'artists_with_details': artists_with_details,
+        'paginated_artists': paginated_artists, 
         'skill_counts': skill_counts_dict,
         'search_query': search_query,  # Pass the search query to the template
     }
@@ -684,7 +703,7 @@ from .models import ArtistMasterAdditional, ArtistMasterBasic, Skill
 from django.contrib.auth.decorators import login_required
 @csrf_exempt
 @login_required
-def update_personal_details_api(request):              
+def update_artist_details_api(request):              
 
     if request.method == 'POST':
     
@@ -729,7 +748,16 @@ def update_personal_details_api(request):
             artist.country = request.POST.get('country')
         
         if 'profile_picture' in request.FILES:
-            artist.profile_picture = request.FILES['profile_picture']    
+            artist.profile_picture = request.FILES['profile_picture'] 
+        
+        if 'files' in request.FILES:
+            files = request.FILES.getlist('files')  # Use getlist to get multiple files
+            if artist.images.exists():
+                artist.images.all().delete()  # Delete existing images
+            
+            for file in files:
+                image = Gallery.objects.create(file_name=file)
+                artist.images.add(image)       
         
         if request.POST.get('address'):
             artist.address = request.POST.get('address')
@@ -757,25 +785,7 @@ def update_personal_details_api(request):
         
         if request.POST.get('linkedin_link'):
             artist.linkedin_link = request.POST.get('linkedin_link')
-        
-        artist.save()
-
-        return JsonResponse({'message': 'Personal Details Updated successfully!'}, status=200)
-
-    return JsonResponse({'error': 'Invalid method'}, status=400)
-
-
-@csrf_exempt
-@login_required
-def update_professional_details_api(request):              
-
-    if request.method == 'POST':
-        
-        try:
-            artist = ArtistMasterAdditional.objects.get(user=request.user)
-        except ArtistMasterAdditional.DoesNotExist:
-            artist = ArtistMasterAdditional(user=request.user)
-        
+            
         # Update only if the field has a value
         if request.POST.get('job_title'):
             artist.job_title = request.POST.get('job_title')
@@ -800,17 +810,61 @@ def update_professional_details_api(request):
             
             skills = []
             for skill_name in skill_names:
-                
                 skill, created = Skill.objects.get_or_create(name=skill_name)
-                if created:
-                  
-                    skills.append(skill)
-                else:
-                  
-                    skills.append(skill)
-           
+                skills.append(skill)
+            
             artist.skills.set(skills)
         
+        # Handling experiences data
+        if 'experiences_data' in request.POST:
+            try:
+                experiences_data = json.loads(request.POST['experiences_data'])  # Parse JSON data from the request body
+
+                if experiences_data: # Check if the artist has any existing experiences and clear them if needed
+                    if artist.experience_details.exists():
+                        
+                        artist.experience_details.all().delete()
+
+                    # Save each new experience
+                    for exp in experiences_data:
+                        designation = exp.get('designation')
+                        company = exp.get('company')
+                        start_date = exp.get('startDate')
+                        end_date = exp.get('endDate')
+
+                        # Validate that required fields are present
+                        if not designation or not company or not start_date:
+                            return JsonResponse({'error': 'Missing required experience fields'}, status=400)
+
+                        # Convert start_date and end_date to proper DateField format if needed
+                        try:
+                            start_date = datetime.strptime(start_date, '%Y-%m-%d').date()  # Assuming format is 'YYYY-MM-DD'
+                        except ValueError:
+                            return JsonResponse({'error': 'Invalid start_date format'}, status=400)
+                        
+                        if end_date:
+                            try:
+                                end_date = datetime.strptime(end_date, '%Y-%m-%d').date()
+                            except ValueError:
+                                return JsonResponse({'error': 'Invalid end_date format'}, status=400)
+                        else:
+                            end_date = None  # If no end date, set it as None
+
+                        # Create and save a new Experience object
+                        experience = Experience.objects.create(
+                            designation=designation,
+                            company=company,
+                            start_date=start_date,
+                            end_date=end_date,
+                        )
+
+                        artist.experience_details.add(experience)
+                else:
+            # If no new experience data is provided, don't clear the existing experiences
+                 pass
+            except json.JSONDecodeError:
+                return JsonResponse({'error': 'Invalid experiences data'}, status=400)
+
         if request.POST.get('certifications'):
             artist.certifications = request.POST.get('certifications')
         
@@ -820,11 +874,118 @@ def update_professional_details_api(request):
         if request.POST.get('awards'):
             artist.awards = request.POST.get('awards')
 
-        artist.save()
+        artist.save()    
+        
+        
 
-        return JsonResponse({'message': 'Professional Details Updated successfully!'}, status=200)
-    
+        return JsonResponse({'message': 'Details Updated successfully!'}, status=200)
+
     return JsonResponse({'error': 'Invalid method'}, status=400)
+
+
+# @csrf_exempt
+# @login_required
+# def update_professional_details_api(request):              
+
+#     if request.method == 'POST':
+        
+#         try:
+#             artist = ArtistMasterAdditional.objects.get(user=request.user)
+#         except ArtistMasterAdditional.DoesNotExist:
+#             artist = ArtistMasterAdditional(user=request.user)
+        
+#         # Update only if the field has a value
+#         if request.POST.get('job_title'):
+#             artist.job_title = request.POST.get('job_title')
+        
+#         if request.POST.get('company_name'):
+#             artist.company_name = request.POST.get('company_name')
+        
+#         if request.POST.get('experience'):
+#             artist.experience = request.POST.get('experience')
+        
+#         if request.POST.get('portfolio'):
+#             artist.portfolio = request.POST.get('portfolio')
+        
+#         if request.POST.get('short_bio'):
+#             artist.short_bio = request.POST.get('short_bio')
+        
+#         if request.POST.get('availability'):
+#             artist.availability = request.POST.get('availability')
+        
+#         if request.POST.get('skills'):
+#             skill_names = request.POST.get('skills').split(',')  
+            
+#             skills = []
+#             for skill_name in skill_names:
+#                 skill, created = Skill.objects.get_or_create(name=skill_name)
+#                 skills.append(skill)
+            
+#             artist.skills.set(skills)
+        
+#         # Handling experiences data
+#         if 'experiences_data' in request.POST:
+#             try:
+#                 experiences_data = json.loads(request.POST['experiences_data'])  # Parse JSON data from the request body
+
+#                 # Check if the artist has any existing experiences and clear them if needed
+#                 if artist.experience_details.exists():
+                    
+#                     artist.experience_details.all().delete()
+
+#                 # Save each new experience
+#                 for exp in experiences_data:
+#                     designation = exp.get('designation')
+#                     company = exp.get('company')
+#                     start_date = exp.get('startDate')
+#                     end_date = exp.get('endDate')
+
+#                     # Validate that required fields are present
+#                     if not designation or not company or not start_date:
+#                         return JsonResponse({'error': 'Missing required experience fields'}, status=400)
+
+#                     # Convert start_date and end_date to proper DateField format if needed
+#                     try:
+#                         start_date = datetime.strptime(start_date, '%Y-%m-%d').date()  # Assuming format is 'YYYY-MM-DD'
+#                     except ValueError:
+#                         return JsonResponse({'error': 'Invalid start_date format'}, status=400)
+                    
+#                     if end_date:
+#                         try:
+#                             end_date = datetime.strptime(end_date, '%Y-%m-%d').date()
+#                         except ValueError:
+#                             return JsonResponse({'error': 'Invalid end_date format'}, status=400)
+#                     else:
+#                         end_date = None  # If no end date, set it as None
+
+#                     # Create and save a new Experience object
+#                     experience = Experience.objects.create(
+#                         designation=designation,
+#                         company=company,
+#                         start_date=start_date,
+#                         end_date=end_date,
+#                     )
+
+#                     # Add the new experience to the artist's experience_details
+#                     artist.experience_details.add(experience)
+#             except json.JSONDecodeError:
+#                 return JsonResponse({'error': 'Invalid experiences data'}, status=400)
+
+#         if request.POST.get('certifications'):
+#             artist.certifications = request.POST.get('certifications')
+        
+#         if request.POST.get('published_works'):
+#             artist.published_works = request.POST.get('published_works')
+        
+#         if request.POST.get('awards'):
+#             artist.awards = request.POST.get('awards')
+
+#         artist.save()
+
+#         return JsonResponse({'message': 'Professional Details Updated successfully!'}, status=200)
+    
+#     return JsonResponse({'error': 'Invalid method'}, status=400)
+
 
 
 from django.contrib.auth import update_session_auth_hash
@@ -961,7 +1122,7 @@ def search_artists(request):
             'id':artist.id,
             'skills': skills,  # Include skills in the response
             'job_title': additional_info.job_title if additional_info else '',
-            'profile_picture': additional_info.profile_picture.url if additional_info.profile_picture else ''
+            'profile_picture': additional_info.profile_picture.url if additional_info and additional_info.profile_picture else ''
         })
 
     return JsonResponse({'artists_with_details': artists_data})
@@ -1109,4 +1270,6 @@ def reset_password(request, user_id, token):
     
     
     return render(request, "helpcenter-support.html", {"user_id": user_id, "token": token})
+
+
 
