@@ -41,22 +41,22 @@
                 <div class="rounded shadow p-4">
                     <form id="ArtistDetailsForm">
                         <h5>Personal Details:</h5>
-                        <div class="row mt-4">
+                        <div class="row g-3">
                             <div class="col-md-6">
                                 <div class="mb-3">
-                                    <label class="form-label fw-semibold">First Name:<span class="text-danger" >*</span></label>
-                                    <input name="firstname" id="firstname" type="text" class="form-control" maxlength="15" placeholder="First Name" required>
+                                    <label class="form-label"style="font-family: Arial, sans-serif; font-size: 16px; font-weight: bold;">First Name:<span class="text-danger" >*</span></label>
+                                    <input name="firstname" id="firstname" type="text" class="form-control"  value="{{ additional_info.firstname|default:'' }}" maxlength="15"required>
                                 </div>
                             </div>
                             <div class="col-md-6">
                                 <div class="mb-3">
-                                    <label class="form-label fw-semibold">Last Name:<span class="text-danger" >*</span></label>
-                                    <input name="lastname" id="lastname" type="text" class="form-control" maxlength="15" placeholder="Last Name" required>
+                                    <label class="form-label" style="font-family: Arial, sans-serif; font-size: 16px; font-weight: bold;">Last Name:<span class="text-danger" >*</span></label>
+                                    <input name="lastname" id="lastname" type="text" class="form-control" maxlength="15" value="{{ additional_info.lastname|default:'' }}" required>
                                 </div>
                             </div>
                             <div class="col-md-6">
                                 <div class="mb-3">
-                                    <label class="form-label fw-semibold">Gender:<span class="text-danger" >*</span></label>
+                                    <label class="form-label" style="font-family: Arial, sans-serif; font-size: 16px; font-weight: bold;">Gender:<span class="text-danger" >*</span></label>
                                     <select class="form-control form-select" id="gender" required>
                                                 <option value="Male">Male</option>
                                                 <option value="Female">Female</option>
@@ -66,25 +66,61 @@
                             </div>
                             <div class="col-md-6">
                                 <div class="mb-3">
-                                    <label class="form-label fw-semibold">Date of Birth:<span class="text-danger" required>*</span></label>
-                                    <input name="dob" id="dob" type="date" class="form-control">
+                                    <label class="form-label" style="font-family: Arial, sans-serif; font-size: 16px; font-weight: bold;">Date of Birth:<span class="text-danger" required>*</span></label>
+                                    <input name="dob" id="dob" value="{{ additional_info.dob|date:'Y-m-d' }}" type="date" class="form-control">
                                 </div>
                             </div>
                             <div class="col-md-6">
                                 <div class="mb-3">
-                                    <label class="form-label fw-semibold">Phone Number:<span class="text-danger">*</span></label>
+                                    <label class="form-label" style="font-family: Arial, sans-serif; font-size: 16px; font-weight: bold;">Phone Number:<span class="text-danger">*</span></label>
                                     <input name="phone" id="phone" value="{{ user.contact_number }}" type="text" maxlength="12" class="form-control" placeholder="Phone Number" required pattern="^[0-9]{10,12}$" title="Please enter a valid phone number" oninput="this.value = this.value.replace(/[^0-9]/g, '')">
                                 </div>
                             </div>
                             <div class="col-md-6">
                                 <div class="mb-3">
-                                    <label class="form-label fw-semibold">Email Address:<span class="text-danger">*</span></label>
+                                    <label class="form-label" style="font-family: Arial, sans-serif; font-size: 16px; font-weight: bold;">Email Address:<span class="text-danger">*</span></label>
                                     <input name="email" id="email2" type="email" value="{{ user.email }}" class="form-control" maxlength="30" placeholder="Email Address" required>
+                                </div>
+                            </div>
+                           
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label class="form-label" style="font-family: Arial, sans-serif; font-size: 16px; font-weight: bold;">Profile Picture:<span class="text-danger">*</span></label>
+                                    <input name="profile_picture" id="profile_picture" type="file" class="form-control" accept="image/*">
                                 </div>
                             </div>
                             <div class="col-md-6">
                                 <div class="mb-3">
-                                    <label class="form-label fw-semibold">Location:</label>
+                                    <label class="form-label" style="font-family: Arial, sans-serif; font-size: 16px; font-weight: bold;" for="houseNumber">Address 1:</label>
+                                    <input type="text" value="{{ additional_info.address1|default:'' }}"  name="houseNumber" id="houseNumber" class="form-control" maxlength="50" placeholder="e.g.,House Number/Building Name" required>
+                                </div>
+                            </div>
+                            
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label class="form-label" style="font-family: Arial, sans-serif; font-size: 16px; font-weight: bold;" for="roadName">Address 2:</label>
+                                    <input type="text" value="{{ additional_info.address2|default:'' }}" name="roadName" id="roadName" class="form-control" maxlength="100" placeholder="e.g., Road Name/Area/Colony" required>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label class="form-label" for="state" style="font-family: Arial, sans-serif; font-size: 16px; font-weight: bold;">Address 3:</label>
+                                    <input type="text"  value="{{ additional_info.state|default:'' }}" name="state" id="state" class="form-control" maxlength="50" placeholder="e.g.,District,City,State" required>
+                                </div>
+                            </div>
+                            
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label class="form-label" style="font-family: Arial, sans-serif; font-size: 16px; font-weight: bold;" for="pincode">Pincode:</label>
+                                    <input type="text" value="{{ additional_info.pincode|default:'' }}" name="pincode" id="pincode" class="form-control" maxlength="8" placeholder="e.g., 123456" pattern="\d{6}" required>
+                                </div>
+                            </div>
+                            
+                            
+                           
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label class="form-label"style="font-family: Arial, sans-serif; font-size: 16px; font-weight: bold;">Location:</label>
                                     <select class="form-control form-select" id="Country">
                                                 <option value="India">India</option>
                                                 <option value="USA">USA</option>
@@ -96,19 +132,7 @@
                                 </div>
                             <div class="col-md-6">
                                 <div class="mb-3">
-                                    <label class="form-label fw-semibold">Profile Picture:<span class="text-danger">*</span></label>
-                                    <input name="profile_picture" id="profile_picture" type="file" class="form-control" accept="image/*">
-                                </div>
-                            </div>
-                            <div class="col-12">
-                                <div class="mb-3">
-                                    <label class="form-label fw-semibold">Complete Address:</label>
-                                    <textarea name="address" id="address" rows="4" class="form-control" maxlength="150" placeholder="e.g., Full Address"></textarea>
-                                </div>
-                            </div>
-                            <div class="col-md-6">
-                                <div class="mb-3">
-                                    <label class="form-label fw-semibold">Role in Literary World:</label>
+                                    <label class="form-label" style="font-family: Arial, sans-serif; font-size: 16px; font-weight: bold;">Role in Literary World:</label>
                                     <select class="form-control form-select" id="description" required>
                                         <option value="Writer">Writer</option>
                                         <option value="Publisher">Publisher</option>
@@ -147,7 +171,7 @@
                             </div>
                             <div class="col-md-6">
                                 <div class="mb-3">
-                                    <label class="form-label fw-semibold">Gallery:<span class="text-danger">*</span></label>
+                                    <label class="form-label" style="font-family: Arial, sans-serif; font-size: 16px; font-weight: bold;">Gallery:<span class="text-danger">*</span></label>
                                     <input
                                         name="documents[]"
                                         id="documents"
@@ -160,16 +184,21 @@
                                     <ul id="file-list" class="mt-2 list-unstyled"></ul>
                                 </div>
                             </div>
-                            
+                            <div class="col-lg-12">
+                                <div class="mb-3">
+                                    <label class="form-label"style="font-family: Arial, sans-serif; font-size: 16px; font-weight: bold;">Short Bio:</label>
+                                    <textarea name="short_bio"  id="short_bio" class="form-control" maxlength="85" placeholder="Brief description of your professional background">{{ additional_info.short_bio|default:'' }}</textarea>
+                                </div>
+                            </div>
                             <div class="col-12">
                                 <div class="mb-3">
-                                    <label class="form-label fw-semibold">Brief Introduction:</label>
-                                    <textarea name="introduction" id="introduction" rows="4" maxlength="500" class="form-control" placeholder="Write a brief introduction about yourself..." ></textarea>
+                                    <label class="form-label" style="font-family: Arial, sans-serif; font-size: 16px; font-weight: bold;">Brief Introduction:</label>
+                                    <textarea name="introduction" id="introduction"  rows="4" maxlength="500" class="form-control" placeholder="Write a brief introduction about yourself..." >{{ additional_info.introduction|default:'' }}</textarea>
                                 </div>
                             </div>
                             <div class="col-md-12">
                                 <div class="mb-3">
-                                    <label class="form-label fw-semibold">Languages:</label>
+                                    <label class="form-label"style="font-family: Arial, sans-serif; font-size: 16px; font-weight: bold;">Languages:</label>
                                     <table class="table table-bordered">
                                         <thead>
                                             <tr>
@@ -229,19 +258,19 @@
                 
                             <div class="col-12">
                                 <div class="mb-3">
-                                    <label class="form-label fw-semibold">Social Media Links:</label>
+                                    <label class="form-label"style="font-family: Arial, sans-serif; font-size: 16px; font-weight: bold;">Social Media Links:</label>
                                     <div class="d-flex flex-column">
                                         <div class="mb-2 d-flex align-items-center">
                                             <i data-feather="facebook" class="fea icon-sm align-middle me-2" title="facebook"></i>
-                                            <input type="url" class="form-control" id="facebook_link" maxlength="100" placeholder="Facebook URL" >
+                                            <input type="url" class="form-control" value="{{ additional_info.facebook_link|default:'' }}" id="facebook_link" maxlength="100" placeholder="Facebook URL" >
                                         </div>
                                         <div class="mb-2 d-flex align-items-center">
                                             <i data-feather="instagram" class="fea icon-sm align-middle me-2" title="instagram"></i>
-                                            <input type="url" class="form-control" id="instagram_link" maxlength="100" placeholder="Instagram URL" >
+                                            <input type="url" class="form-control" id="instagram_link"  value="{{ additional_info.instagram_link|default:'' }}" maxlength="100" placeholder="Instagram URL" >
                                         </div>
                                         <div class="mb-2 d-flex align-items-center">
                                             <i data-feather="linkedin" class="fea icon-sm align-middle me-2" title="linkedin"></i>
-                                            <input type="url" class="form-control" id="linkedin_link" maxlength="100" placeholder="LinkedIn URL" >
+                                            <input type="url" class="form-control" id="linkedin_link" value="{{ additional_info.linkedin_link|default:'' }}" maxlength="100" placeholder="LinkedIn URL" >
                                         </div>
 
                                     </div>
@@ -249,29 +278,29 @@
                             </div>
                         </div>
                             <h5>Professional Details:</h5>
-                            <div class="row mt-4">
+                            <div class="row g-3">
                             <div class="col-lg-12">
                                 <div class="mb-3">
-                                    <label class="form-label fw-semibold">Professional Title:</label>
-                                    <input name="job_title" id="job_title" type="text" class="form-control" maxlength="30" placeholder="Professional Title" >
+                                    <label class="form-label"style="font-family: Arial, sans-serif; font-size: 16px; font-weight: bold;">Professional Title:</label>
+                                    <input name="job_title" id="job_title" value="{{ additional_info.job_title|default:'' }}" type="text" class="form-control" maxlength="30" placeholder="Professional Title" >
                                 </div>
                             </div>
                             <div class="col-lg-12">
                                 <div class="mb-3">
-                                    <label class="form-label fw-semibold">Company / Organization (if applicable):</label>
-                                    <input name="company_name" id="company_name" type="text" class="form-control"  maxlength="30" placeholder="Company / Organization" >
+                                    <label class="form-label"style="font-family: Arial, sans-serif; font-size: 16px; font-weight: bold;">Company / Organization (if applicable):</label>
+                                    <input name="company_name" id="company_name" value="{{ additional_info.company_name|default:'' }}" type="text" class="form-control"  maxlength="30" placeholder="Company / Organization" >
                                 </div>
                             </div>
                             <div class="col-lg-12">
                                 <div class="mb-3">
-                                    <label class="form-label fw-semibold">Years of Experience:</label>
+                                    <label class="form-label"style="font-family: Arial, sans-serif; font-size: 16px; font-weight: bold;">Years of Experience:</label>
                                     <input name="experience" id="experience" type="text" class="form-control"  placeholder="Years of Experience" readonly>
                                 </div>
                             </div>
                             
                                 <!-- Experience list -->
                                 <div class="col-lg-12">
-                                <label class="form-label fw-semibold">Experience List:</label>
+                                <label class="form-label"style="font-family: Arial, sans-serif; font-size: 16px; font-weight: bold;">Experience List:</label>
                                 <ul id="experienceList" class="list-group"></ul>
                             </div>
                             <div class="col-lg-12">
@@ -281,19 +310,14 @@
                             </div>
                             <div class="col-lg-12">
                                 <div class="mb-3">
-                                    <label class="form-label fw-semibold">Portfolio Links / Website:</label>
-                                    <input name="portfolio" id="portfolio" type="url" class="form-control" maxlength="50" placeholder="Portfolio URL">
+                                    <label class="form-label" style="font-family: Arial, sans-serif; font-size: 16px; font-weight: bold;">Portfolio Links / Website:</label>
+                                    <input name="portfolio" id="portfolio" value="{{ additional_info.portfolio|default:'' }}" type="url" class="form-control" maxlength="50" placeholder="Portfolio URL">
                                 </div>
                             </div>
+                            
                             <div class="col-lg-12">
                                 <div class="mb-3">
-                                    <label class="form-label fw-semibold">Short Bio:</label>
-                                    <textarea name="short_bio" id="short_bio" class="form-control" maxlength="300" placeholder="Brief description of your professional background"></textarea>
-                                </div>
-                            </div>
-                            <div class="col-lg-12">
-                                <div class="mb-3">
-                                    <label class="form-label fw-semibold">Availability:</label>
+                                    <label class="form-label"style="font-family: Arial, sans-serif; font-size: 16px; font-weight: bold;">Availability:</label>
                                     <select name="availability" id="availability" class="form-control">
                                                     <option value="full_time">Full-time</option>
                                                     <option value="part_time">Part-time</option>
@@ -303,7 +327,7 @@
                             </div>
                             <div class="col-lg-12">
                                 <div class="mb-3">
-                                    <label class="fw-semibold">Skills:</label>
+                                    <label class="form-label" style="font-family: Arial, sans-serif; font-size: 16px; font-weight: bold;">Skills:</label>
                                     <div id="custom-multi-select" style="display: flex; flex-wrap: wrap; gap: 10px;" required>
                                         <label style="display: flex; align-items: center;">
                                             <input type="checkbox" value="Writer" class="skill-checkbox" style="margin-right: 4px; vertical-align: middle;"> Writer
@@ -410,6 +434,8 @@
                             
                             
                             <script>
+
+
                                 // Limit selection to 6 checkboxes
                                 const checkboxes = document.querySelectorAll('.skill-checkbox');
                                 checkboxes.forEach((checkbox) => {
@@ -445,6 +471,8 @@
                                         }
                                     });
                                 });
+
+                                
                                 
                             </script>
                             
@@ -454,20 +482,20 @@
                             
                             <div class="col-lg-12">
                                 <div class="mb-3">
-                                    <label class="form-label fw-semibold">Certifications:</label>
-                                    <input type="text" id="certifications" class="form-control" maxlength="200" placeholder="Certifications">
+                                    <label class="form-label"style="font-family: Arial, sans-serif; font-size: 16px; font-weight: bold;">Certifications:</label>
+                                    <input type="text" id="certifications" value="{{ additional_info.certifications }}" class="form-control" maxlength="200" placeholder="Certifications">
                                 </div>
                             </div>
                             <div class="col-lg-12">
                                 <div class="mb-3">
-                                    <label class="form-label fw-semibold">Published Works / Projects:</label>
-                                    <textarea name="published_works" id="published_works"  maxlength="200" class="form-control" placeholder="Add details about published works (Title, Date, etc.)"></textarea>
+                                    <label class="form-label"style="font-family: Arial, sans-serif; font-size: 16px; font-weight: bold;">Published Works / Projects:</label>
+                                    <textarea name="published_works" id="published_works" maxlength="200" class="form-control" placeholder="Add details about published works (Title, Date, etc.)">{{ additional_info.published_works }}</textarea>
                                 </div>
                             </div>
                             <div class="col-lg-12">
                                 <div class="mb-3">
-                                    <label class="form-label fw-semibold">Awards / Recognitions:</label>
-                                    <textarea name="awards" id="awards" class="form-control" maxlength="200" placeholder="Mention any awards or achievements"></textarea>
+                                    <label class="form-label"style="font-family: Arial, sans-serif; font-size: 16px; font-weight: bold;">Awards / Recognitions:</label>
+                                    <textarea name="awards" id="awards" class="form-control"  maxlength="100" placeholder="Mention any awards or achievements">{{ additional_info.awards }}</textarea>
                                 </div>
                             </div>
 
@@ -480,219 +508,11 @@
                         </div>
                     </form>
                 </div>
-                {% comment %} <div class="rounded shadow p-4 mt-4">
-
-                    <div class="row">
-                        <div class="col-md-12 mt-4 pt-2">
-                            <h5>Professional Details:</h5>
-                            <form id="professionalDetailsForm">
-                                <div class="row mt-4">
-                                    <div class="col-lg-12">
-                                        <div class="mb-3">
-                                            <label class="form-label fw-semibold">Professional Title:</label>
-                                            <input name="job_title" id="job_title" type="text" class="form-control" placeholder="Professional Title" required>
-                                        </div>
-                                    </div>
-                                    <div class="col-lg-12">
-                                        <div class="mb-3">
-                                            <label class="form-label fw-semibold">Company / Organization (if applicable):</label>
-                                            <input name="company_name" id="company_name" type="text" class="form-control" placeholder="Company / Organization" required>
-                                        </div>
-                                    </div>
-                                    <div class="col-lg-12">
-                                        <div class="mb-3">
-                                            <label class="form-label fw-semibold">Years of Experience:</label>
-                                            <input name="experience" id="experience" type="text" class="form-control" placeholder="Years of Experience" readonly>
-                                        </div>
-                                    </div>
-                                    <div class="col-lg-12">
-                                        <button type="button" class="btn btn-primary mb-3" data-bs-toggle="modal" data-bs-target="#experienceModal" onclick="openAddModal()">
-                                            Add Experience
-                                        </button>
-                                    
-                                        <!-- Experience list -->
-                                        <ul id="experienceList" class="list-group"></ul>
-                                    </div>
-                                    <div class="col-lg-12">
-                                        <div class="mb-3">
-                                            <label class="form-label fw-semibold">Portfolio Links / Website:</label>
-                                            <input name="portfolio" id="portfolio" type="url" class="form-control" placeholder="Portfolio URL">
-                                        </div>
-                                    </div>
-                                    <div class="col-lg-12">
-                                        <div class="mb-3">
-                                            <label class="form-label fw-semibold">Short Bio:</label>
-                                            <textarea name="short_bio" id="short_bio" class="form-control" placeholder="Brief description of your professional background"></textarea>
-                                        </div>
-                                    </div>
-                                    <div class="col-lg-12">
-                                        <div class="mb-3">
-                                            <label class="form-label fw-semibold">Availability:</label>
-                                            <select name="availability" id="availability" class="form-control">
-                                                            <option value="full_time">Full-time</option>
-                                                            <option value="part_time">Part-time</option>
-                                                            <option value="freelance">Freelance</option>
-                                                        </select>
-                                        </div>
-                                    </div>
-                                    <div class="col-lg-12">
-                                        <div class="mb-3">
-                                            <label class="fw-semibold">Skills:</label>
-                                            <div id="custom-multi-select" style="display: flex; flex-wrap: wrap; gap: 10px;" required>
-                                                <label style="display: flex; align-items: center;">
-                                                    <input type="checkbox" value="Writer" class="skill-checkbox" style="margin-right: 4px; vertical-align: middle;"> Writer
-                                                </label>
-                                                <label style="display: flex; align-items: center;">
-                                                    <input type="checkbox" value="Publisher" class="skill-checkbox" style="margin-right: 4px; vertical-align: middle;"> Publisher
-                                                </label>
-                                                <label style="display: flex; align-items: center;">
-                                                    <input type="checkbox" value="Printer" class="skill-checkbox" style="margin-right: 4px; vertical-align: middle;"> Printer
-                                                </label>
-                                                <label style="display: flex; align-items: center;">
-                                                    <input type="checkbox" value="Editor" class="skill-checkbox" style="margin-right: 4px; vertical-align: middle;"> Editor
-                                                </label>
-                                                <label style="display: flex; align-items: center;">
-                                                    <input type="checkbox" value="Artist" class="skill-checkbox" style="margin-right: 4px; vertical-align: middle;"> Artist
-                                                </label>
-                                                <label style="display: flex; align-items: center;">
-                                                    <input type="checkbox" value="Digital Graphics Designer" class="skill-checkbox" style="margin-right: 4px; vertical-align: middle;"> Digital Graphics Designer
-                                                </label>
-                                                <label style="display: flex; align-items: center;">
-                                                    <input type="checkbox" value="Digital Content Creator" class="skill-checkbox" style="margin-right: 4px; vertical-align: middle;"> Digital Content Creator
-                                                </label>
-                                                <label style="display: flex; align-items: center;">
-                                                    <input type="checkbox" value="Spiritual Leader" class="skill-checkbox" style="margin-right: 4px; vertical-align: middle;"> Spiritual Leader
-                                                </label>
-                                                <label style="display: flex; align-items: center;">
-                                                    <input type="checkbox" value="Social Media Influencer" class="skill-checkbox" style="margin-right: 4px; vertical-align: middle;"> Social Media Influencer
-                                                </label>
-                                                <label style="display: flex; align-items: center;">
-                                                    <input type="checkbox" value="Digital Marketer" class="skill-checkbox" style="margin-right: 4px; vertical-align: middle;"> Digital Marketer
-                                                </label>
-                                                <label style="display: flex; align-items: center;">
-                                                    <input type="checkbox" value="Public Relations Manager" class="skill-checkbox" style="margin-right: 4px; vertical-align: middle;"> Public Relations Manager
-                                                </label>
-                                                <label style="display: flex; align-items: center;">
-                                                    <input type="checkbox" value="Event Manager" class="skill-checkbox" style="margin-right: 4px; vertical-align: middle;"> Event Manager
-                                                </label>
-                                                <label style="display: flex; align-items: center;">
-                                                    <input type="checkbox" value="Entertainment Troupe Owner" class="skill-checkbox" style="margin-right: 4px; vertical-align: middle;"> Entertainment Troupe Owner
-                                                </label>
-                                                <label style="display: flex; align-items: center;">
-                                                    <input type="checkbox" value="Standup Comedian" class="skill-checkbox" style="margin-right: 4px; vertical-align: middle;"> Standup Comedian
-                                                </label>
-                                                <label style="display: flex; align-items: center;">
-                                                    <input type="checkbox" value="Compere/Emcee" class="skill-checkbox" style="margin-right: 4px; vertical-align: middle;"> Compere/Emcee
-                                                </label>
-                                                
-                                                <label style="display: flex; align-items: center;">
-                                                    <input type="checkbox" value="Book Store Owner" class="skill-checkbox" style="margin-right: 4px; vertical-align: middle;"> Book Store Owner
-                                                </label>
-                                                <label style="display: flex; align-items: center;">
-                                                    <input type="checkbox" value="Digital Marketplace/Platform" class="skill-checkbox" style="margin-right: 4px; vertical-align: middle;"> Digital Marketplace/Platform
-                                                </label>
-                                                <label style="display: flex; align-items: center;">
-                                                    <input type="checkbox" value="Poet" class="skill-checkbox" style="margin-right: 4px; vertical-align: middle;"> Poet
-                                                </label>
-                                                <label style="display: flex; align-items: center;">
-                                                    <input type="checkbox" value="Essayist" class="skill-checkbox" style="margin-right: 4px; vertical-align: middle;"> Essayist
-                                                </label>
-                                                <label style="display: flex; align-items: center;">
-                                                    <input type="checkbox" value="Blogger" class="skill-checkbox" style="margin-right: 4px; vertical-align: middle;"> Blogger
-                                                </label>
-
-                                                <label style="display: flex; align-items: center;">
-                                                    <input type="checkbox" value="Novelist" class="skill-checkbox" style="margin-right: 4px; vertical-align: middle;"> Novelist
-                                                </label>
-                                               
-                                                <label style="display: flex; align-items: center;">
-                                                    <input type="checkbox" value="Columnist" class="skill-checkbox" style="margin-right: 4px; vertical-align: middle;"> Columnist
-                                                </label>
-                                                <label style="display: flex; align-items: center;">
-                                                    <input type="checkbox" value="Journalist" class="skill-checkbox" style="margin-right: 4px; vertical-align: middle;"> Journalist
-                                                </label>
-                                                <label style="display: flex; align-items: center;">
-                                                    <input type="checkbox" value="Short Story Writer" class="skill-checkbox" style="margin-right: 4px; vertical-align: middle;"> Short Story Writer
-                                                </label>
-                                                <label style="display: flex; align-items: center;">
-                                                    <input type="checkbox" value="Motivational Speaker" class="skill-checkbox" style="margin-right: 4px; vertical-align: middle;"> Motivational Speaker
-                                                </label>
-                                                <label style="display: flex; align-items: center;">
-                                                    <input type="checkbox" value="Literary Critic" class="skill-checkbox" style="margin-right: 4px; vertical-align: middle;"> Literary Critic
-                                                </label>
-                                                <label style="display: flex; align-items: center;">
-                                                    <input type="checkbox" value="Literacy Reviewer" class="skill-checkbox" style="margin-right: 4px; vertical-align: middle;"> Literacy Reviewer
-                                                </label>
-                                                <label style="display: flex; align-items: center;">
-                                                    <input type="checkbox" value="Lyricist" class="skill-checkbox" style="margin-right: 4px; vertical-align: middle;"> Lyricist
-                                                </label>
-                                                <label style="display: flex; align-items: center;">
-                                                    <input type="checkbox" value="Scriptwriter-Drama" class="skill-checkbox" style="margin-right: 4px; vertical-align: middle;"> Scriptwriter-Drama
-                                                </label>
-                                                <label style="display: flex; align-items: center;">
-                                                    <input type="checkbox" value="Scriptwriter-Screen" class="skill-checkbox" style="margin-right: 4px; vertical-align: middle;"> Scriptwriter-Screen
-                                                </label>
-                                                <label style="display: flex; align-items: center;">
-                                                    <input type="checkbox" value="Translator" class="skill-checkbox" style="margin-right: 4px; vertical-align: middle;"> Translator
-                                                </label>
-                                            </div>
-                                            <small class="text-muted">You can select up to 6 skills.</small>
-                                        </div>
-                                    </div>
-                                    
-                                    
-                                    
-                                    
-                                    <script>
-                                        // Limit selection to 6 checkboxes
-                                        const checkboxes = document.querySelectorAll('.skill-checkbox');
-                                        checkboxes.forEach((checkbox) => {
-                                            checkbox.addEventListener('change', function () {
-                                                const selectedCheckboxes = document.querySelectorAll('.skill-checkbox:checked');
-                                                if (selectedCheckboxes.length > 6) {
-                                                    alert("You can only select up to 6 skills.");
-                                                    this.checked = false; 
-                                                }
-                                            });
-                                        });
-                                    </script>
-                                    
-                                    
-                                    
-                                    
-                                    
-                                    <div class="col-lg-12">
-                                        <div class="mb-3">
-                                            <label class="form-label fw-semibold">Certifications:</label>
-                                            <input type="text" id="certifications" class="form-control" placeholder="Certifications">
-                                        </div>
-                                    </div>
-                                    <div class="col-lg-12">
-                                        <div class="mb-3">
-                                            <label class="form-label fw-semibold">Published Works / Projects:</label>
-                                            <textarea name="published_works" id="published_works" class="form-control" placeholder="Add details about published works (Title, Date, etc.)"></textarea>
-                                        </div>
-                                    </div>
-                                    <div class="col-lg-12">
-                                        <div class="mb-3">
-                                            <label class="form-label fw-semibold">Awards / Recognitions:</label>
-                                            <textarea name="awards" id="awards" class="form-control" placeholder="Mention any awards or achievements"></textarea>
-                                        </div>
-                                    </div>
-                                    <div class="col-lg-12 mt-2 mb-0">
-                                        <button id="submit2" class=" btn btn-primary" value="Update Details">Update Details</button>
-
-                                    </div>
-                                </div>
-                            </form>
-                        </div>
-                    </div>
-
-                </div> {% endcomment %}
+               
                 <div class="rounded shadow p-4 mt-4">
                     <h5>Others:</h5>
                     <form id="otherDetails">
-                        <div class="row">
+                        <div class="row g-3">
                             <div class="mb-3">
                                 <label class="form-label fw-semibold">Preferred Payment Method:</label>
                                 <select class="form-control form-select" id="payment_method">
@@ -780,11 +600,11 @@
                     <input type="hidden" id="experienceId" value="">
                     <div class="mb-3">
                         <label for="designation" class="form-label">Designation</label>
-                        <input type="text" id="designation" class="form-control" placeholder="Designation" >
+                        <input type="text" id="designation" class="form-control" placeholder="Designation" maxlength="50" >
                     </div>
                     <div class="mb-3">
                         <label for="company" class="form-label">Company Name</label>
-                        <input type="text" id="company" class="form-control" placeholder="Company Name" >
+                        <input type="text" id="company" class="form-control" placeholder="Company Name" maxlength="50">
                     </div>
                     <div class="mb-3">
                         <label for="startDate" class="form-label">Start Date</label>
@@ -883,7 +703,7 @@
             const duration = `${years > 0 ? `${years} year${years > 1 ? 's' : ''} ` : ''}${months > 0 ? `${months} month${months > 1 ? 's' : ''}` : ''}`.trim();
     
             const listItem = document.createElement('li');
-            listItem.className = 'list-group-item-experience d-flex justify-content-between align-items-center';
+            listItem.className = 'list-group-item-experience mb-2 d-flex justify-content-between align-items-center';
             listItem.innerHTML = `
                 <div>
                     <strong>${experience.designation}</strong> at ${experience.company} 
@@ -916,6 +736,24 @@
 
         document.getElementById('experience').value = `${years} years ${months} months`;
     }
+
+    // Add event listeners for all fields with maxlength
+document.addEventListener("DOMContentLoaded", function() {
+    const inputs = document.querySelectorAll("input[maxlength], textarea[maxlength]");
+    inputs.forEach(input => {
+        input.addEventListener("input", function() {
+            console.log("inputting")
+            const maxLength = parseInt(this.getAttribute("maxlength"), 10);
+            console.log(maxLength);
+            console.log(this.value.length);
+                if (this.value.length >= maxLength) {
+                   
+                    alert(`Maximum length of ${maxLength} characters exceeded!`);
+                    this.value = this.value.slice(0, maxLength); // Truncate to the max length
+            }
+        });
+    });
+});
    
 </script>
 

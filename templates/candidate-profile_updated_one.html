@@ -54,7 +54,9 @@
                         <div class="d-flex flex-wrap gap-2">
                                             {% if info.skills.all %}
                             {% for skill in info.skills.all %}
-                                <span class="badge bg-soft-primary rounded-pill">{{ skill.name }}</span>
+                            <a href="javascript:void(0);" class="badge bg-soft-primary rounded-pill" onclick="searchBySkill('{{ skill.name }}')">
+                                {{ skill.name }}
+                            </a>
                             {% endfor %}
                         {% else %}
                             <span>No skills available.</span>
@@ -137,8 +139,10 @@
                         <div class="d-flex flex-wrap gap-2">
                             {% if info.skills.all %}
                             {% for skill in info.skills.all %}
-                                <span class="badge bg-soft-primary rounded-pill">{{ skill.name }}</span>
-                            {% endfor %}
+                            <a href="javascript:void(0);" class="badge bg-soft-primary rounded-pill" onclick="searchBySkill('{{ skill.name }}')">
+                                {{ skill.name }}
+                            </a>
+                        {% endfor %}
                         {% else %}
                             <span>No skills available.</span>
                         {% endif %}
@@ -227,14 +231,15 @@
                                     </div>
                                     <div class="d-flex align-items-start justify-content-between mt-3" style="flex-wrap: wrap; line-height: 1.5; word-break: break-word;">
                                         <span class="d-inline-flex align-items-center text-muted fw-medium" style="margin-right: 10px; white-space: nowrap;"><i data-feather="home" class="fea icon-sm me-2"></i> Address:</span>
-                                        <span class="fw-medium" style="flex: 1; line-height: 1.5; text-align: right;">{{ info.address }}</span>
+                                        <span class="fw-medium" style="flex: 1; line-height: 1.5; text-align: right;"> {{ info.address1 }}<br>
+                                            {{ info.address2 }}<br>
+                                            {{ info.state }}<br>
+                                            {{ info.pincode }}
+                                        </span>
                                     </div>
                                     
                                     
-                                    <div class="d-flex align-items-center justify-content-between mt-3">
-                                        <span class="d-inline-flex align-items-center text-muted fw-medium"><i data-feather="map-pin" class="fea icon-sm me-2"></i> City:</span>
-                                        <span class="fw-medium">{{ info.city }}</span>
-                                    </div>
+                                    
                                     <div class="d-flex align-items-center justify-content-between mt-3">
                                         <span class="d-inline-flex align-items-center text-muted fw-medium"><i data-feather="globe" class="fea icon-sm me-2"></i> Country:</span>
                                         <span class="fw-medium">{{ info.country }}</span>
@@ -245,7 +250,7 @@
                                     </div>
                                     <div class="d-flex align-items-center justify-content-between mt-3">
                                         <span class="d-inline-flex align-items-center text-muted fw-medium"><i data-feather="briefcase" class="fea icon-sm me-2"></i> Experience:</span>
-                                        <span class="fw-medium">{{ info.experience }}</span>
+                                        <span class="fw-medium">{{ total_experience }}</span>
                                     </div>
                                     <div class="d-flex align-items-center justify-content-between mt-3">
                                         <span class="d-inline-flex align-items-center text-muted fw-medium"><i data-feather="award" class="fea icon-sm me-2"></i> Awards:</span>
@@ -322,14 +327,15 @@
                                     </div>
                                     <div class="d-flex align-items-start justify-content-between mt-3" style="flex-wrap: wrap; line-height: 1.5; word-break: break-word;">
                                         <span class="d-inline-flex align-items-center text-muted fw-medium" style="margin-right: 10px; white-space: nowrap;"><i data-feather="home" class="fea icon-sm me-2"></i> Address:</span>
-                                        <span class="fw-medium" style="flex: 1; line-height: 1.5; text-align: right;">{{ info.address }}</span>
+                                        <span class="fw-medium" style="flex: 1; line-height: 1.5; text-align: right;"> {{ info.address1 }}<br>
+                                            {{ info.address2 }}<br>
+                                            {{ info.state }}<br>
+                                            {{ info.pincode }}
+                                        </span>                                    
                                     </div>
                                     
                                     
-                                    <div class="d-flex align-items-center justify-content-between mt-3">
-                                        <span class="d-inline-flex align-items-center text-muted fw-medium"><i data-feather="map-pin" class="fea icon-sm me-2"></i> City:</span>
-                                        <span class="fw-medium">{{ info.city }}</span>
-                                    </div>
+                                    
                                     <div class="d-flex align-items-center justify-content-between mt-3">
                                         <span class="d-inline-flex align-items-center text-muted fw-medium"><i data-feather="globe" class="fea icon-sm me-2"></i> Country:</span>
                                         <span class="fw-medium">{{ info.country }}</span>
@@ -340,11 +346,11 @@
                                     </div>
                                     <div class="d-flex align-items-center justify-content-between mt-3">
                                         <span class="d-inline-flex align-items-center text-muted fw-medium"><i data-feather="briefcase" class="fea icon-sm me-2"></i> Experience:</span>
-                                        <span class="fw-medium">{{ info.experience }}</span>
+                                        <span class="fw-medium">{{ total_experience }}</span>
                                     </div>
-                                    <div class="d-flex align-items-center justify-content-between mt-3">
-                                        <span class="d-inline-flex align-items-center text-muted fw-medium"><i data-feather="award" class="fea icon-sm me-2"></i> Awards:</span>
-                                        <span class="fw-medium">{{ info.awards }}</span>
+                                    <div class="d-flex align-items-center justify-content-between mt-3" style="flex-wrap: wrap; line-height: 1.5; word-break: break-word;">
+                                        <span class="d-inline-flex align-items-center text-muted fw-medium" style="margin-right: 10px; white-space: nowrap;"><i data-feather="award" class="fea icon-sm me-2"></i> Awards:</span>
+                                        <span class="fw-medium" style="flex: 1; line-height: 1.5; text-align: right;">{{ info.awards }}</span>
                                     </div>
                                     <div class="d-flex align-items-center justify-content-between mt-3">
                                         <span class="text-muted fw-medium">Social:</span>
@@ -571,6 +577,15 @@
       </div>
     </div>
   </div>
+  <script>
+    function searchBySkill(skillName) {
+        // Construct the URL with the selected skill name
+        var url = '/artists/?search_query=' + encodeURIComponent(skillName);
+        
+        // Redirect to the new URL to perform the search
+        window.location.href = url;
+    }
+</script>
        {% endblock %}
 
 

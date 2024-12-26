@@ -52,6 +52,7 @@ class Experience(models.Model):
     company = models.CharField(max_length=255)
     start_date = models.DateField()
     end_date = models.DateField(null=True, blank=True)
+    currently_working = models.BooleanField(default=False)
     
     
     def __str__(self):
@@ -100,7 +101,10 @@ class ArtistMasterAdditional(models.Model):
     dob = models.DateField(blank=True, null=True)
     country = models.CharField(max_length=100, choices=Location_choices, blank=True, null=True)
     profile_picture = models.ImageField(upload_to='profiles/', blank=True, null=True)
-    address = models.TextField(blank=True, null=True)
+    address1 = models.CharField(max_length=100, blank=True, null=True)
+    address2 = models.CharField(max_length=100, blank=True, null=True)
+    pincode=models.CharField(max_length=10, blank=True, null=True) 
+    state =models.CharField(max_length=100, blank=True, null=True)
     description = models.CharField(max_length=100, choices=Literacy_world_choices, blank=True, null=True)
     introduction = models.TextField(blank=True, null=True)
     languages_read = models.TextField(blank=True, null=True)

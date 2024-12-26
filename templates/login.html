@@ -21,7 +21,16 @@
         <script src="https://www.google.com/recaptcha/api.js" async defer></script>
         <link href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css" rel="stylesheet" />
         <!-- Style css -->
+        <style>
+        /* Style for the password field */
 
+
+
+.pe-3 {
+    padding-right: 3rem !important;
+    padding-top: 0.9rem;
+}
+</style>
     </head>
 
     <body>
@@ -44,7 +53,7 @@
                                 <div class="mb-3">
                                     <label class="form-label fw-semibold" for="password">Password</label>
                                     <input type="password" class="form-control" id="password" placeholder="Password">
-                                </div>
+                                    <i class="mdi mdi-eye position-absolute top-50 end-0 translate-middle-y pe-3" id="togglePassword" style="cursor: pointer;"></i>
                             
                                 <div class="d-flex justify-content-between">
                                     <div class="mb-3">
@@ -85,6 +94,16 @@
 <script>
 
     $(document).ready(function() {
+
+        $('#togglePassword').on('click', function() {
+            const passwordField = $('#password');
+            const type = passwordField.attr('type') === 'password' ? 'text' : 'password';
+            passwordField.attr('type', type);
+
+            // Toggle eye icon
+            $(this).toggleClass('mdi-eye mdi-eye-off');
+        });
+        
         $('#loginForm').on('submit', function(event) {
             event.preventDefault(); 
             

@@ -103,7 +103,37 @@
                 }
             }
             
-            
+            .password-container {
+                position: relative;
+            }
+    
+            .password-container i {
+                position: absolute;
+                top: 50%;
+                right: 10px;
+                transform: translateY(-50%);
+                cursor: pointer;
+            } 
+            .pe-3 {
+                padding-right: 1rem !important;
+                padding-top: 0.2rem;
+            }
+
+            @media (max-width: 768px) {
+
+                .password-container {
+                    position: relative; /* Ensures proper positioning on small screens */
+                }
+                .password-container i {
+                   
+                    right: 10px; /* Adjust the position for small screens */
+                    
+                }
+                .pe-3 {
+                    padding-right: 1rem !important;
+                    padding-top: 2.1rem;
+                }
+            }
             
          </style>
 
@@ -136,14 +166,16 @@
                                 </div>
                                 
             
-                                <div class="mb-3 form-row">
+                                <div class="mb-3 form-row password-container">
                                     <label class="form-label fw-semibold col-form-label" for="loginpass">Password</label>
                                     <input type="password" class="form-control col" id="password" placeholder="Password" required>
+                                    <i class="mdi mdi-eye position-absolute top-50 end-0 translate-middle-y pe-3" id="togglePassword" style="cursor: pointer;"></i>
                                 </div>
             
-                                <div class="mb-3 form-row">
+                                <div class="mb-3 form-row password-container">
                                     <label class="form-label fw-semibold col-form-label" for="confirmpass">Confirm Password</label>
                                     <input type="password" class="form-control col" id="confirmPassword" placeholder="Confirm Password" required>
+                                    <i class="mdi mdi-eye position-absolute top-50 end-0 translate-middle-y pe-3" id="toggleConfirmPassword" style="cursor: pointer;"></i>
                                 </div>
                                 
                                 <!-- reCAPTCHA and Terms and Conditions centered -->
@@ -281,7 +313,39 @@
 <script>
 
 $(document).ready(function() {
+
+    // Toggle visibility for the Password field
+    document.getElementById("togglePassword").addEventListener("click", function() {
+        var passwordField = document.getElementById("password");
+        var icon = this;
+        if (passwordField.type === "password") {
+            passwordField.type = "text";
+            icon.classList.remove("mdi-eye");
+            icon.classList.add("mdi-eye-off");
+        } else {
+            passwordField.type = "password";
+            icon.classList.remove("mdi-eye-off");
+            icon.classList.add("mdi-eye");
+        }
+    });
+    
+    document.getElementById("toggleConfirmPassword").addEventListener("click", function() {
+        var confirmPasswordField = document.getElementById("confirmPassword");
+        var icon = this;
+        if (confirmPasswordField.type === "password") {
+            confirmPasswordField.type = "text";
+            icon.classList.remove("mdi-eye");
+            icon.classList.add("mdi-eye-off");
+        } else {
+            confirmPasswordField.type = "password";
+            icon.classList.remove("mdi-eye-off");
+            icon.classList.add("mdi-eye");
+        }
+    });
+    
     $('#signupForm').on('submit', function(event) {
+
+
 
         event.preventDefault();
     

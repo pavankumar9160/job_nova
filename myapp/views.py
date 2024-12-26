@@ -91,6 +91,7 @@ def artist_profile(request):
 def artist_profile_setting_updated_one(request):
     user = request.user
     full_name = None
+    description = ''
     try:
         additional_info = ArtistMasterAdditional.objects.get(user=user)
         profile_picture = additional_info.profile_picture.url if additional_info.profile_picture else None
@@ -103,7 +104,7 @@ def artist_profile_setting_updated_one(request):
     except ArtistMasterAdditional.DoesNotExist:
         profile_picture = None 
       
-    return render(request, 'candidate-profile-setting_updated_one.html',{"user":user,'profile_picture': profile_picture,'full_name':full_name,'description':description})
+    return render(request, 'candidate-profile-setting_updated_one.html',{"user":user,'profile_picture': profile_picture,'full_name':full_name,'description':description,"additional_info":additional_info})
 
 def artist_profile_setting(request):
     user = request.user
@@ -116,6 +117,25 @@ def artist_profile_setting(request):
     return render(request, 'candidate-profile-setting.html',{"user":user,'profile_picture': profile_picture})
 
 
+from datetime import date
+
+def calculate_experience_duration(start_date, end_date=None):
+    """
+    Calculate the duration between two dates in years and months.
+    If end_date is not provided, it defaults to today's date.
+    """
+    if not start_date:
+        return 0, 0
+
+    end_date = end_date or date.today()
+    delta = end_date - start_date
+
+    years = delta.days // 365
+    months = (delta.days % 365) // 30
+
+    return years, months
+
+
 @login_required(login_url='/login/')  
 
 def artist_profile_updated_one(request):
@@ -126,6 +146,8 @@ def artist_profile_updated_one(request):
     experience_details = []
     images = []
     full_name = None
+    total_experience_years = 0
+    total_experience_months = 0
     try:
         additional_info = ArtistMasterAdditional.objects.get(user=user)
         profile_picture = additional_info.profile_picture.url if additional_info.profile_picture else None
@@ -137,7 +159,17 @@ def artist_profile_updated_one(request):
         skills = additional_info.skills.all()
         experience_details = additional_info.experience_details.all()
         images = additional_info.images.all()
-       
+        for experience in experience_details:
+            start_date = experience.start_date
+            end_date = experience.end_date if not experience.currently_working else None
+
+            years, months = calculate_experience_duration(start_date, end_date)
+            total_experience_years += years
+            total_experience_months += months
+
+        # Normalize months to years and months
+        total_experience_years += total_experience_months // 12
+        total_experience_months = total_experience_months % 12
 
     except ArtistMasterAdditional.DoesNotExist:
         profile_picture = None
@@ -148,7 +180,7 @@ def artist_profile_updated_one(request):
                   {"artist_user":user,'profile_picture': profile_picture,
                    'additional_info':additional_info,'full_name':full_name, 
                    "is_logged_in_user": True,
-                   'skills': skills,'experience_details':experience_details,'images':images})
+                   'skills': skills,'experience_details':experience_details,'images':images, 'total_experience': f"{total_experience_years} years, {total_experience_months} months"})
 
 
 from django.shortcuts import get_object_or_404
@@ -161,6 +193,8 @@ def artist_profile_updated_one_Id(request, id):
     skills = []
     experience_details = [] # Initialize a list for experience details
     images=[]
+    total_experience_years = 0
+    total_experience_months = 0
     
     if logged_in_user.is_authenticated:
         try:
@@ -187,6 +221,17 @@ def artist_profile_updated_one_Id(request, id):
         skills = additional_info_user.skills.all()
         experience_details = additional_info_user.experience_details.all()
         images = additional_info_user.images.all()
+        for experience in experience_details:
+            start_date = experience.start_date
+            end_date = experience.end_date if not experience.currently_working else None
+
+            years, months = calculate_experience_duration(start_date, end_date)
+            total_experience_years += years
+            total_experience_months += months
+
+        # Normalize months to years and months
+        total_experience_years += total_experience_months // 12
+        total_experience_months = total_experience_months % 12
     except ArtistMasterAdditional.DoesNotExist:
         profile_picture_user = None
         full_name_user = None
@@ -200,7 +245,8 @@ def artist_profile_updated_one_Id(request, id):
         "profile_picture":profile_picture,
         'skills': skills,
         'experience_details': experience_details,
-        'images':images
+        'images':images,
+        'total_experience': f"{total_experience_years} years, {total_experience_months} months"
         
     })
 
@@ -233,7 +279,7 @@ def artists(request):
     # Filter artists based on the search query
     if search_query:
         artists = ArtistMasterBasic.objects.filter(Q(additional_info__skills__name__icontains=search_query) |  # Search by skills
-            Q(additional_info__description__icontains=search_query) |  # Search by description
+              # Search by description
             Q(name__icontains=search_query)  # Search by artist name
         ).prefetch_related('additional_info', 'additional_info__skills').distinct().exclude(is_superuser=True).distinct()
     else:
@@ -253,7 +299,7 @@ def artists(request):
             'skills': skills
         })
     # Paginate the artists_with_details list
-    paginator = Paginator(artists_with_details, 10)  # Show 10 artists per page
+    paginator = Paginator(artists_with_details,8)  # Show 10 artists per page
     paginated_artists = paginator.get_page(page)    
 
     # Get skill counts
@@ -726,6 +772,7 @@ def update_artist_details_api(request):
             artist = ArtistMasterAdditional.objects.get(user=request.user)
         except ArtistMasterAdditional.DoesNotExist:
             artist = ArtistMasterAdditional(user=request.user)
+        artist.save()
         
         dob_input = request.POST.get('dob')
         if dob_input:
@@ -744,6 +791,9 @@ def update_artist_details_api(request):
         if request.POST.get('gender'):
             artist.gender = request.POST.get('gender')
         
+        if request.POST.get('city'):
+            artist.city = request.POST.get('city')    
+        
         if request.POST.get('country'):
             artist.country = request.POST.get('country')
         
@@ -759,8 +809,17 @@ def update_artist_details_api(request):
                 image = Gallery.objects.create(file_name=file)
                 artist.images.add(image)       
         
-        if request.POST.get('address'):
-            artist.address = request.POST.get('address')
+        if request.POST.get('address1'):
+            artist.address1 = request.POST.get('address1')
+            
+        if request.POST.get('address2'):
+            artist.address2 = request.POST.get('address2')
+            
+        if request.POST.get('pincode'):
+            artist.pincode = request.POST.get('pincode')
+            
+        if request.POST.get('state'):
+            artist.state = request.POST.get('state')            
         
         if request.POST.get('description'):
             artist.description = request.POST.get('description')
@@ -777,7 +836,7 @@ def update_artist_details_api(request):
         if request.POST.get('languages_speak'):
             artist.languages_speak = request.POST.get('languages_speak')
         
-        if request.POST.getlist('facebook_link'):
+        if request.POST.get('facebook_link'):
             artist.facebook_link = request.POST.get('facebook_link')
         
         if request.POST.get('instagram_link'):
@@ -831,6 +890,7 @@ def update_artist_details_api(request):
                         company = exp.get('company')
                         start_date = exp.get('startDate')
                         end_date = exp.get('endDate')
+                        currently_working = exp.get('currentlyWorking')
 
                         # Validate that required fields are present
                         if not designation or not company or not start_date:
@@ -856,6 +916,8 @@ def update_artist_details_api(request):
                             company=company,
                             start_date=start_date,
                             end_date=end_date,
+                            currently_working=currently_working,
+                            
                         )
 
                         artist.experience_details.add(experience)
@@ -1103,7 +1165,12 @@ def search_artists(request):
         # Filter artists based on the search query
         artists = ArtistMasterBasic.objects.filter(
             Q(additional_info__skills__name__icontains=search_query) |  # Search by skills
-            Q(additional_info__description__icontains=search_query) |  # Search by description
+            Q(additional_info__description__icontains=search_query) |
+            Q(additional_info__country__icontains=search_query) |
+            Q(additional_info__city__icontains=search_query) |
+            Q(additional_info__state__icontains=search_query) |
+            Q(additional_info__languages_speak__icontains=search_query) |
+            # Search by description
             Q(name__icontains=search_query)  # Search by artist name
         ).prefetch_related('additional_info', 'additional_info__skills').distinct()  # Prefetch related skills
 
@@ -1121,7 +1188,7 @@ def search_artists(request):
             'name': artist.name,
             'id':artist.id,
             'skills': skills,  # Include skills in the response
-            'job_title': additional_info.job_title if additional_info else '',
+            'short_bio': additional_info.short_bio if additional_info else '',
             'profile_picture': additional_info.profile_picture.url if additional_info and additional_info.profile_picture else ''
         })
 
@@ -1161,7 +1228,7 @@ def filter_artists(request):
                 'id':artist.user.id,
                 'description': artist.description,
                 'skills': skills,
-                'job_title': artist.job_title   ,
+                'short_bio': artist.short_bio   ,
                 'country': artist.country,
                 'profile_picture': artist.profile_picture.url if artist.profile_picture else None
             })

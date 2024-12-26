@@ -17,8 +17,12 @@ $(document).ready(function() {
         var lastname = document.getElementById("lastname").value;
         var gender = document.getElementById("gender").value;
         var dob = document.getElementById("dob").value;
+
         var country = document.getElementById("Country").value;
-        var address = document.getElementById("address").value;
+        var address1 = document.getElementById("houseNumber").value;
+        var address2 = document.getElementById("roadName").value;
+        var pincode = document.getElementById("pincode").value;
+        var state = document.getElementById("state").value;
         var description = document.getElementById("description").value;
         var introduction = document.getElementById("introduction").value;
         var facebook_link = document.getElementById("facebook_link").value;
@@ -134,7 +138,10 @@ $(document).ready(function() {
         formData.append('gender', gender);
         formData.append('dob', dob);
         formData.append('country', country);
-        formData.append('address', address);
+        formData.append('address1', address1);
+        formData.append('address2', address2);
+        formData.append('pincode', pincode);
+        formData.append('state', state);
         formData.append('description', description);
         formData.append('introduction', introduction);
         formData.append('languages_read', languages_read.join(','));
@@ -168,13 +175,18 @@ $(document).ready(function() {
             contentType: false,
             success: function(response) {
                 toastr.success('Details Updated successfully!', 'Success');
-                const inputFields = ["firstname", "lastname", "gender", "dob", "Country", "address", "description", "introduction", "facebook_link", "instagram_link", "linkedin_link", "email2", "phone", "profile_picture", "job_title", "company_name", "experience", "portfolio", "short_bio", "availability", "certifications", "published_works", "awards"];
+                const inputFields = ["firstname", "lastname", "gender", "dob", "Country",
+                    "houseNumber", "roadNumber", "pincode", "state",
+                    "description", "introduction", "facebook_link", "instagram_link", "linkedin_link", "email2", "phone", "profile_picture", "job_title", "company_name", "experience", "portfolio", "short_bio", "availability", "certifications", "published_works", "awards"
+                ];
                 inputFields.forEach(fieldId => {
                     document.getElementById(fieldId).value = "";
                 });
-                document.querySelectorAll('input[type="checkbox"]:checked').forEach(function(checkbox) {
-                    checkbox.checked = false;
-                })
+                inputFields.forEach(fieldId => {
+                    document.getElementById(fieldId).value = "";
+                    $(".skill-checkbox").prop('checked', false);
+
+                });
                 const experienceList = document.getElementById('experienceList');
                 experienceList.innerHTML = '';
 
@@ -424,18 +436,18 @@ $(document).ready(function() {
                         var artistProfileURL = artistProfileBaseURL + artist.id + "/"; // Construct URL dynamically
                         var artistHTML = `
                             <div class="col-md-6 col-12">
-                                <div class="candidate-card position-relative overflow-hidden text-center shadow rounded p-4">
+                                <div class="candidate-card position-relative overflow-hidden text-center shadow rounded p-4" style="min-height: 400px; display: flex; flex-direction: column; justify-content: space-between;">
                                     <div class="ribbon ribbon-left overflow-hidden">
                                         <span class="text-center d-block bg-warning shadow small h6">
                                             <i class="mdi mdi-star"></i>
                                         </span>
                                     </div>
-                                    <div class="content">
+                                    <div class="content" style="flex-grow: 1;">
                                         <!-- Profile Picture (if available, otherwise default) -->
                                         <img src="${artist.profile_picture ? artist.profile_picture : STATIC_URL + 'images/blank_pic.png'}" class="avatar avatar-md-md rounded-pill shadow-md" alt="">
                                         <div class="mt-3">
                                             <a href="${artistProfileURL}"  class="title h5 text-dark">${artist.name}</a>
-                                            <p class="text-muted mt-1">${artist.job_title || ''}</p>
+                                            <p class="text-muted mt-1">${artist.short_bio || ''}</p>
                                             ${skillBadges}
                                         </div>
                                         <div class="mt-3">
@@ -523,18 +535,18 @@ $(document).ready(function() {
                         // Build the artist HTML content
                         var artistHTML = `
                             <div class="col-md-6 col-12">
-                                <div class="candidate-card position-relative overflow-hidden text-center shadow rounded p-4">
+                                <div class="candidate-card position-relative overflow-hidden text-center shadow rounded p-4"style="min-height: 400px; display: flex; flex-direction: column; justify-content: space-between;">
                                     <div class="ribbon ribbon-left overflow-hidden">
                                         <span class="text-center d-block bg-warning shadow small h6">
                                             <i class="mdi mdi-star"></i>
                                         </span>
                                     </div>
-                                    <div class="content">
+                                    <div class="content" style="flex-grow: 1;">
                                         <!-- Profile Picture -->
                                         <img src="${artist.profile_picture ? artist.profile_picture : STATIC_URL + 'images/blank_pic.png'}" class="avatar avatar-md-md rounded-pill shadow-md" alt="">
                                         <div class="mt-3">
                                             <a href="${artistProfileURL}" class="title h5 text-dark">${artist.name}</a>
-                                            <p class="text-muted mt-1">${artist.job_title || ''}</p>
+                                            <p class="text-muted mt-1">${artist.short_bio || ''}</p>
                                             ${skillBadges}
                                         </div>
                                         <div class="mt-3">
@@ -580,13 +592,15 @@ $(document).ready(function() {
                         var firstName = $('#firstname').val();
                         var lastName = $('#lastname').val();
                         var name = firstName + " " + lastName;
-
-                        var gender = $('#gender').val();
                         var dob = $('#dob').val();
                         var phone = $('#phone').val();
                         var email = $('#email2').val();
+
                         var country = $('#Country').val();
-                        var address = $('#address').val();
+                        var address1 = $('#houseNumber').val();
+                        var address2 = $('#roadName').val();
+                        var state = $('#state').val();
+                        var pincode = $('#pincode').val();
                         var description = $('#description').val();
                         var introduction = $('#introduction').val();
                         var facebookLink = $('#facebook_link').val();
@@ -594,13 +608,16 @@ $(document).ready(function() {
                         var linkedinLink = $('#linkedin_link').val();
                         var profile_picture = $('#profile_picture').prop('files')[0];
                         var defaultImage = `${STATIC_URL}images/blank_pic.png`;
-                        var reader = new FileReader();
+
                         var experience = document.getElementById("experience").value;
                         var certifications = document.getElementById("certifications").value;
                         var published_works = document.getElementById("published_works").value;
                         var awards = document.getElementById("awards").value;
 
                         var selectedSkills = [];
+
+
+
 
 
 
@@ -641,403 +658,14 @@ $(document).ready(function() {
                             selectedSkills.push($(this).val());
                         });
 
-                        function updatePreview(previewImage) {
+                        var fileInput = document.getElementById('documents');
+                        var files = fileInput.files;
+
+                        function updatePreview(previewImage, files) {
 
 
 
-                            //     var previewContent = `<section class="section">
-                            //     <div class="container">
-                            //         <div class="row">
-                            //             <div class="col-12">
-                            //                 <div class="position-relative">
-                            //                     <div class="candidate-cover">
-                            //                         <img src="${STATIC_URL}images/hero/bg5.jpg" class="img-fluid rounded shadow" alt="">
-                            //                     </div>
-                            //                     <div class="candidate-profile d-flex align-items-end justify-content-between mx-2">
-                            //                         <div class="d-flex align-items-end">
-                            //                             <img src="${previewImage}" class="rounded-pill shadow border border-3 avatar avatar-medium" alt="">
 
-                            //                             <div class="ms-2">
-                            //                                 <h5 class="mb-0">${name}</h5>
-                            //                                 <p class="text-muted mb-0">Web Designer</p>
-                            //                             </div>
-                            //                         </div>
-
-                            //                         <a href="{% url 'artist-profile-setting' %}" class="btn btn-sm btn-icon btn-pills btn-soft-primary"><i data-feather="settings" class="icons"></i></a>
-                            //                     </div>
-                            //                 </div>
-                            //             </div><!--end col-->
-                            //         </div><!--end row-->
-                            //     </div><!--end container-->
-
-                            //     <div class="container mt-4">
-                            //         <div class="row g-4">
-                            //             <div class="col-lg-8 col-md-7 col-12">
-                            //                 <h5 class="mb-4">Introduction:</h5>
-
-                            //                 <p class="text-muted">Obviously I'M Web Developer. Web Developer with over 3 years of experience. Experienced with all stages of the development cycle for dynamic web projects. The as opposed to using 'Content here, content here', making it look like readable English.</p>
-                            //                 <p class="text-muted">Data Structures and Algorithms are the heart of programming. Initially most of the developers do not realize its importance but when you will start your career in software development, you will find your code is either taking too much time or taking too much space.</p>
-
-                            //                 <h5 class="mt-4">Skills:</h5>
-
-                            //                 <div class="row">
-                            //                     <div class="col-lg-6 col-12">
-                            //                         <div class="progress-box mt-4">
-                            //                             <h6 class="font-weight-normal">HTML</h6>
-                            //                             <div class="progress">
-                            //                                 <div class="progress-bar position-relative bg-primary" style="width:84%;">
-                            //                                     <div class="progress-value d-block text-dark h6">84%</div>
-                            //                                 </div>
-                            //                             </div>
-                            //                         </div><!--end process box-->
-                            //                         <div class="progress-box mt-4">
-                            //                             <h6 class="font-weight-normal">CSS</h6>
-                            //                             <div class="progress">
-                            //                                 <div class="progress-bar position-relative bg-primary" style="width:75%;">
-                            //                                     <div class="progress-value d-block text-dark h6">75%</div>
-                            //                                 </div>
-                            //                             </div>
-                            //                         </div><!--end process box-->
-                            //                         <div class="progress-box mt-4">
-                            //                             <h6 class="font-weight-normal">JQuery</h6>
-                            //                             <div class="progress">
-                            //                                 <div class="progress-bar position-relative bg-primary" style="width:79%;">
-                            //                                     <div class="progress-value d-block text-dark h6">79%</div>
-                            //                                 </div>
-                            //                             </div>
-                            //                         </div><!--end process box-->
-                            //                     </div><!--end col-->
-
-                            //                     <div class="col-lg-6 col-12">
-                            //                         <div class="progress-box mt-4">
-                            //                             <h6 class="font-weight-normal">WordPress</h6>
-                            //                             <div class="progress">
-                            //                                 <div class="progress-bar position-relative bg-primary" style="width:79%;">
-                            //                                     <div class="progress-value d-block text-dark h6">79%</div>
-                            //                                 </div>
-                            //                             </div>
-                            //                         </div><!--end process box-->
-                            //                         <div class="progress-box mt-4">
-                            //                             <h6 class="font-weight-normal">Figma</h6>
-                            //                             <div class="progress">
-                            //                                 <div class="progress-bar position-relative bg-primary" style="width:85%;">
-                            //                                     <div class="progress-value d-block text-dark h6">85%</div>
-                            //                                 </div>
-                            //                             </div>
-                            //                         </div><!--end process box-->
-                            //                         <div class="progress-box mt-4">
-                            //                             <h6 class="font-weight-normal">Illustration</h6>
-                            //                             <div class="progress">
-                            //                                 <div class="progress-bar position-relative bg-primary" style="width:65%;">
-                            //                                     <div class="progress-value d-block text-dark h6">65%</div>
-                            //                                 </div>
-                            //                             </div>
-                            //                         </div><!--end process box-->
-                            //                     </div><!--end col-->
-                            //                 </div><!--end row-->
-
-                            //                 <h5 class="mt-4">Experience:</h5>
-
-                            //                 <div class="row">
-                            //                     <div class="col-12 mt-4">
-                            //                         <div class="d-flex">
-                            //                             <div class="text-center">
-                            //                                 <img src="${STATIC_URL}images/company/linkedin.png" class="avatar avatar-small bg-white shadow p-2 rounded" alt="">
-                            //                                 <h6 class="text-muted mt-2 mb-0">2019-22</h6>
-                            //                             </div>
-
-                            //                             <div class="ms-3">
-                            //                                 <h6 class="mb-0">Full Stack Developer</h6>
-                            //                                 <p class="text-muted">Linkedin - U.S.A.</p>
-                            //                                 <p class="text-muted mb-0">It seems that only fragments of the original text remain in the Lorem Ipsum texts used today. One may speculate that over the course of time certain letters were added or deleted at various positions within the text.</p>
-                            //                             </div>
-                            //                         </div>
-                            //                     </div><!--end col-->
-
-                            //                     <div class="col-12 mt-4">
-                            //                         <div class="d-flex">
-                            //                             <div class="text-center">
-                            //                                 <img src="${STATIC_URL}images/company/lenovo-logo.png" class="avatar avatar-small bg-white shadow p-2 rounded" alt="">
-                            //                                 <h6 class="text-muted mt-2 mb-0">2017-19</h6>
-                            //                             </div>
-
-                            //                             <div class="ms-3">
-                            //                                 <h6 class="mb-0">Back-end Developer</h6>
-                            //                                 <p class="text-muted">Lenovo - China</p>
-                            //                                 <p class="text-muted mb-0">It seems that only fragments of the original text remain in the Lorem Ipsum texts used today. One may speculate that over the course of time certain letters were added or deleted at various positions within the text.</p>
-                            //                             </div>
-                            //                         </div>
-                            //                     </div><!--end col-->
-                            //                 </div><!--end row-->
-
-                            //                 <div class="p-4 rounded shadow mt-4">
-                            //                     <h5>Get in touch !</h5>
-                            //                     <form class="mt-4" method="post" name="myForm" onsubmit="return validateForm()">
-                            //                         <p class="mb-0" id="error-msg"></p>
-                            //                         <div id="simple-msg"></div>
-                            //                         <div class="row">
-                            //                             <div class="col-md-6">
-                            //                                 <div class="mb-3">
-                            //                                     <label class="form-label fw-semibold">Your Name <span class="text-danger">*</span></label>
-                            //                                     <input name="name" id="name" type="text" class="form-control" placeholder="Name :">
-                            //                                 </div>
-                            //                             </div>
-
-                            //                             <div class="col-md-6">
-                            //                                 <div class="mb-3">
-                            //                                     <label class="form-label fw-semibold">Your Email <span class="text-danger">*</span></label>
-                            //                                     <input name="email" id="email" type="email" class="form-control" placeholder="Email :">
-                            //                                 </div> 
-                            //                             </div><!--end col-->
-
-                            //                             <div class="col-12">
-                            //                                 <div class="mb-3">
-                            //                                     <label class="form-label fw-semibold">Subject</label>
-                            //                                     <input name="subject" id="subject" class="form-control" placeholder="Subject :">
-                            //                                 </div>
-                            //                             </div><!--end col-->
-
-                            //                             <div class="col-12">
-                            //                                 <div class="mb-3">
-                            //                                     <label class="form-label fw-semibold">Comments <span class="text-danger">*</span></label>
-                            //                                     <textarea name="comments" id="comments" rows="4" class="form-control" placeholder="Message :"></textarea>
-                            //                                 </div>
-                            //                             </div>
-                            //                         </div>
-                            //                         <div class="row">
-                            //                             <div class="col-12">
-                            //                                 <div class="d-grid">
-                            //                                     <button type="submit" id="submit" name="send" class="btn btn-primary">Send Message</button>
-                            //                                 </div>
-                            //                             </div><!--end col-->
-                            //                         </div><!--end row-->
-                            //                     </form>
-                            //                 </div>
-                            //             </div><!--end col-->
-
-                            //             <div class="col-lg-4 col-md-5 col-12">
-                            //                 <div class="card bg-light p-4 rounded shadow sticky-bar">
-                            //                     <h5 class="mb-0">Personal Detail:</h5>
-                            //                     <div class="mt-3">
-                            //                         <div class="d-flex align-items-center justify-content-between mt-3">
-                            //                             <span class="d-inline-flex align-items-center text-muted fw-medium"><i data-feather="mail" class="fea icon-sm me-2"></i> Email:</span>
-                            //                             <span class="fw-medium">${email}</span>
-                            //                         </div>
-
-                            //                         <div class="d-flex align-items-center justify-content-between mt-3">
-                            //                             <span class="d-inline-flex align-items-center text-muted fw-medium"><i data-feather="gift" class="fea icon-sm me-2"></i> D.O.B.:</span>
-                            //                             <span class="fw-medium">${dob}</span>
-                            //                         </div>
-
-                            //                         <div class="d-flex align-items-center justify-content-between mt-3">
-                            //                             <span class="d-inline-flex align-items-center text-muted fw-medium"><i data-feather="home" class="fea icon-sm me-2"></i> Address:</span>
-                            //                             <span class="fw-medium">${address}</span>
-                            //                         </div>
-
-                            //                         <div class="d-flex align-items-center justify-content-between mt-3">
-                            //                             <span class="d-inline-flex align-items-center text-muted fw-medium"><i data-feather="map-pin" class="fea icon-sm me-2"></i> City:</span>
-                            //                             <span class="fw-medium">London</span>
-                            //                         </div>
-
-                            //                         <div class="d-flex align-items-center justify-content-between mt-3">
-                            //                             <span class="d-inline-flex align-items-center text-muted fw-medium"><i data-feather="globe" class="fea icon-sm me-2"></i> Country:</span>
-                            //                             <span class="fw-medium">${country}</span>
-                            //                         </div>
-
-                            //                         <div class="d-flex align-items-center justify-content-between mt-3">
-                            //                             <span class="d-inline-flex align-items-center text-muted fw-medium"><i data-feather="phone" class="fea icon-sm me-2"></i> Mobile:</span>
-                            //                             <span class="fw-medium">${phone}</span>
-                            //                         </div>
-
-                            //                         <div class="d-flex align-items-center justify-content-between mt-3">
-                            //                             <span class="text-muted fw-medium">Social:</span>
-
-                            //                             <ul class="list-unstyled social-icon text-sm-end mb-0">
-                            //                                 <li class="list-inline-item"><a href="https://dribbble.com/shreethemes" target="_blank" class="rounded"><i data-feather="dribbble" class="fea icon-sm align-middle" title="dribbble"></i></a></li>
-                            //                                 <li class="list-inline-item"><a href="http://linkedin.com/company/shreethemes" target="_blank" class="rounded"><i data-feather="linkedin" class="fea icon-sm align-middle" title="Linkedin"></i></a></li>
-                            //                                 <li class="list-inline-item"><a href="https://www.facebook.com/shreethemes" target="_blank" class="rounded"><i data-feather="facebook" class="fea icon-sm align-middle" title="facebook"></i></a></li>
-                            //                                 <li class="list-inline-item"><a href="https://www.instagram.com/shreethemes/" target="_blank" class="rounded"><i data-feather="instagram" class="fea icon-sm align-middle" title="instagram"></i></a></li>
-                            //                                 <li class="list-inline-item"><a href="https://twitter.com/shreethemes" target="_blank" class="rounded"><i data-feather="twitter" class="fea icon-sm align-middle" title="twitter"></i></a></li>
-                            //                             </ul><!--end icon-->
-                            //                         </div>
-
-                            //                         <div class="p-3 rounded shadow bg-white mt-2">
-                            //                             <div class="d-flex align-items-center mb-2">
-                            //                                 <i data-feather="file-text" class="fea icon-md"></i>
-                            //                                 <h6 class="mb-0 ms-2">calvin-carlo-resume.pdf</h6>
-                            //                             </div>
-
-                            //                             <a href="${STATIC_URL}images/calvin-carlo-resume.pdf" class="btn btn-primary w-100" download><i data-feather="download" class="fea icon-sm me-1"></i> Download CV</a>
-                            //                         </div>
-                            //                     </div>
-                            //                 </div>
-                            //             </div><!--end col-->
-                            //         </div><!--end row-->
-                            //     </div><!--end container-->
-
-                            //     <div class="container mt-100 mt-60">
-                            //         <div class="row justify-content-center mb-4 pb-2">
-                            //             <div class="col-12">
-                            //                 <div class="section-title text-center">
-                            //                     <h4 class="title mb-3">Related Candidates</h4>
-                            //                     <p class="text-muted para-desc mx-auto mb-0">Search all the open positions on the web. Get your own personalized salary estimate. Read reviews on over 30000+ companies worldwide.</p>
-                            //                 </div>
-                            //             </div><!--end col-->
-                            //         </div><!--end row-->
-
-                            //         <div class="row">
-                            //             <div class="col-lg-3 col-md-4 col-sm-6 col-12 mt-4 pt-2">
-                            //                 <div class="candidate-card position-relative overflow-hidden text-center shadow rounded p-4">
-                            //                     <div class="content">
-                            //                         <img src="${STATIC_URL}images/team/02.jpg" class="avatar avatar-md-md rounded-pill shadow-md" alt="">
-
-                            //                         <div class="mt-3">
-                            //                             <a href="{% url 'artist-profile_updated_one' %}" class="title h5 text-dark">Tiffany Betancourt</a>
-                            //                             <p class="text-muted mt-1">Application Developer</p>
-
-                            //                             <span class="badge bg-soft-primary rounded-pill">Design</span>
-                            //                             <span class="badge bg-soft-primary rounded-pill">UI</span>
-                            //                             <span class="badge bg-soft-primary rounded-pill">UX</span>
-                            //                             <span class="badge bg-soft-primary rounded-pill">Digital</span>
-                            //                         </div>
-
-                            //                         <div class="mt-2 d-flex align-items-center justify-content-between">
-                            //                             <div class="text-center">
-                            //                                 <p class="text-muted fw-medium mb-0">Salary:</p>
-                            //                                 <p class="mb-0 fw-medium">$5k - $6k</p>
-                            //                             </div>
-
-                            //                             <div class="text-center">
-                            //                                 <p class="text-muted fw-medium mb-0">Experience:</p>
-                            //                                 <p class="mb-0 fw-medium">2 Years</p>
-                            //                             </div>
-                            //                         </div>
-
-                            //                         <div class="mt-3">
-                            //                             <a href="{% url 'artist-profile_updated_one' %}" class="btn btn-sm btn-primary me-1">View Profile</a>
-                            //                             <a href="{% url 'contactus' %}" class="btn btn-sm btn-icon btn-soft-primary"><i data-feather="message-circle" class="icons"></i></a>
-                            //                         </div>
-
-                            //                         <a href="javascript:void(0)" class="like"><i class="mdi mdi-heart align-middle fs-4"></i></a>
-                            //                     </div>
-                            //                 </div>
-                            //             </div><!--end col-->
-
-                            //             <div class="col-lg-3 col-md-4 col-sm-6 col-12 mt-4 pt-2">
-                            //                 <div class="candidate-card position-relative overflow-hidden text-center shadow rounded p-4">
-                            //                     <div class="content">
-                            //                         <img src="${STATIC_URL}images/team/03.jpg" class="avatar avatar-md-md rounded-pill shadow-md" alt="">
-
-                            //                         <div class="mt-3">
-                            //                             <a href="{% url 'artist-profile_updated_one' %}" class="title h5 text-dark">Jacqueline Burns</a>
-                            //                             <p class="text-muted mt-1">Senior Product Designer</p>
-
-                            //                             <span class="badge bg-soft-primary rounded-pill">Design</span>
-                            //                             <span class="badge bg-soft-primary rounded-pill">UI</span>
-                            //                             <span class="badge bg-soft-primary rounded-pill">UX</span>
-                            //                             <span class="badge bg-soft-primary rounded-pill">Digital</span>
-                            //                         </div>
-
-                            //                         <div class="mt-2 d-flex align-items-center justify-content-between">
-                            //                             <div class="text-center">
-                            //                                 <p class="text-muted fw-medium mb-0">Salary:</p>
-                            //                                 <p class="mb-0 fw-medium">$5k - $6k</p>
-                            //                             </div>
-
-                            //                             <div class="text-center">
-                            //                                 <p class="text-muted fw-medium mb-0">Experience:</p>
-                            //                                 <p class="mb-0 fw-medium">2 Years</p>
-                            //                             </div>
-                            //                         </div>
-
-                            //                         <div class="mt-3">
-                            //                             <a href="{% url 'artist-profile_updated_one' %}" class="btn btn-sm btn-primary me-1">View Profile</a>
-                            //                             <a href="{% url 'contactus' %}" class="btn btn-sm btn-icon btn-soft-primary"><i data-feather="message-circle" class="icons"></i></a>
-                            //                         </div>
-
-                            //                         <a href="javascript:void(0)" class="like"><i class="mdi mdi-heart align-middle fs-4"></i></a>
-                            //                     </div>
-                            //                 </div>
-                            //             </div><!--end col-->
-
-                            //             <div class="col-lg-3 col-md-4 col-sm-6 col-12 mt-4 pt-2">
-                            //                 <div class="candidate-card position-relative overflow-hidden text-center shadow rounded p-4">
-                            //                     <div class="ribbon ribbon-left overflow-hidden"><span class="text-center d-block bg-warning shadow small h6"><i class="mdi mdi-star"></i></span></div>
-                            //                     <div class="content">
-                            //                         <img src="${STATIC_URL}images/team/04.jpg" class="avatar avatar-md-md rounded-pill shadow-md" alt="">
-
-                            //                         <div class="mt-3">
-                            //                             <a href="{% url 'artist-profile_updated_one' %}" class="title h5 text-dark">Mari Harrington</a>
-                            //                             <p class="text-muted mt-1">C++ Developer</p>
-
-                            //                             <span class="badge bg-soft-primary rounded-pill">Design</span>
-                            //                             <span class="badge bg-soft-primary rounded-pill">UI</span>
-                            //                             <span class="badge bg-soft-primary rounded-pill">UX</span>
-                            //                             <span class="badge bg-soft-primary rounded-pill">Digital</span>
-                            //                         </div>
-
-                            //                         <div class="mt-2 d-flex align-items-center justify-content-between">
-                            //                             <div class="text-center">
-                            //                                 <p class="text-muted fw-medium mb-0">Salary:</p>
-                            //                                 <p class="mb-0 fw-medium">$5k - $6k</p>
-                            //                             </div>
-
-                            //                             <div class="text-center">
-                            //                                 <p class="text-muted fw-medium mb-0">Experience:</p>
-                            //                                 <p class="mb-0 fw-medium">2 Years</p>
-                            //                             </div>
-                            //                         </div>
-
-                            //                         <div class="mt-3">
-                            //                             <a href="{% url 'artist-profile_updated_one' %}" class="btn btn-sm btn-primary me-1">View Profile</a>
-                            //                             <a href="{% url 'contactus' %}" class="btn btn-sm btn-icon btn-soft-primary"><i data-feather="message-circle" class="icons"></i></a>
-                            //                         </div>
-
-                            //                         <a href="javascript:void(0)" class="like"><i class="mdi mdi-heart align-middle fs-4"></i></a>
-                            //                     </div>
-                            //                 </div>
-                            //             </div><!--end col-->
-
-                            //             <div class="col-lg-3 col-md-4 col-sm-6 col-12 mt-4 pt-2">
-                            //                 <div class="candidate-card position-relative overflow-hidden text-center shadow rounded p-4">
-                            //                     <div class="content">
-                            //                         <img src="${STATIC_URL}images/team/05.jpg" class="avatar avatar-md-md rounded-pill shadow-md" alt="">
-
-                            //                         <div class="mt-3">
-                            //                             <a href="{% url 'artist-profile_updated_one' %}" class="title h5 text-dark">Floyd Glasgow</a>
-                            //                             <p class="text-muted mt-1">Php Developer</p>
-
-                            //                             <span class="badge bg-soft-primary rounded-pill">Design</span>
-                            //                             <span class="badge bg-soft-primary rounded-pill">UI</span>
-                            //                             <span class="badge bg-soft-primary rounded-pill">UX</span>
-                            //                             <span class="badge bg-soft-primary rounded-pill">Digital</span>
-                            //                         </div>
-
-                            //                         <div class="mt-2 d-flex align-items-center justify-content-between">
-                            //                             <div class="text-center">
-                            //                                 <p class="text-muted fw-medium mb-0">Salary:</p>
-                            //                                 <p class="mb-0 fw-medium">$5k - $6k</p>
-                            //                             </div>
-
-                            //                             <div class="text-center">
-                            //                                 <p class="text-muted fw-medium mb-0">Experience:</p>
-                            //                                 <p class="mb-0 fw-medium">2 Years</p>
-                            //                             </div>
-                            //                         </div>
-
-                            //                         <div class="mt-3">
-                            //                             <a href="{% url 'artist-profile_updated_one' %}" class="btn btn-sm btn-primary me-1">View Profile</a>
-                            //                             <a href="{% url 'contactus' %}" class="btn btn-sm btn-icon btn-soft-primary"><i data-feather="message-circle" class="icons"></i></a>
-                            //                         </div>
-
-                            //                         <a href="javascript:void(0)" class="like"><i class="mdi mdi-heart align-middle fs-4"></i></a>
-                            //                     </div>
-                            //                 </div>
-                            //             </div><!--end col-->
-                            //         </div><!--end row-->
-                            //     </div><!--end container-->
-                            // </section>
-                            // `;
                             var previewContent = `<section class="section">
             <div class="container">
                 <div class="row">
@@ -1096,12 +724,13 @@ $(document).ready(function() {
                                     </div>
                                    <div class="d-flex align-items-start justify-content-between mt-3" style="flex-wrap: wrap; line-height: 1.5; word-break: break-word;">
                                         <span class="d-inline-flex align-items-center text-muted fw-medium" style="margin-right: 10px; white-space: nowrap;"><i data-feather="home" class="fea icon-sm me-2"></i> Address:</span>
-                                        <span class="fw-medium" style="flex: 1; line-height: 1.5; text-align: right;">${address}</span>
+                                        <span class="fw-medium" style="flex: 1; line-height: 1.5; text-align: right;"> ${address1 }<br>
+                                            ${address2}<br>
+                                            ${state}<br>
+                                            ${pincode}
+                                        </span>
                                     </div>
-                                    <div class="d-flex align-items-center justify-content-between mt-3">
-                                        <span class="d-inline-flex align-items-center text-muted fw-medium"><i data-feather="map-pin" class="fea icon-sm me-2"></i> City:</span>
-                                        <span class="fw-medium"></span>
-                                    </div>
+                                    
                                     <div class="d-flex align-items-center justify-content-between mt-3">
                                         <span class="d-inline-flex align-items-center text-muted fw-medium"><i data-feather="globe" class="fea icon-sm me-2"></i> Country:</span>
                                         <span class="fw-medium">${country}</span>
@@ -1111,12 +740,12 @@ $(document).ready(function() {
                                         <span class="fw-medium">${phone}</span>
                                     </div>
                                     <div class="d-flex align-items-center justify-content-between mt-3">
-                                        <span class="d-inline-flex align-items-center text-muted fw-medium"><i data-feather="briefcase" class="fea icon-sm me-2"></i> Mobile:</span>
+                                        <span class="d-inline-flex align-items-center text-muted fw-medium"><i data-feather="briefcase" class="fea icon-sm me-2"></i> Experience:</span>
                                         <span class="fw-medium">${experience}</span>
                                     </div>
-                                    <div class="d-flex align-items-center justify-content-between mt-3">
-                                        <span class="d-inline-flex align-items-center text-muted fw-medium"><i data-feather="award" class="fea icon-sm me-2"></i> Mobile:</span>
-                                        <span class="fw-medium">${awards}</span>
+                                    <div class="d-flex align-items-center justify-content-between mt-3"style="flex-wrap: wrap; line-height: 1.5; word-break: break-word;">
+                                        <span class="d-inline-flex align-items-center text-muted  fw-medium" style="margin-right: 10px; white-space: nowrap;"><i data-feather="award" class="fea icon-sm me-2"></i> Awards:</span>
+                                        <span class="fw-medium" style="flex: 1; line-height: 1.5; text-align: right;">${awards}</span>
                                     </div>
                                     <div class="d-flex align-items-center justify-content-between mt-3">
                                         <span class="text-muted fw-medium">Social:</span>
@@ -1129,15 +758,24 @@ $(document).ready(function() {
                                             <li class="list-inline-item"><a href="https://twitter.com/shreethemes" target="_blank" class="rounded"><i data-feather="twitter" class="fea icon-sm align-middle" title="twitter"></i></a></li>
                                         </ul><!--end icon-->
                                     </div>
+                                     <div class="mt-4">
+                                        <h5 class="mb-3">Gallery:</h5>
+                                        <div class="row" id ="image-preview-container">
+                                
+                                        </div>
+                                    </div>
                                    
                                 </div>
                             </div>
                         </div>
                   
-               `
+               `;
+
 
                             // Insert the preview content into the modal
                             $('#previewContent').html(previewContent);
+
+                            feather.replace();
 
                             // Now render the skills in the skills container
                             var skillsContainer = document.getElementById("skills-container");
@@ -1180,24 +818,62 @@ $(document).ready(function() {
         
                 // Append the card to the container
                 experienceContainer.appendChild(card);
+
+
+                
             });
 
+                
+                    const imagePreviewContainer = document.getElementById('image-preview-container');
+                    imagePreviewContainer.innerHTML = ''; // Clear previous content
+                    console.log("preview the files",files)
+                    if (files.length > 0) {
+                        for (let i = 0; i < files.length; i++) {
+                        
+                            const reader = new FileReader();
 
-        }
+                            reader.onload = function (e) {
+                                const col = document.createElement('div');
+                                col.classList.add('col-6', 'col-md-3', 'mb-4');
 
+                                const imageBlock = document.createElement('div');
+                                imageBlock.classList.add('image-block', 'border', 'rounded', 'p-1');
+
+                                const img = document.createElement('img');
+                                img.src = e.target.result;
+                                img.alt = 'Preview Image';
+                                img.classList.add('img-fluid', 'rounded');
+                                img.style.width = '100%';
+                                img.style.height = '100%';
+                                img.style.objectFit = 'cover';
+
+                                imageBlock.appendChild(img);
+                                col.appendChild(imageBlock);
+                                imagePreviewContainer.append(col);
+                            };
+
+                            reader.readAsDataURL(files[i]);
+                        };
+                    } else {
+                        imagePreviewContainer.innerHTML = '<p>No images selected.</p>';
+                    }
+}
+
+        
 
 
         if (profile_picture) {
             // If a file is selected, read it
+            const reader = new FileReader();
             reader.onload = function(e) {
-                updatePreview(e.target.result); // Pass the result of the uploaded file
+                updatePreview(e.target.result,files); // Pass the result of the uploaded file
                 $('#previewModal').modal('show');
 
             };
             reader.readAsDataURL(profile_picture);
         } else {
             // If no file is selected, use the default image directly
-            updatePreview(defaultImage);
+            updatePreview(defaultImage,files);
             $('#previewModal').modal('show');
 
         }
