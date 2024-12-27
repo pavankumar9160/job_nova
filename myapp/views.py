@@ -106,10 +106,14 @@ def artist_profile_setting_updated_one(request):
     user = request.user
     full_name = None
     description = ''
+    profile_picture = None
+    additional_info = None
+    skills = []
     try:
         additional_info = ArtistMasterAdditional.objects.get(user=user)
         profile_picture = additional_info.profile_picture.url if additional_info.profile_picture else None
         description = additional_info.description if additional_info and additional_info.description else ''
+        skills = additional_info.skills.values_list('name', flat=True)
         firstname = additional_info.firstname if additional_info.firstname else None
         lastname = additional_info.lastname if additional_info.lastname else None
         if firstname or lastname:
@@ -117,8 +121,12 @@ def artist_profile_setting_updated_one(request):
 
     except ArtistMasterAdditional.DoesNotExist:
         profile_picture = None 
+        full_name = None
+        description = ''
+        skills = []
+
       
-    return render(request, 'candidate-profile-setting_updated_one.html',{"user":user,'profile_picture': profile_picture,'full_name':full_name,'description':description,"additional_info":additional_info})
+    return render(request, 'candidate-profile-setting_updated_one.html',{"user":user,'profile_picture': profile_picture,'full_name':full_name,'description':description,"additional_info":additional_info,'skills': skills})
 
 def artist_profile_setting(request):
     user = request.user
@@ -151,7 +159,6 @@ def calculate_experience_duration(start_date, end_date=None):
 
 
 @login_required(login_url='/login/')  
-
 def artist_profile_updated_one(request):
     user = request.user
     profile_picture = None
@@ -162,17 +169,21 @@ def artist_profile_updated_one(request):
     full_name = None
     total_experience_years = 0
     total_experience_months = 0
+
     try:
-        additional_info = ArtistMasterAdditional.objects.get(user=user)
+        # Try fetching the artist's additional data
+        additional_info = ArtistMasterAdditional.objects.get(user=request.user)
+        
         profile_picture = additional_info.profile_picture.url if additional_info.profile_picture else None
         firstname = additional_info.firstname if additional_info.firstname else None
         lastname = additional_info.lastname if additional_info.lastname else None
         
         if firstname or lastname:
             full_name = f"{firstname} {lastname}".strip()
-        skills = additional_info.skills.all()
-        experience_details = additional_info.experience_details.all()
+        skills = additional_info.skills.all() if additional_info.skills.exists() else []
+        experience_details = additional_info.experience_details.all() if additional_info.experience_details.exists() else []
         images = additional_info.images.all()
+
         for experience in experience_details:
             start_date = experience.start_date
             end_date = experience.end_date if not experience.currently_working else None
@@ -186,30 +197,41 @@ def artist_profile_updated_one(request):
         total_experience_months = total_experience_months % 12
 
     except ArtistMasterAdditional.DoesNotExist:
+        # Handle case where additional_info does not exist
         profile_picture = None
         full_name = None 
-    
-    artists = ArtistMasterBasic.objects.all().exclude(is_superuser=True).order_by('?')[:3]
+        skills = []
+        experience_details = []
 
-    # Prefetch related additional details and skills
+   
+    artists_with_details = []
+    
+    artists = ArtistMasterBasic.objects.all().exclude(is_superuser=True).exclude(id=user.id).order_by('?')[:3]
     additional_details = ArtistMasterAdditional.objects.select_related('user').prefetch_related('skills')
 
-    artists_with_details = []
     for artist in artists:
-        additional_info = additional_details.filter(user=artist).first()
+        additional = additional_details.filter(user=artist).first()
         skills = additional_info.skills.all() if additional_info else []
         artists_with_details.append({
             'basic': artist,
-            'additional': additional_info,
+            'additional': additional,
             'skills': skills
-        })    
-    
+        })
+
     return render(request,
                   'candidate-profile_updated_one.html',
-                  {"artist_user":user,'profile_picture': profile_picture,
-                   'additional_info':additional_info,'full_name':full_name, 
-                   "is_logged_in_user": True,
-                   'skills': skills,'experience_details':experience_details,'images':images, 'total_experience': f"{total_experience_years} years, {total_experience_months} months","artists_with_details":artists_with_details})
+                  {
+                      "artist_user": user,
+                      'profile_picture': profile_picture,
+                      'additional_info': additional_info,
+                      'full_name': full_name,
+                      "is_logged_in_user": True,
+                      'skills': skills,
+                      'experience_details': experience_details,
+                      'images': images,
+                      'total_experience': f"{total_experience_years} years, {total_experience_months} months",
+                      "artists_with_details": artists_with_details
+                  })
 
 
 from django.shortcuts import get_object_or_404
@@ -1213,7 +1235,6 @@ def search_artists(request):
             Q(additional_info__skills__name__icontains=search_query) |  # Search by skills
             Q(additional_info__description__icontains=search_query) |
             Q(additional_info__country__icontains=search_query) |
-            Q(additional_info__city__icontains=search_query) |
             Q(additional_info__state__icontains=search_query) |
             Q(additional_info__languages_speak__icontains=search_query) |
             # Search by description

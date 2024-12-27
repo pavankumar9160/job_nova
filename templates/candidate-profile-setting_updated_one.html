@@ -22,7 +22,7 @@
                             <input id="pro-img" name="profile-image" type="file" class="d-none" onchange="loadFile(event)" />
                             <div class="position-relative d-inline-block">
                                 <img src="{% if profile_picture %}{{ profile_picture }}{% else %}{% static 'images/blank_pic.png' %}{% endif %}" class="avatar avatar-medium img-thumbnail rounded-pill shadow-sm" id="profile-image" alt="">
-                                <label class="icons position-absolute bottom-0 end-0" for="pro-img"><span class="btn btn-icon btn-sm btn-pills btn-primary"><i data-feather="camera" class="icons"></i></span></label>
+                                {% comment %} <label class="icons position-absolute bottom-0 end-0" for="pro-img"><span class="btn btn-icon btn-sm btn-pills btn-primary"><i data-feather="camera" class="icons"></i></span></label> {% endcomment %}
                             </div>
                         </div>
                         <div class="ms-2">
@@ -102,6 +102,7 @@
                                     <input type="text" value="{{ additional_info.address2|default:'' }}" name="roadName" id="roadName" class="form-control" maxlength="100" placeholder="e.g., Road Name/Area/Colony" required>
                                 </div>
                             </div>
+                            
                             <div class="col-md-6">
                                 <div class="mb-3">
                                     <label class="form-label" for="state" style="font-family: Arial, sans-serif; font-size: 16px; font-weight: bold;">Address 3:</label>
@@ -121,7 +122,7 @@
                             <div class="col-md-6">
                                 <div class="mb-3">
                                     <label class="form-label"style="font-family: Arial, sans-serif; font-size: 16px; font-weight: bold;">Location:</label>
-                                    <select class="form-control form-select" id="Country">
+                                    <select class="form-control form-select" value="{{ additional_info.country|default:'' }}" id="Country">
                                                 <option value="India">India</option>
                                                 <option value="USA">USA</option>
                                                 <option value="Canada">Canada</option>
@@ -133,7 +134,7 @@
                             <div class="col-md-6">
                                 <div class="mb-3">
                                     <label class="form-label" style="font-family: Arial, sans-serif; font-size: 16px; font-weight: bold;">Role in Literary World:<span class="text-danger" >*</span></label>
-                                    <select class="form-control form-select" id="description" required>
+                                    <select class="form-control form-select" id="description"  value="{{ additional_info.description|default:'' }}" required>
                                         <option value="Writer">Writer</option>
                                         <option value="Publisher">Publisher</option>
                                         <option value="Printer">Printer</option>
@@ -211,45 +212,45 @@
                                         <tbody>
                                             <tr>
                                                 <td>English</td>
-                                                <td><input type="checkbox" name="languages_read[]" value="English"></td>
-                                                <td><input type="checkbox" name="languages_write[]" value="English"></td>
-                                                <td><input type="checkbox" name="languages_speak[]" value="English"></td>
+                                                <td><input type="checkbox" name="languages_read[]" {% if 'English' in additional_info.languages_read %}checked{% endif %} value="English"></td>
+                                                <td><input type="checkbox" name="languages_write[]"  {% if 'English' in additional_info.languages_write %}checked{% endif %} value="English"></td>
+                                                <td><input type="checkbox" name="languages_speak[]" {% if 'English' in additional_info.languages_speak %}checked{% endif %}  value="English"></td>
                                             </tr>
                                             <tr>
                                                 <td>Hindi</td>
-                                                <td><input type="checkbox" name="languages_read[]" value="Hindi"></td>
-                                                <td><input type="checkbox" name="languages_write[]" value="Hindi"></td>
-                                                <td><input type="checkbox" name="languages_speak[]" value="Hindi"></td>
+                                                <td><input type="checkbox" name="languages_read[]" {% if 'Hindi' in additional_info.languages_read %}checked{% endif %}  value="Hindi"></td>
+                                                <td><input type="checkbox" name="languages_write[]" {% if 'Hindi' in additional_info.languages_write %}checked{% endif %}  value="Hindi"></td>
+                                                <td><input type="checkbox" name="languages_speak[]" {% if 'Hindi' in additional_info.languages_speak %}checked{% endif %}  value="Hindi"></td>
                                             </tr>
                                             <tr>
                                                 <td>Odia</td>
-                                                <td><input type="checkbox" name="languages_read[]" value="Odia"></td>
-                                                <td><input type="checkbox" name="languages_write[]" value="Odia"></td>
-                                                <td><input type="checkbox" name="languages_speak[]" value="Odia"></td>
+                                                <td><input type="checkbox" name="languages_read[]" {% if 'Odia' in additional_info.languages_read %}checked{% endif %}  value="Odia"></td>
+                                                <td><input type="checkbox" name="languages_write[]" {% if 'Odia' in additional_info.languages_write %}checked{% endif %}  value="Odia"></td>
+                                                <td><input type="checkbox" name="languages_speak[]" {% if 'Odia' in additional_info.languages_speak %}checked{% endif %}  value="Odia"></td>
                                             </tr>
                                             <tr>
                                                 <td>Telugu</td>
-                                                <td><input type="checkbox" name="languages_read[]" value="Telugu"></td>
-                                                <td><input type="checkbox" name="languages_write[]" value="Telugu"></td>
-                                                <td><input type="checkbox" name="languages_speak[]" value="Telugu"></td>
+                                                <td><input type="checkbox" name="languages_read[]" {% if 'Telugu' in additional_info.languages_read %}checked{% endif %}  value="Telugu"></td>
+                                                <td><input type="checkbox" name="languages_write[]" {% if 'Telugu' in additional_info.languages_write %}checked{% endif %}  value="Telugu"></td>
+                                                <td><input type="checkbox" name="languages_speak[]" {% if 'Telugu' in additional_info.languages_speak %}checked{% endif %}  value="Telugu"></td>
                                             </tr>
                                             <tr>
                                                 <td>Tamil</td>
-                                                <td><input type="checkbox" name="languages_read[]" value="Tamil"></td>
-                                                <td><input type="checkbox" name="languages_write[]" value="Tamil"></td>
-                                                <td><input type="checkbox" name="languages_speak[]" value="Tamil"></td>
+                                                <td><input type="checkbox" name="languages_read[]" {% if 'Tamil' in additional_info.languages_read %}checked{% endif %}  value="Tamil"></td>
+                                                <td><input type="checkbox" name="languages_write[]" {% if 'Tamil' in additional_info.languages_write %}checked{% endif %}  value="Tamil"></td>
+                                                <td><input type="checkbox" name="languages_speak[]" {% if 'Tamil' in additional_info.languages_speak %}checked{% endif %}  value="Tamil"></td>
                                             </tr>
                                             <tr>
                                                 <td>Kannada</td>
-                                                <td><input type="checkbox" name="languages_read[]" value="Kannada"></td>
-                                                <td><input type="checkbox" name="languages_write[]" value="Kannada"></td>
-                                                <td><input type="checkbox" name="languages_speak[]" value="Kannada"></td>
+                                                <td><input type="checkbox" name="languages_read[]" {% if 'Kannada' in additional_info.languages_read %}checked{% endif %}  value="Kannada"></td>
+                                                <td><input type="checkbox" name="languages_write[]" {% if 'Kannada' in additional_info.languages_write %}checked{% endif %}  value="Kannada"></td>
+                                                <td><input type="checkbox" name="languages_speak[]" {% if 'Kannada' in additional_info.languages_speak %}checked{% endif %}  value="Kannada"></td>
                                             </tr>
                                             <tr>
                                                 <td>Malayalam</td>
-                                                <td><input type="checkbox" name="languages_read[]" value="Malayalam"></td>
-                                                <td><input type="checkbox" name="languages_write[]" value="Malayalam"></td>
-                                                <td><input type="checkbox" name="languages_speak[]" value="Malayalam"></td>
+                                                <td><input type="checkbox" name="languages_read[]" {% if 'Malayalam' in additional_info.languages_read %}checked{% endif %}  value="Malayalam"></td>
+                                                <td><input type="checkbox" name="languages_write[]" {% if 'Malayalam' in additional_info.languages_write %}checked{% endif %}  value="Malayalam"></td>
+                                                <td><input type="checkbox" name="languages_speak[]" {% if 'Malayalam' in additional_info.languages_speak %}checked{% endif %}  value="Malayalam"></td>
                                             </tr>
                                         </tbody>
                                     </table>
@@ -301,7 +302,9 @@
                                 <!-- Experience list -->
                                 <div class="col-lg-12">
                                 <label class="form-label"style="font-family: Arial, sans-serif; font-size: 16px; font-weight: bold;">Experience List:</label>
-                                <ul id="experienceList" class="list-group"></ul>
+                                <ul id="experienceList" class="list-group">       
+                                  </ul>
+                                
                             </div>
                             <div class="col-lg-12">
                                 <button type="button" class="btn btn-primary mb-3" data-bs-toggle="modal" data-bs-target="#experienceModal" onclick="openAddModal()">
@@ -333,97 +336,97 @@
                                             <input type="checkbox" value="Writer" class="skill-checkbox" style="margin-right: 4px; vertical-align: middle;"> Writer
                                         </label>
                                         <label style="display: flex; align-items: center;">
-                                            <input type="checkbox" value="Publisher" class="skill-checkbox" style="margin-right: 4px; vertical-align: middle;"> Publisher
+                                            <input type="checkbox" value="Publisher" class="skill-checkbox" style="margin-right: 4px; vertical-align: middle;" {% if 'Publisher ' in skills %}checked{% endif %}> Publisher
                                         </label>
                                         <label style="display: flex; align-items: center;">
-                                            <input type="checkbox" value="Printer" class="skill-checkbox" style="margin-right: 4px; vertical-align: middle;"> Printer
+                                            <input type="checkbox" value="Printer" class="skill-checkbox" style="margin-right: 4px; vertical-align: middle;" {% if 'Printer' in skills %}checked{% endif %}> Printer
                                         </label>
                                         <label style="display: flex; align-items: center;">
-                                            <input type="checkbox" value="Editor" class="skill-checkbox" style="margin-right: 4px; vertical-align: middle;"> Editor
+                                            <input type="checkbox" value="Editor" class="skill-checkbox" style="margin-right: 4px; vertical-align: middle;" {% if 'Editor' in skills %}checked{% endif %}> Editor
                                         </label>
                                         <label style="display: flex; align-items: center;">
-                                            <input type="checkbox" value="Artist" class="skill-checkbox" style="margin-right: 4px; vertical-align: middle;"> Artist
+                                            <input type="checkbox" value="Artist" class="skill-checkbox" style="margin-right: 4px; vertical-align: middle;" {% if 'Artist' in skills %}checked{% endif %}> Artist
                                         </label>
                                         <label style="display: flex; align-items: center;">
-                                            <input type="checkbox" value="Digital Graphics Designer" class="skill-checkbox" style="margin-right: 4px; vertical-align: middle;"> Digital Graphics Designer
+                                            <input type="checkbox" value="Digital Graphics Designer" class="skill-checkbox" style="margin-right: 4px; vertical-align: middle;"{% if 'Digital Graphics Designer' in skills %}checked{% endif %}> Digital Graphics Designer
                                         </label>
                                         <label style="display: flex; align-items: center;">
-                                            <input type="checkbox" value="Digital Content Creator" class="skill-checkbox" style="margin-right: 4px; vertical-align: middle;"> Digital Content Creator
+                                            <input type="checkbox" value="Digital Content Creator" class="skill-checkbox" style="margin-right: 4px; vertical-align: middle;"{% if 'Digital Content Creator' in skills %}checked{% endif %}> Digital Content Creator
                                         </label>
                                         <label style="display: flex; align-items: center;">
-                                            <input type="checkbox" value="Spiritual Leader" class="skill-checkbox" style="margin-right: 4px; vertical-align: middle;"> Spiritual Leader
+                                            <input type="checkbox" value="Spiritual Leader" class="skill-checkbox" style="margin-right: 4px; vertical-align: middle;"{% if 'Spiritual Leader' in skills %}checked{% endif %}> Spiritual Leader
                                         </label>
                                         <label style="display: flex; align-items: center;">
-                                            <input type="checkbox" value="Social Media Influencer" class="skill-checkbox" style="margin-right: 4px; vertical-align: middle;"> Social Media Influencer
+                                            <input type="checkbox" value="Social Media Influencer" class="skill-checkbox" style="margin-right: 4px; vertical-align: middle;"{% if 'Social Media Influencer' in skills %}checked{% endif %}> Social Media Influencer
                                         </label>
                                         <label style="display: flex; align-items: center;">
-                                            <input type="checkbox" value="Digital Marketer" class="skill-checkbox" style="margin-right: 4px; vertical-align: middle;"> Digital Marketer
+                                            <input type="checkbox" value="Digital Marketer" class="skill-checkbox" style="margin-right: 4px; vertical-align: middle;"{% if 'Digital Marketer' in skills %}checked{% endif %}> Digital Marketer
                                         </label>
                                         <label style="display: flex; align-items: center;">
-                                            <input type="checkbox" value="Public Relations Manager" class="skill-checkbox" style="margin-right: 4px; vertical-align: middle;"> Public Relations Manager
+                                            <input type="checkbox" value="Public Relations Manager" class="skill-checkbox" style="margin-right: 4px; vertical-align: middle;"{% if 'Public Relations Manager' in skills %}checked{% endif %}> Public Relations Manager
                                         </label>
                                         <label style="display: flex; align-items: center;">
-                                            <input type="checkbox" value="Event Manager" class="skill-checkbox" style="margin-right: 4px; vertical-align: middle;"> Event Manager
+                                            <input type="checkbox" value="Event Manager" class="skill-checkbox" style="margin-right: 4px; vertical-align: middle;"{% if 'Event Manager' in skills %}checked{% endif %}> Event Manager
                                         </label>
                                         <label style="display: flex; align-items: center;">
-                                            <input type="checkbox" value="Entertainment Troupe Owner" class="skill-checkbox" style="margin-right: 4px; vertical-align: middle;"> Entertainment Troupe Owner
+                                            <input type="checkbox" value="Entertainment Troupe Owner" class="skill-checkbox" style="margin-right: 4px; vertical-align: middle;"{% if 'Entertainment Troupe Owner' in skills %}checked{% endif %}> Entertainment Troupe Owner
                                         </label>
                                         <label style="display: flex; align-items: center;">
-                                            <input type="checkbox" value="Standup Comedian" class="skill-checkbox" style="margin-right: 4px; vertical-align: middle;"> Standup Comedian
+                                            <input type="checkbox" value="Standup Comedian" class="skill-checkbox" style="margin-right: 4px; vertical-align: middle;"{% if 'Standup Comedian' in skills %}checked{% endif %}> Standup Comedian
                                         </label>
                                         <label style="display: flex; align-items: center;">
-                                            <input type="checkbox" value="Compere/Emcee" class="skill-checkbox" style="margin-right: 4px; vertical-align: middle;"> Compere/Emcee
+                                            <input type="checkbox" value="Compere/Emcee" class="skill-checkbox" style="margin-right: 4px; vertical-align: middle;"{% if 'Compere/Emcee' in skills %}checked{% endif %}> Compere/Emcee
                                         </label>
                                         
                                         <label style="display: flex; align-items: center;">
-                                            <input type="checkbox" value="Book Store Owner" class="skill-checkbox" style="margin-right: 4px; vertical-align: middle;"> Book Store Owner
+                                            <input type="checkbox" value="Book Store Owner" class="skill-checkbox" style="margin-right: 4px; vertical-align: middle;"{% if 'Book Store Owner' in skills %}checked{% endif %}> Book Store Owner
                                         </label>
                                         <label style="display: flex; align-items: center;">
-                                            <input type="checkbox" value="Digital Marketplace/Platform" class="skill-checkbox" style="margin-right: 4px; vertical-align: middle;"> Digital Marketplace/Platform
+                                            <input type="checkbox" value="Digital Marketplace/Platform" class="skill-checkbox" style="margin-right: 4px; vertical-align: middle;"{% if 'Digital Marketplace/Platform' in skills %}checked{% endif %}> Digital Marketplace/Platform
                                         </label>
                                         <label style="display: flex; align-items: center;">
-                                            <input type="checkbox" value="Poet" class="skill-checkbox" style="margin-right: 4px; vertical-align: middle;"> Poet
+                                            <input type="checkbox" value="Poet" class="skill-checkbox" style="margin-right: 4px; vertical-align: middle;"{% if 'Poet' in skills %}checked{% endif %}> Poet
                                         </label>
                                         <label style="display: flex; align-items: center;">
-                                            <input type="checkbox" value="Essayist" class="skill-checkbox" style="margin-right: 4px; vertical-align: middle;"> Essayist
+                                            <input type="checkbox" value="Essayist" class="skill-checkbox" style="margin-right: 4px; vertical-align: middle;"{% if 'Essayist' in skills %}checked{% endif %}> Essayist
                                         </label>
                                         <label style="display: flex; align-items: center;">
-                                            <input type="checkbox" value="Blogger" class="skill-checkbox" style="margin-right: 4px; vertical-align: middle;"> Blogger
+                                            <input type="checkbox" value="Blogger" class="skill-checkbox" style="margin-right: 4px; vertical-align: middle;"{% if 'Blogger' in skills %}checked{% endif %}> Blogger
                                         </label>
 
                                         <label style="display: flex; align-items: center;">
-                                            <input type="checkbox" value="Novelist" class="skill-checkbox" style="margin-right: 4px; vertical-align: middle;"> Novelist
+                                            <input type="checkbox" value="Novelist" class="skill-checkbox" style="margin-right: 4px; vertical-align: middle;"{% if 'Novelist' in skills %}checked{% endif %}> Novelist
                                         </label>
                                        
                                         <label style="display: flex; align-items: center;">
-                                            <input type="checkbox" value="Columnist" class="skill-checkbox" style="margin-right: 4px; vertical-align: middle;"> Columnist
+                                            <input type="checkbox" value="Columnist" class="skill-checkbox" style="margin-right: 4px; vertical-align: middle;"{% if 'Columnist' in skills %}checked{% endif %}> Columnist
                                         </label>
                                         <label style="display: flex; align-items: center;">
-                                            <input type="checkbox" value="Journalist" class="skill-checkbox" style="margin-right: 4px; vertical-align: middle;"> Journalist
+                                            <input type="checkbox" value="Journalist" class="skill-checkbox" style="margin-right: 4px; vertical-align: middle;"{% if 'Journalist' in skills %}checked{% endif %}> Journalist
                                         </label>
                                         <label style="display: flex; align-items: center;">
-                                            <input type="checkbox" value="Short Story Writer" class="skill-checkbox" style="margin-right: 4px; vertical-align: middle;"> Short Story Writer
+                                            <input type="checkbox" value="Short Story Writer" class="skill-checkbox" style="margin-right: 4px; vertical-align: middle;"{% if 'Short Story Writer' in skills %}checked{% endif %}> Short Story Writer
                                         </label>
                                         <label style="display: flex; align-items: center;">
                                             <input type="checkbox" value="Motivational Speaker" class="skill-checkbox" style="margin-right: 4px; vertical-align: middle;"> Motivational Speaker
                                         </label>
                                         <label style="display: flex; align-items: center;">
-                                            <input type="checkbox" value="Literary Critic" class="skill-checkbox" style="margin-right: 4px; vertical-align: middle;"> Literary Critic
+                                            <input type="checkbox" value="Literary Critic" class="skill-checkbox" style="margin-right: 4px; vertical-align: middle;"{% if 'Literary Critic' in skills %}checked{% endif %}> Literary Critic
                                         </label>
                                         <label style="display: flex; align-items: center;">
-                                            <input type="checkbox" value="Literacy Reviewer" class="skill-checkbox" style="margin-right: 4px; vertical-align: middle;"> Literacy Reviewer
+                                            <input type="checkbox" value="Literacy Reviewer" class="skill-checkbox" style="margin-right: 4px; vertical-align: middle;"{% if 'Literacy Reviewer' in skills %}checked{% endif %}> Literacy Reviewer
                                         </label>
                                         <label style="display: flex; align-items: center;">
-                                            <input type="checkbox" value="Lyricist" class="skill-checkbox" style="margin-right: 4px; vertical-align: middle;"> Lyricist
+                                            <input type="checkbox" value="Lyricist" class="skill-checkbox" style="margin-right: 4px; vertical-align: middle;"{% if 'Lyricist' in skills %}checked{% endif %}> Lyricist
                                         </label>
                                         <label style="display: flex; align-items: center;">
-                                            <input type="checkbox" value="Scriptwriter-Drama" class="skill-checkbox" style="margin-right: 4px; vertical-align: middle;"> Scriptwriter-Drama
+                                            <input type="checkbox" value="Scriptwriter-Drama" class="skill-checkbox" style="margin-right: 4px; vertical-align: middle;"{% if 'Scriptwriter-Drama' in skills %}checked{% endif %}> Scriptwriter-Drama
                                         </label>
                                         <label style="display: flex; align-items: center;">
-                                            <input type="checkbox" value="Scriptwriter-Screen" class="skill-checkbox" style="margin-right: 4px; vertical-align: middle;"> Scriptwriter-Screen
+                                            <input type="checkbox" value="Scriptwriter-Screen" class="skill-checkbox" style="margin-right: 4px; vertical-align: middle;"{% if 'Scriptwriter-Screen' in skills %}checked{% endif %}> Scriptwriter-Screen
                                         </label>
                                         <label style="display: flex; align-items: center;">
-                                            <input type="checkbox" value="Translator" class="skill-checkbox" style="margin-right: 4px; vertical-align: middle;"> Translator
+                                            <input type="checkbox" value="Translator" class="skill-checkbox" style="margin-right: 4px; vertical-align: middle;"{% if 'Translator' in skills %}checked{% endif %}> Translator
                                         </label>
                                     </div>
                                     <small class="text-muted">You can select up to 6 skills.</small>
@@ -629,113 +632,134 @@
 </div>
 
 <script>
-    window.experiences = [];
 
-    function toggleEndDate() {
-        const currentlyWorking = document.getElementById('currentlyWorking').checked;
-        document.getElementById('endDate').disabled = currentlyWorking;
-        if (currentlyWorking) document.getElementById('endDate').value = '';
-    }
 
-    function openAddModal() {
-        document.getElementById('experienceId').value = '';
-        document.getElementById('designation').value = '';
-        document.getElementById('company').value = '';
-        document.getElementById('startDate').value = '';
-        document.getElementById('endDate').value = '';
-        document.getElementById('currentlyWorking').checked = false;
-        toggleEndDate();
-    }
-
-    function openEditModal(index) {
-        const experience = experiences[index];
-        document.getElementById('experienceId').value = index;
-        document.getElementById('designation').value = experience.designation;
-        document.getElementById('company').value = experience.company;
-        document.getElementById('startDate').value = experience.startDate;
-        document.getElementById('endDate').value = experience.endDate || '';
-        document.getElementById('currentlyWorking').checked = experience.currentlyWorking;
-        toggleEndDate();
-        const modal = new bootstrap.Modal(document.getElementById('experienceModal'));
-        modal.show();
-    }
-
-    function saveExperience() {
-        const id = document.getElementById('experienceId').value;
-        const designation = document.getElementById('designation').value;
-        const company = document.getElementById('company').value;
-        const startDate = document.getElementById('startDate').value;
-        const currentlyWorking = document.getElementById('currentlyWorking').checked;
-        const endDate = currentlyWorking ? null : document.getElementById('endDate').value;
-
-        if (id) {
-            experiences[id] = { designation, company, startDate, endDate, currentlyWorking };
-        } else {
-            experiences.push({ designation, company, startDate, endDate, currentlyWorking });
+        // Initialize experiences with data from the backend
+        window.experiences = [
+          {% for experience in additional_info.experience_details.all %}
+          {
+            id: {{ experience.id }},
+            designation: "{{ experience.designation|escapejs }}",
+            company: "{{ experience.company|escapejs }}",
+            startDate: "{{ experience.start_date|date:'Y-m-d' }}",
+            endDate: "{{ experience.end_date|date:'Y-m-d'|default:'' }}",
+            currentlyWorking: {{ experience.currently_working|yesno:"true,false" }},
+          },
+          {% endfor %}
+        ];
+      
+        function toggleEndDate() {
+          const currentlyWorking = document.getElementById('currentlyWorking').checked;
+          document.getElementById('endDate').disabled = currentlyWorking;
+          if (currentlyWorking) document.getElementById('endDate').value = '';
         }
-
-        const modal = bootstrap.Modal.getInstance(document.getElementById('experienceModal'));
-        modal.hide();
-
-        renderExperienceList();
-        calculateTotalExperience();
-        console.log(experiences);
-    }
-
-    function deleteExperience(index) {
-        experiences.splice(index, 1);
-        renderExperienceList();
-        calculateTotalExperience();
-    }
-
-    function renderExperienceList() {
-        const experienceList = document.getElementById('experienceList');
-        experienceList.innerHTML = '';
-    
-        experiences.forEach((experience, index) => {
+      
+        function openAddModal() {
+          document.getElementById('experienceId').value = '';
+          document.getElementById('designation').value = '';
+          document.getElementById('company').value = '';
+          document.getElementById('startDate').value = '';
+          document.getElementById('endDate').value = '';
+          document.getElementById('currentlyWorking').checked = false;
+          toggleEndDate();
+        }
+      
+        function openEditModal(index) {
+          const experience = experiences[index];
+          document.getElementById('experienceId').value = index;
+          document.getElementById('designation').value = experience.designation;
+          document.getElementById('company').value = experience.company;
+          document.getElementById('startDate').value = experience.startDate;
+          document.getElementById('endDate').value = experience.endDate || '';
+          document.getElementById('currentlyWorking').checked = experience.currentlyWorking;
+          toggleEndDate();
+          const modal = new bootstrap.Modal(document.getElementById('experienceModal'));
+          modal.show();
+        }
+      
+        function saveExperience() {
+          const id = document.getElementById('experienceId').value;
+          const designation = document.getElementById('designation').value;
+          const company = document.getElementById('company').value;
+          const startDate = document.getElementById('startDate').value;
+          const currentlyWorking = document.getElementById('currentlyWorking').checked;
+          const endDate = currentlyWorking ? null : document.getElementById('endDate').value;
+      
+          if (id) {
+            experiences[id] = { designation, company, startDate, endDate, currentlyWorking };
+          } else {
+            experiences.push({ designation, company, startDate, endDate, currentlyWorking });
+          }
+          
+          const modal = bootstrap.Modal.getInstance(document.getElementById('experienceModal'));
+          modal.hide();
+      
+          renderExperienceList();
+          calculateTotalExperience();
+        }
+      
+        function deleteExperience(index) {
+          experiences.splice(index, 1);
+          renderExperienceList();
+          calculateTotalExperience();
+        }
+      
+        function renderExperienceList() {
+          const experienceList = document.getElementById('experienceList');
+          experienceList.innerHTML = '';
+          if (experiences.length === 0) {
+            experienceList.innerHTML = '<li class="list-group-item-experience text-center" style="list-style-type:none;">No experience details found. Add your first experience!</li>';
+            return;
+          }
+      
+          experiences.forEach((experience, index) => {
             const start = new Date(experience.startDate);
             const end = experience.currentlyWorking ? new Date() : new Date(experience.endDate || new Date());
-    
+      
             const totalMonths = (end.getFullYear() - start.getFullYear()) * 12 + (end.getMonth() - start.getMonth());
             const years = Math.floor(totalMonths / 12);
             const months = totalMonths % 12;
-    
+      
             const duration = `${years > 0 ? `${years} year${years > 1 ? 's' : ''} ` : ''}${months > 0 ? `${months} month${months > 1 ? 's' : ''}` : ''}`.trim();
-    
+      
             const listItem = document.createElement('li');
             listItem.className = 'list-group-item-experience mb-2 d-flex justify-content-between align-items-center';
             listItem.innerHTML = `
-                <div>
-                    <strong>${experience.designation}</strong> at ${experience.company} 
-                    (${experience.startDate}  to  ${experience.currentlyWorking ? 'Present' : experience.endDate}) 
-                    <span class="text-muted">[${duration}]</span>
-                </div>
-                <div>
-                    <button class="btn btn-sm btn-warning me-2" onclick="openEditModal(${index})">Edit</button>
-                    <button class="btn btn-sm btn-danger" onclick="deleteExperience(${index})">Delete</button>
-                </div>
+              <div>
+                <strong>${experience.designation}</strong> at ${experience.company}
+                (${experience.startDate} to ${experience.currentlyWorking ? 'Present' : experience.endDate})
+                <span class="text-muted">[${duration}]</span>
+              </div>
+              <div>
+                <button type="button" class="btn btn-sm btn-warning me-2" onclick="openEditModal(${index})">Edit</button>
+                <button type="button" class="btn btn-sm btn-danger" onclick="deleteExperience(${index})">Delete</button>
+              </div>
             `;
             experienceList.appendChild(listItem);
-        });
-    }
-    
-
-    function calculateTotalExperience() {
-        let totalMonths = 0;
-
-        experiences.forEach((experience) => {
+          });
+        }
+      
+        function calculateTotalExperience() {
+          let totalMonths = 0;
+      
+          experiences.forEach((experience) => {
             const start = new Date(experience.startDate);
             const end = experience.currentlyWorking ? new Date() : new Date(experience.endDate || new Date());
-
+      
             const months = (end.getFullYear() - start.getFullYear()) * 12 + (end.getMonth() - start.getMonth());
             totalMonths += months;
-        });
-
-        const years = Math.floor(totalMonths / 12);
-        const months = totalMonths % 12;
-
-        document.getElementById('experience').value = `${years} years ${months} months`;
-    }
+          });
+      
+          const years = Math.floor(totalMonths / 12);
+          const months = totalMonths % 12;
+      
+          document.getElementById('experience').value = `${years} years ${months} months`;
+        }
+      
+        // Initial rendering
+        renderExperienceList();
+        calculateTotalExperience();
+      
 
     // Add event listeners for all fields with maxlength
 document.addEventListener("DOMContentLoaded", function() {

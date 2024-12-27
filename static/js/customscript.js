@@ -80,14 +80,16 @@ $(document).ready(function() {
             console.log('No files selected');
         }
 
+        const experiences = [];
 
         // Select all list items
         const listItems = document.querySelectorAll('.list-group-item-experience');
-        const experiences = [];
+
 
         listItems.forEach((listItem) => {
             // Get the entire text content of the <div> containing the data
-            const divContent = listItem.querySelector('div').textContent.trim();
+            const divElement = listItem.querySelector('div');
+            const divContent = divElement ? divElement.textContent.trim() : '';
 
             // Extract designation
             const designationMatch = divContent.match(/^(.*) at/);
@@ -175,20 +177,20 @@ $(document).ready(function() {
             contentType: false,
             success: function(response) {
                 toastr.success('Details Updated successfully!', 'Success');
-                const inputFields = ["firstname", "lastname", "gender", "dob", "Country",
-                    "houseNumber", "roadNumber", "pincode", "state",
-                    "description", "introduction", "facebook_link", "instagram_link", "linkedin_link", "email2", "phone", "profile_picture", "job_title", "company_name", "experience", "portfolio", "short_bio", "availability", "certifications", "published_works", "awards"
-                ];
-                inputFields.forEach(fieldId => {
-                    document.getElementById(fieldId).value = "";
-                });
-                inputFields.forEach(fieldId => {
-                    document.getElementById(fieldId).value = "";
-                    $(".skill-checkbox").prop('checked', false);
+                // const inputFields = ["firstname", "lastname", "gender", "dob", "Country",
+                //     "houseNumber", "roadNumber", "pincode", "state",
+                //     "description", "introduction", "facebook_link", "instagram_link", "linkedin_link", "email2", "phone", "profile_picture", "job_title", "company_name", "experience", "portfolio", "short_bio", "availability", "certifications", "published_works", "awards"
+                // ];
+                // inputFields.forEach(fieldId => {
+                //     document.getElementById(fieldId).value = "";
+                // });
+                // inputFields.forEach(fieldId => {
+                //     document.getElementById(fieldId).value = "";
+                //     $(".skill-checkbox").prop('checked', false);
 
-                });
-                const experienceList = document.getElementById('experienceList');
-                experienceList.innerHTML = '';
+                // });
+                //const experienceList = document.getElementById('experienceList');
+                //experienceList.innerHTML = '';
 
             },
             error: function(xhr) {
@@ -627,7 +629,9 @@ $(document).ready(function() {
 
                         listItems.forEach((listItem) => {
                             // Get the entire text content of the <div> containing the data
-                            const divContent = listItem.querySelector('div').textContent.trim();
+                            const divElement = listItem.querySelector('div');
+                            const divContent = divElement ? divElement.textContent.trim() : '';
+                            d
 
                             // Extract designation
                             const designationMatch = divContent.match(/^(.*) at/);
