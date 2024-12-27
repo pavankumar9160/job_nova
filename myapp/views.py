@@ -21,8 +21,22 @@ def index(request):
                 profile_picture = additional_info.profile_picture.url if additional_info.profile_picture else None
             except ArtistMasterAdditional.DoesNotExist:
                 profile_picture = None 
+    artists = ArtistMasterBasic.objects.all().exclude(is_superuser=True).order_by('?')[:3]
+
+    # Prefetch related additional details and skills
+    additional_details = ArtistMasterAdditional.objects.select_related('user').prefetch_related('skills')
+
+    artists_with_details = []
+    for artist in artists:
+        additional_info = additional_details.filter(user=artist).first()
+        skills = additional_info.skills.all() if additional_info else []
+        artists_with_details.append({
+            'basic': artist,
+            'additional': additional_info,
+            'skills': skills
+        })             
         
-    return render(request, 'index-three.html',{"user":user,'profile_picture': profile_picture})
+    return render(request, 'index-three.html',{"user":user,'profile_picture': profile_picture,"artists_with_details":artists_with_details})
 
 def aboutus(request):
     user = request.user
@@ -175,12 +189,27 @@ def artist_profile_updated_one(request):
         profile_picture = None
         full_name = None 
     
+    artists = ArtistMasterBasic.objects.all().exclude(is_superuser=True).order_by('?')[:3]
+
+    # Prefetch related additional details and skills
+    additional_details = ArtistMasterAdditional.objects.select_related('user').prefetch_related('skills')
+
+    artists_with_details = []
+    for artist in artists:
+        additional_info = additional_details.filter(user=artist).first()
+        skills = additional_info.skills.all() if additional_info else []
+        artists_with_details.append({
+            'basic': artist,
+            'additional': additional_info,
+            'skills': skills
+        })    
+    
     return render(request,
                   'candidate-profile_updated_one.html',
                   {"artist_user":user,'profile_picture': profile_picture,
                    'additional_info':additional_info,'full_name':full_name, 
                    "is_logged_in_user": True,
-                   'skills': skills,'experience_details':experience_details,'images':images, 'total_experience': f"{total_experience_years} years, {total_experience_months} months"})
+                   'skills': skills,'experience_details':experience_details,'images':images, 'total_experience': f"{total_experience_years} years, {total_experience_months} months","artists_with_details":artists_with_details})
 
 
 from django.shortcuts import get_object_or_404
@@ -235,6 +264,21 @@ def artist_profile_updated_one_Id(request, id):
     except ArtistMasterAdditional.DoesNotExist:
         profile_picture_user = None
         full_name_user = None
+    
+    artists = ArtistMasterBasic.objects.all().exclude(is_superuser=True).order_by('?')[:3]
+
+    # Prefetch related additional details and skills
+    additional_details = ArtistMasterAdditional.objects.select_related('user').prefetch_related('skills')
+
+    artists_with_details = []
+    for artist in artists:
+        additional_info = additional_details.filter(user=artist).first()
+        skills = additional_info.skills.all() if additional_info else []
+        artists_with_details.append({
+            'basic': artist,
+            'additional': additional_info,
+            'skills': skills
+        })    
         
     return render(request, 'candidate-profile_updated_one.html', {
         "artist_user": artist_basic,
@@ -246,7 +290,8 @@ def artist_profile_updated_one_Id(request, id):
         'skills': skills,
         'experience_details': experience_details,
         'images':images,
-        'total_experience': f"{total_experience_years} years, {total_experience_months} months"
+        'total_experience': f"{total_experience_years} years, {total_experience_months} months",
+        'artists_with_details':artists_with_details
         
     })
 
@@ -448,6 +493,7 @@ def index_three(request):
     else:
        
         profile_picture = None
+           
     return render(request, 'index-three.html',{"user":user,'profile_picture': profile_picture})
 
 
