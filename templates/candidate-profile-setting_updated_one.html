@@ -92,28 +92,28 @@
                             <div class="col-md-6">
                                 <div class="mb-3">
                                     <label class="form-label" style="font-family: Arial, sans-serif; font-size: 16px; font-weight: bold;" for="houseNumber">Address 1:</label>
-                                    <input type="text" value="{{ additional_info.address1|default:'' }}"  name="houseNumber" id="houseNumber" class="form-control" maxlength="50" placeholder="e.g.,House Number/Building Name" required>
+                                    <input type="text" value="{{ additional_info.address1|default:'' }}"  name="houseNumber" id="houseNumber" class="form-control" maxlength="50" placeholder="e.g.,House Number/Building Name">
                                 </div>
                             </div>
                             
                             <div class="col-md-6">
                                 <div class="mb-3">
                                     <label class="form-label" style="font-family: Arial, sans-serif; font-size: 16px; font-weight: bold;" for="roadName">Address 2:</label>
-                                    <input type="text" value="{{ additional_info.address2|default:'' }}" name="roadName" id="roadName" class="form-control" maxlength="100" placeholder="e.g., Road Name/Area/Colony" required>
+                                    <input type="text" value="{{ additional_info.address2|default:'' }}" name="roadName" id="roadName" class="form-control" maxlength="100" placeholder="e.g., Road Name/Area/Colony" >
                                 </div>
                             </div>
                             
                             <div class="col-md-6">
                                 <div class="mb-3">
                                     <label class="form-label" for="state" style="font-family: Arial, sans-serif; font-size: 16px; font-weight: bold;">Address 3:</label>
-                                    <input type="text"  value="{{ additional_info.state|default:'' }}" name="state" id="state" class="form-control" maxlength="50" placeholder="e.g.,District,City,State" required>
+                                    <input type="text"  value="{{ additional_info.state|default:'' }}" name="state" id="state" class="form-control" maxlength="50" placeholder="e.g.,District,City,State">
                                 </div>
                             </div>
                             
                             <div class="col-md-6">
                                 <div class="mb-3">
                                     <label class="form-label" style="font-family: Arial, sans-serif; font-size: 16px; font-weight: bold;" for="pincode">Pincode:</label>
-                                    <input type="text" value="{{ additional_info.pincode|default:'' }}" name="pincode" id="pincode" class="form-control" maxlength="8" placeholder="e.g., 123456" pattern="\d{6}" required>
+                                    <input type="text" value="{{ additional_info.pincode|default:'' }}" name="pincode" id="pincode" class="form-control" maxlength="8" placeholder="e.g., 123456" pattern="\d{6}">
                                 </div>
                             </div>
                             
@@ -134,39 +134,38 @@
                             <div class="col-md-6">
                                 <div class="mb-3">
                                     <label class="form-label" style="font-family: Arial, sans-serif; font-size: 16px; font-weight: bold;">Role in Literary World:<span class="text-danger" >*</span></label>
-                                    <select class="form-control form-select" id="description"  value="{{ additional_info.description|default:'' }}" required>
-                                        <option value="Writer">Writer</option>
-                                        <option value="Publisher">Publisher</option>
-                                        <option value="Printer">Printer</option>
-                                        <option value="Editor">Editor</option>
-                                        <option value="Artist">Artist</option>
-                                        <option value="Digital Graphics Designer">Digital Graphics Designer</option>
-                                        <option value="Digital Content Creator">Digital Content Creator</option>
-                                        <option value="Spiritual Leader">Spiritual Leader</option>
-                                        <option value="Social Media Influencer">Social Media Influencer</option>
-                                        <option value="Digital Marketer">Digital Marketer</option>
-                                        <option value="Public Relations Manager">Public Relations Manager</option>
-                                        <option value="Event Manager">Event Manager</option>
-                                        <option value="Entertainment Troupe Owner">Entertainment Troupe Owner</option>
-                                        <option value="Standup Comedian">Standup Comedian</option>
-                                        <option value="Compere/Emcee">Compere/Emcee</option>
-                                        <option value="Book Store Owner">Book Store Owner</option>
-                                        <option value="Digital Marketplace/Platform">Digital Marketplace/Platform</option>
-                                        <option value="Poet">Poet</option>
-                                        <option value="Essayist">Essayist</option>
-                                        <option value="Blogger">Blogger</option>
-                                        <option value="Novelist">Novelist</option>
-                                        
-                                        <option value="Columnist">Columnist</option>
-                                        <option value="Journalist">Journalist</option>
-                                        <option value="Short Story Writer">Short Story Writer</option>
-                                        <option value="Motivational Speaker">Motivational Speaker</option>
-                                        <option value="Literary Critic">Literary Critic</option>
-                                        <option value="Literacy Reviewer">Literacy Reviewer</option>
-                                        <option value="Lyricist">Lyricist</option>
-                                        <option value="Scriptwriter-Drama">Scriptwriter-Drama</option>
-                                        <option value="Scriptwriter-Screen">Scriptwriter-Screen</option>
-                                        <option value="Translator">Translator</option>
+                                    <select class="form-control form-select" id="description"  required>
+                                        <option value="Writer" {% if additional_info.description == "Writer" %}selected{% endif %}>Writer</option>
+                                        <option value="Publisher" {% if additional_info.description == "Publisher" %}selected{% endif %}>Publisher</option>
+                                        <option value="Printer" {% if additional_info.description == "Printer" %}selected{% endif %}>Printer</option>
+                                        <option value="Editor" {% if additional_info.description == "Editor" %}selected{% endif %}>Editor</option>
+                                        <option value="Artist" {% if additional_info.description == "Artist" %}selected{% endif %}>Artist</option>
+                                        <option value="Digital Graphics Designer" {% if additional_info.description == "Digital Graphics Designer" %}selected{% endif %}>Digital Graphics Designer</option>
+                                        <option value="Digital Content Creator" {% if additional_info.description == "Digital Content Creator" %}selected{% endif %}>Digital Content Creator</option>
+                                        <option value="Spiritual Leader" {% if additional_info.description == "Spiritual Leader" %}selected{% endif %}>Spiritual Leader</option>
+                                        <option value="Social Media Influencer" {% if additional_info.description == "Social Media Influencer" %}selected{% endif %}>Social Media Influencer</option>
+                                        <option value="Digital Marketer" {% if additional_info.description == "Digital Marketer" %}selected{% endif %}>Digital Marketer</option>
+                                        <option value="Public Relations Manager" {% if additional_info.description == "Public Relations Manager" %}selected{% endif %}>Public Relations Manager</option>
+                                        <option value="Event Manager" {% if additional_info.description == "Event Manager" %}selected{% endif %}>Event Manager</option>
+                                        <option value="Entertainment Troupe Owner" {% if additional_info.description == "Entertainment Troupe Owner" %}selected{% endif %}>Entertainment Troupe Owner</option>
+                                        <option value="Standup Comedian" {% if additional_info.description == "Standup Comedian" %}selected{% endif %}>Standup Comedian</option>
+                                        <option value="Compere/Emcee" {% if additional_info.description == "Compere/Emcee" %}selected{% endif %}>Compere/Emcee</option>
+                                        <option value="Book Store Owner" {% if additional_info.description == "Book Store Owner" %}selected{% endif %}>Book Store Owner</option>
+                                        <option value="Digital Marketplace/Platform" {% if additional_info.description == "Digital Marketplace/Platform" %}selected{% endif %}>Digital Marketplace/Platform</option>
+                                        <option value="Poet" {% if additional_info.description == "Poet" %}selected{% endif %}>Poet</option>
+                                        <option value="Essayist" {% if additional_info.description == "Essayist" %}selected{% endif %}>Essayist</option>
+                                        <option value="Blogger" {% if additional_info.description == "Blogger" %}selected{% endif %}>Blogger</option>
+                                        <option value="Novelist" {% if additional_info.description == "Novelist" %}selected{% endif %}>Novelist</option>
+                                        <option value="Columnist" {% if additional_info.description == "Columnist" %}selected{% endif %}>Columnist</option>
+                                        <option value="Journalist" {% if additional_info.description == "Journalist" %}selected{% endif %}>Journalist</option>
+                                        <option value="Short Story Writer" {% if additional_info.description == "Short Story Writer" %}selected{% endif %}>Short Story Writer</option>
+                                        <option value="Motivational Speaker" {% if additional_info.description == "Motivational Speaker" %}selected{% endif %}>Motivational Speaker</option>
+                                        <option value="Literary Critic" {% if additional_info.description == "Literary Critic" %}selected{% endif %}>Literary Critic</option>
+                                        <option value="Literacy Reviewer" {% if additional_info.description == "Literacy Reviewer" %}selected{% endif %}>Literacy Reviewer</option>
+                                        <option value="Lyricist" {% if additional_info.description == "Lyricist" %}selected{% endif %}>Lyricist</option>
+                                        <option value="Scriptwriter-Drama" {% if additional_info.description == "Scriptwriter-Drama" %}selected{% endif %}>Scriptwriter-Drama</option>
+                                        <option value="Scriptwriter-Screen" {% if additional_info.description == "Scriptwriter-Screen" %}selected{% endif %}>Scriptwriter-Screen</option>
+                                        <option value="Translator" {% if additional_info.description == "Translator" %}selected{% endif %}>Translator</option>
                                         </select>
                                 </div>
                             </div>
@@ -310,6 +309,18 @@
                                 <button type="button" class="btn btn-primary mb-3" data-bs-toggle="modal" data-bs-target="#experienceModal" onclick="openAddModal()">
                                     Add Experience
                                 </button>
+                            </div>
+                            <div class="col-lg-12">
+                                <div class="mb-3">
+                                    <label class="form-label"style="font-family: Arial, sans-serif; font-size: 16px; font-weight: bold;">Education:</label>
+                                    <textarea name="highest_qualification"  id="highest_qualification" class="form-control" maxlength="85">{{ additional_info.highest_qualification|default:'' }}</textarea>
+                                </div>
+                            </div>
+                            <div class="col-lg-12">
+                                <div class="mb-3">
+                                    <label class="form-label"style="font-family: Arial, sans-serif; font-size: 16px; font-weight: bold;">Books Published:</label>
+                                    <textarea name="books_published"  id="books_published" class="form-control" maxlength="85">{{ additional_info.books_published|default:'' }}</textarea>
+                                </div>
                             </div>
                             <div class="col-lg-12">
                                 <div class="mb-3">
@@ -711,6 +722,14 @@
             experienceList.innerHTML = '<li class="list-group-item-experience text-center" style="list-style-type:none;">No experience details found. Add your first experience!</li>';
             return;
           }
+          experiences.sort((a, b) => {
+            // If one experience is currently working, it should come first
+            if (a.currentlyWorking && !b.currentlyWorking) return -1;
+            if (!a.currentlyWorking && b.currentlyWorking) return 1;
+        
+            // Otherwise, sort by start date (most recent first)
+            return new Date(b.startDate) - new Date(a.startDate);
+          });
       
           experiences.forEach((experience, index) => {
             const start = new Date(experience.startDate);

@@ -56,6 +56,8 @@ $(document).ready(function() {
         var experience = document.getElementById("experience").value;
         var portfolio = document.getElementById("portfolio").value;
         var short_bio = document.getElementById("short_bio").value;
+        var books_published = document.getElementById("books_published").value;
+        var highest_qualification = document.getElementById("highest_qualification").value;
         var availability = document.getElementById("availability").value;
 
         var certifications = document.getElementById("certifications").value;
@@ -161,6 +163,8 @@ $(document).ready(function() {
         formData.append('experience', experience);
         formData.append('portfolio', portfolio);
         formData.append('short_bio', short_bio);
+        formData.append('books_published', books_published);
+        formData.append('highest_qualification', highest_qualification);
         formData.append('availability', availability);
         formData.append('certifications', certifications);
         formData.append('published_works', published_works);
@@ -450,7 +454,7 @@ $(document).ready(function() {
                                         <div class="mt-3">
                                             <a href="${artistProfileURL}"  class="title h5 text-dark">${artist.name}</a>
                                             <p class="text-muted mt-1">${artist.short_bio || ''}</p>
-                                            ${skillBadges}
+                                             ${skillBadges || '<span class="text-muted">No skills Listed</span>'}
                                         </div>
                                         <div class="mt-3">
                                             <a href="${artistProfileURL}"  class="btn btn-sm btn-primary me-1">View Profile</a>
@@ -613,8 +617,27 @@ $(document).ready(function() {
 
                         var experience = document.getElementById("experience").value;
                         var certifications = document.getElementById("certifications").value;
+                        var books_published = $('#books_published').val();
+                        var highest_qualification = $('#highest_qualification').val();
                         var published_works = document.getElementById("published_works").value;
-                        var awards = document.getElementById("awards").value;
+                        var portfolio = document.getElementById("portfolio").value;
+                        var languages_read = []
+                        document.querySelectorAll('input[name="languages_read[]"]:checked').forEach(function(checkbox) {
+                            languages_read.push(checkbox.value);
+                        })
+                        console.log(languages_read);
+
+                        var languages_write = []
+                        document.querySelectorAll('input[name="languages_write[]"]:checked').forEach(function(checkbox) {
+                            languages_write.push(checkbox.value);
+                        })
+                        console.log(languages_write);
+
+                        var languages_speak = []
+                        document.querySelectorAll('input[name="languages_speak[]"]:checked').forEach(function(checkbox) {
+                            languages_speak.push(checkbox.value);
+                        })
+                        console.log(languages_speak);
 
                         var selectedSkills = [];
 
@@ -701,15 +724,44 @@ $(document).ready(function() {
                         <h5 class="mb-4">Introduction:</h5>
                         <p class="text-muted">I am <strong>${name},</strong>${introduction}</p>
                        
-                         
+                             <h5 class="mt-4">Languages:</h5>
+                        <div class="d-flex flex-wrap gap-2">
+                            <h6>Languages Speak:</h6>
+                          
+                                <span>${languages_speak}</span>
+                           
+                        </div>
+
+                        <div class="d-flex flex-wrap gap-2">
+                            <h6>Languages Read:</h6>
+                           
+                                <span>${languages_read}</span>
+                           
+                        </div>
+
+                        <div class="d-flex flex-wrap gap-2">
+                            <h6>Languages Write:</h6>
+                                <span>${languages_write}</span>
+                        </div>
                                 <h5 class="mt-4">Skills:</h5>
                             <div class="d-flex flex-wrap gap-2" id="skills-container">
                                 <!-- Skills will be dynamically added here -->
                             </div>
+                             <h5 class="mt-4">Education:</h5>
+                            <div class="d-flex flex-wrap gap-2" id="highest_qualification">
+                                <!-- Books Published will be dynamically added here -->
+                                <span>${highest_qualification}</span>
+                            </div> 
                             <h5 class="mt-4">Experience Details:</h5>
                             <div class="d-flex flex-column gap-3" id="experience-container">
                                     <!-- Experience cards will be dynamically added here -->
                                 </div>
+
+                              <h5 class="mt-4">Books Published:</h5>
+                            <div class="d-flex flex-wrap gap-2" id="books_published">
+                                <!-- Books Published will be dynamically added here -->
+                                <span>${books_published}</span>
+                            </div>   
 
                     </div>
 
@@ -744,13 +796,10 @@ $(document).ready(function() {
                                         <span class="fw-medium">${phone}</span>
                                     </div>
                                     <div class="d-flex align-items-center justify-content-between mt-3">
-                                        <span class="d-inline-flex align-items-center text-muted fw-medium"><i data-feather="briefcase" class="fea icon-sm me-2"></i> Experience:</span>
-                                        <span class="fw-medium">${experience}</span>
+                                        <span class="d-inline-flex align-items-center text-muted fw-medium"><i data-feather="globe" class="fea icon-sm me-2"></i> Website:</span>
+                                        <span class="fw-medium">${portfolio}</span>
                                     </div>
-                                    <div class="d-flex align-items-center justify-content-between mt-3"style="flex-wrap: wrap; line-height: 1.5; word-break: break-word;">
-                                        <span class="d-inline-flex align-items-center text-muted  fw-medium" style="margin-right: 10px; white-space: nowrap;"><i data-feather="award" class="fea icon-sm me-2"></i> Awards:</span>
-                                        <span class="fw-medium" style="flex: 1; line-height: 1.5; text-align: right;">${awards}</span>
-                                    </div>
+                                    
                                     <div class="d-flex align-items-center justify-content-between mt-3">
                                         <span class="text-muted fw-medium">Social:</span>
                                         

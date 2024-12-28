@@ -118,10 +118,13 @@ class ArtistMasterAdditional(models.Model):
     experience = models.CharField(blank=True, null=True,max_length=500)
     experience_details = models.ManyToManyField(Experience, related_name='artist_experiences', blank=True)  
     portfolio = models.URLField(blank=True, null=True) 
-    short_bio = models.TextField(blank=True, null=True) 
+    short_bio = models.TextField(blank=True, null=True)    
+    books_published = models.TextField(blank=True, null=True)
+    highest_qualification = models.TextField(blank=True, null=True)       
     availability = models.CharField(max_length=50, choices=availability_choices,blank=True,null=True)
     skills = models.ManyToManyField(Skill, related_name='skills', blank=True)    
-    images = models.ManyToManyField(Gallery, related_name='images', blank=True)    
+    images = models.ManyToManyField(Gallery, related_name='images', blank=True) 
+    
  
     certifications = models.TextField(blank=True, null=True)  
     published_works = models.TextField(blank=True, null=True) 

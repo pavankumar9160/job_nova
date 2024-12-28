@@ -205,18 +205,21 @@ def artist_profile_updated_one(request):
 
    
     artists_with_details = []
-    
+
     artists = ArtistMasterBasic.objects.all().exclude(is_superuser=True).exclude(id=user.id).order_by('?')[:3]
-    additional_details = ArtistMasterAdditional.objects.select_related('user').prefetch_related('skills')
 
     for artist in artists:
-        additional = additional_details.filter(user=artist).first()
-        skills = additional_info.skills.all() if additional_info else []
+  
+        additional = ArtistMasterAdditional.objects.filter(user=artist).select_related('user').prefetch_related('skills').first()
+     
+        skills = additional.skills.all() if additional else []
+   
         artists_with_details.append({
             'basic': artist,
             'additional': additional,
             'skills': skills
         })
+
 
     return render(request,
                   'candidate-profile_updated_one.html',
@@ -345,10 +348,13 @@ def artists(request):
 
     # Filter artists based on the search query
     if search_query:
-        artists = ArtistMasterBasic.objects.filter(Q(additional_info__skills__name__icontains=search_query) |  # Search by skills
-              # Search by description
-            Q(name__icontains=search_query)  # Search by artist name
-        ).prefetch_related('additional_info', 'additional_info__skills').distinct().exclude(is_superuser=True).distinct()
+        artists = ArtistMasterBasic.objects.annotate(
+       full_name=Concat('additional_info__firstname', Value(' '), 'additional_info__lastname')
+                ).filter(
+                    Q(additional_info__skills__name__icontains=search_query) |  # Search by skills
+                    Q(full_name__icontains=search_query) |  # Combined firstname and lastname
+                    Q(name__icontains=search_query)  # Search by artist name
+                ).prefetch_related('additional_info', 'additional_info__skills').exclude(is_superuser=True).distinct()
     else:
         # Return all artists if no search query is provided
         artists = ArtistMasterBasic.objects.all().exclude(is_superuser=True)
@@ -928,6 +934,12 @@ def update_artist_details_api(request):
         
         if request.POST.get('short_bio'):
             artist.short_bio = request.POST.get('short_bio')
+            
+        if request.POST.get('highest_qualification'):
+            artist.highest_qualification = request.POST.get('highest_qualification')    
+        
+        if request.POST.get('books_published'):
+            artist.books_published = request.POST.get('books_published')    
         
         if request.POST.get('availability'):
             artist.availability = request.POST.get('availability')
@@ -1225,24 +1237,28 @@ def check_profile_completion(request):
 from django.db.models import Q
 from django.http import JsonResponse
 from .models import ArtistMasterBasic, Skill
+from django.db.models import Value
+from django.db.models.functions import Concat
 
 def search_artists(request):
     search_query = request.GET.get('search_query', '')
 
     if search_query:
         # Filter artists based on the search query
-        artists = ArtistMasterBasic.objects.filter(
-            Q(additional_info__skills__name__icontains=search_query) |  # Search by skills
-            Q(additional_info__description__icontains=search_query) |
-            Q(additional_info__country__icontains=search_query) |
-            Q(additional_info__state__icontains=search_query) |
-            Q(additional_info__languages_speak__icontains=search_query) |
-            # Search by description
-            Q(name__icontains=search_query)  # Search by artist name
-        ).prefetch_related('additional_info', 'additional_info__skills').distinct()  # Prefetch related skills
+       artists = ArtistMasterBasic.objects.annotate(
+       full_name=Concat('additional_info__firstname', Value(' '), 'additional_info__lastname')
+                ).filter(
+                    Q(additional_info__skills__name__icontains=search_query) |  # Search by skills
+                    Q(additional_info__description__icontains=search_query) |
+                    Q(additional_info__country__icontains=search_query) |
+                    Q(additional_info__state__icontains=search_query) |
+                    Q(additional_info__languages_speak__icontains=search_query) |
+                    Q(full_name__icontains=search_query) |  # Combined firstname and lastname
+                    Q(name__icontains=search_query)  # Search by artist name
+                ).prefetch_related('additional_info', 'additional_info__skills').exclude(is_superuser=True).distinct() # Prefetch related skills
 
     else:
-        artists = ArtistMasterBasic.objects.all().prefetch_related('additional_info', 'additional_info__skills')
+        artists = ArtistMasterBasic.objects.all().prefetch_related('additional_info', 'additional_info__skills').exclude(is_superuser=True)
 
     artists_data = []
     for artist in artists:
