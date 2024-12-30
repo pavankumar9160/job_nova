@@ -67,6 +67,59 @@
                             </div>
                             
                             <!-- SEARCH -->
+                            <div class="mt-4">
+                                <h6 class="mb-0">Age Range</h6>
+                                <input type="range" class="form-range" id="ageRange" min="18" max="100" value="18" step="1" >
+                                <div class="d-flex justify-content-between">
+                                    <span>18</span>
+                                    <span>100</span>
+                                </div>
+                                <p id="ageRangeValue">Selected Age:0-18</p>
+                            </div>
+                            
+                            <!-- Years of Experience Range -->
+                            <div class="mt-4">
+                                <h6 class="mb-0">Years of Experience</h6>
+                                <div id="experienceOptions">
+                                    <div class="form-check">
+                                        <input class="form-check-input experience_checkbox" type="checkbox" value="0-2" id="experience1">
+                                        <label class="form-check-label" for="experience1">0-2 years</label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input class="form-check-input experience_checkbox" type="checkbox" value="3-5" id="experience2">
+                                        <label class="form-check-label" for="experience2">3-5 years</label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input class="form-check-input experience_checkbox" type="checkbox" value="6-10" id="experience3">
+                                        <label class="form-check-label" for="experience3">6-10 years</label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input class="form-check-input experience_checkbox" type="checkbox" value="11+" id="experience4">
+                                        <label class="form-check-label" for="experience4">11+ years</label>
+                                    </div>
+                                </div>
+                                
+                            </div>
+                            <!-- Languages Dropdown Selection -->
+<!-- Languages Dropdown Selection (Single Selection) -->
+<div class="mt-4">
+    <h6 class="mb-0">Language</h6>
+    <div id="languageOptions">
+        <select class="form-select form-control border mt-2" aria-label="Default select example"  id="languageSelect">
+            <option value="" selected> Select Languaage</option>
+            <option value="English">English</option>
+            <option value="Hindi">Hindi</option>
+            <option value="Odia">Odia</option>
+            <option value="Telugu">Telugu</option>
+            <option value="Tamil">Tamil</option>
+            <option value="Kannada">Kannada</option>
+            <option value="Malayalam">Malayalam</option>
+        </select>
+    </div>
+</div>
+
+
+                               
     
                             <!-- Categories -->
                             <div class="mt-4">
@@ -180,7 +233,7 @@
                                 <div class="skill-group">
                                     <div class="d-flex justify-content-between mt-2">
                                         <div class="form-check">
-                                            <input class="form-check-input" type="checkbox" value="Writer" id="writer">
+                                            <input class="form-check-input skills_checkbox" type="checkbox" value="Writer" id="writer">
                                             <label class="form-check-label" for="writer">
                                                 Writer
                                             </label>
@@ -197,7 +250,7 @@
 
                                     <div class="d-flex justify-content-between mt-2">
                                         <div class="form-check">
-                                            <input class="form-check-input" type="checkbox" value="Editor" id="editor">
+                                            <input class="form-check-input skills_checkbox" type="checkbox" value="Editor" id="editor">
                                             <label class="form-check-label" for="editor">
                                                 Editor
                                             </label>
@@ -212,7 +265,7 @@
                                     </div>
                                     <div class="d-flex justify-content-between mt-2">
                                         <div class="form-check">
-                                            <input class="form-check-input" type="checkbox" value="Printer" id="printer">
+                                            <input class="form-check-input skills_checkbox" type="checkbox" value="Printer" id="printer">
                                             <label class="form-check-label" for="printer">
                                                 Printer
                                             </label>
@@ -228,7 +281,7 @@
                                     
                                     <div class="d-flex justify-content-between mt-2">
                                         <div class="form-check">
-                                            <input class="form-check-input" type="checkbox" value="Artist" id="artist">
+                                            <input class="form-check-input skills_checkbox" type="checkbox" value="Artist" id="artist">
                                             <label class="form-check-label" for="artist">
                                                 Artist
                                             </label>
@@ -244,7 +297,7 @@
                                     
                                     <div class="d-flex justify-content-between mt-2">
                                         <div class="form-check">
-                                            <input class="form-check-input" type="checkbox" value="Digital Graphic Designer" id="digital-graphic-designer">
+                                            <input class="form-check-input skills_checkbox" type="checkbox" value="Digital Graphic Designer" id="digital-graphic-designer">
                                             <label class="form-check-label" for="digital-graphic-designer">
                                                 Digital Graphic Designer
                                             </label>
@@ -260,7 +313,7 @@
                                     
                                     <div class="d-flex justify-content-between mt-2">
                                         <div class="form-check">
-                                            <input class="form-check-input" type="checkbox" value="Digital Content Creator" id="digital-content-creator">
+                                            <input class="form-check-input skills_checkbox" type="checkbox" value="Digital Content Creator" id="digital-content-creator">
                                             <label class="form-check-label" for="digital-content-creator">
                                                 Digital Content Creator
                                             </label>
@@ -276,7 +329,7 @@
                                     
                                     <div class="d-flex justify-content-between mt-2">
                                         <div class="form-check">
-                                            <input class="form-check-input" type="checkbox" value="Spiritual Leader" id="spiritual-leader">
+                                            <input class="form-check-input skills_checkbox" type="checkbox" value="Spiritual Leader" id="spiritual-leader">
                                             <label class="form-check-label" for="spiritual-leader">
                                                 Spiritual Leader
                                             </label>
@@ -291,7 +344,7 @@
                                     </div>
                                     <div class="d-flex justify-content-between mt-2">
                                         <div class="form-check">
-                                            <input class="form-check-input" type="checkbox" value="Social Media Influencer" id="social-media-influencer">
+                                            <input class="form-check-input skills_checkbox" type="checkbox" value="Social Media Influencer" id="social-media-influencer">
                                             <label class="form-check-label" for="social-media-influencer">
                                                 Social Media Influencer
                                             </label>
@@ -306,7 +359,7 @@
                                     </div>
                                     <div class="d-flex justify-content-between mt-2">
                                         <div class="form-check">
-                                            <input class="form-check-input" type="checkbox" value="Digital Marketer" id="digital-marketer">
+                                            <input class="form-check-input skills_checkbox" type="checkbox" value="Digital Marketer" id="digital-marketer">
                                             <label class="form-check-label" for="digital-marketer">
                                                 Digital Marketer
                                             </label>
@@ -321,7 +374,7 @@
                                     </div>
                                     <div class="d-flex justify-content-between mt-2">
                                         <div class="form-check">
-                                            <input class="form-check-input" type="checkbox" value="Public Relations Manager" id="public-relations-manager">
+                                            <input class="form-check-input skills_checkbox" type="checkbox" value="Public Relations Manager" id="public-relations-manager">
                                             <label class="form-check-label" for="public-relations-manager">
                                                 Public Relations Manager
                                             </label>
@@ -336,7 +389,7 @@
                                     </div>
                                     <div class="d-flex justify-content-between mt-2">
                                         <div class="form-check">
-                                            <input class="form-check-input" type="checkbox" value="Event Manager" id="event-manager">
+                                            <input class="form-check-input skills_checkbox" type="checkbox" value="Event Manager" id="event-manager">
                                             <label class="form-check-label" for="event-manager">
                                                 Event Manager
                                             </label>
@@ -351,7 +404,7 @@
                                     </div>
                                     <div class="d-flex justify-content-between mt-2">
                                         <div class="form-check">
-                                            <input class="form-check-input" type="checkbox" value="Entertainment Troupe Owner" id="entertainment-troupe-owner">
+                                            <input class="form-check-input skills_checkbox" type="checkbox" value="Entertainment Troupe Owner" id="entertainment-troupe-owner">
                                             <label class="form-check-label" for="entertainment-troupe-owner">
                                                 Entertainment Troupe Owner
                                             </label>
@@ -367,7 +420,7 @@
                                     
                                     <div class="d-flex justify-content-between mt-2">
                                         <div class="form-check">
-                                            <input class="form-check-input" type="checkbox" value="Standup Comedian" id="standup-comedian">
+                                            <input class="form-check-input skills_checkbox" type="checkbox" value="Standup Comedian" id="standup-comedian">
                                             <label class="form-check-label" for="standup-comedian">
                                                 Standup Comedian
                                             </label>
@@ -383,7 +436,7 @@
                                     
                                     <div class="d-flex justify-content-between mt-2">
                                         <div class="form-check">
-                                            <input class="form-check-input" type="checkbox" value="Compere/Emcee" id="compere-emcee">
+                                            <input class="form-check-input skills_checkbox" type="checkbox" value="Compere/Emcee" id="compere-emcee">
                                             <label class="form-check-label" for="compere-emcee">
                                                 Compere/Emcee
                                             </label>
@@ -399,7 +452,7 @@
                                     
                                     <div class="d-flex justify-content-between mt-2">
                                         <div class="form-check">
-                                            <input class="form-check-input" type="checkbox" value="Book Store Owner" id="book-store-owner">
+                                            <input class="form-check-input skills_checkbox" type="checkbox" value="Book Store Owner" id="book-store-owner">
                                             <label class="form-check-label" for="book-store-owner">
                                                 Book Store Owner
                                             </label>
@@ -415,7 +468,7 @@
                                     
                                     <div class="d-flex justify-content-between mt-2">
                                         <div class="form-check">
-                                            <input class="form-check-input" type="checkbox" value="Digital Marketplace/Platform" id="digital-marketplace-platform">
+                                            <input class="form-check-input skills_checkbox" type="checkbox" value="Digital Marketplace/Platform" id="digital-marketplace-platform">
                                             <label class="form-check-label" for="digital-marketplace-platform">
                                                 Digital Marketplace/Platform
                                             </label>
@@ -432,7 +485,7 @@
                                     <div class="skill-group hidden-skills d-none">
                                     <div class="d-flex justify-content-between mt-2">
                                         <div class="form-check">
-                                            <input class="form-check-input" type="checkbox" value="Poet" id="poet">
+                                            <input class="form-check-input skills_checkbox" type="checkbox" value="Poet" id="poet">
                                             <label class="form-check-label" for="poet">
                                                 Poet
                                             </label>
@@ -449,7 +502,7 @@
                             
                                     <div class="d-flex justify-content-between mt-2">
                                         <div class="form-check">
-                                            <input class="form-check-input" type="checkbox" value="Blogger" id="blogger">
+                                            <input class="form-check-input skills_checkbox" type="checkbox" value="Blogger" id="blogger">
                                             <label class="form-check-label" for="blogger">
                                                 Blogger
                                             </label>
@@ -465,7 +518,7 @@
 
                                     <div class="d-flex justify-content-between mt-2">
                                         <div class="form-check">
-                                            <input class="form-check-input" type="checkbox" value="Novelist" id="novelist">
+                                            <input class="form-check-input skills_checkbox" type="checkbox" value="Novelist" id="novelist">
                                             <label class="form-check-label" for="novelist">
                                                 Novelist
                                             </label>
@@ -482,7 +535,7 @@
 
                                     <div class="d-flex justify-content-between mt-2">
                                         <div class="form-check">
-                                            <input class="form-check-input" type="checkbox" value="Publisher" id="publisher">
+                                            <input class="form-check-input skills_checkbox" type="checkbox" value="Publisher" id="publisher">
                                             <label class="form-check-label" for="publisher">
                                                 Publisher
                                             </label>
@@ -501,7 +554,7 @@
 
                                     <div class="d-flex justify-content-between mt-2">
                                         <div class="form-check">
-                                            <input class="form-check-input" type="checkbox" value="Short Story Writer" id="short-story-writer">
+                                            <input class="form-check-input skills_checkbox" type="checkbox" value="Short Story Writer" id="short-story-writer">
                                             <label class="form-check-label" for="short-story-writer">
                                                 Short Story Writer
                                             </label>
@@ -518,7 +571,7 @@
 
                                     <div class="d-flex justify-content-between mt-2">
                                         <div class="form-check">
-                                            <input class="form-check-input" type="checkbox" value="Motivational Speaker" id="motivational-speaker">
+                                            <input class="form-check-input skills_checkbox" type="checkbox" value="Motivational Speaker" id="motivational-speaker">
                                             <label class="form-check-label" for="motivational-speaker">
                                                 Motivational Speaker
                                             </label>
@@ -533,7 +586,7 @@
                                      </div>
                                      <div class="d-flex justify-content-between mt-2">
                                         <div class="form-check">
-                                            <input class="form-check-input" type="checkbox" value="Essayist" id="essayist">
+                                            <input class="form-check-input skills_checkbox" type="checkbox" value="Essayist" id="essayist">
                                             <label class="form-check-label" for="essayist">
                                                 Essayist
                                             </label>
@@ -549,7 +602,7 @@
                                     
                                     <div class="d-flex justify-content-between mt-2">
                                         <div class="form-check">
-                                            <input class="form-check-input" type="checkbox" value="Columnist" id="columnist">
+                                            <input class="form-check-input skills_checkbox" type="checkbox" value="Columnist" id="columnist">
                                             <label class="form-check-label" for="columnist">
                                                 Columnist
                                             </label>
@@ -566,7 +619,7 @@
                                     
                                     <div class="d-flex justify-content-between mt-2">
                                         <div class="form-check">
-                                            <input class="form-check-input" type="checkbox" value="Journalist" id="journalist">
+                                            <input class="form-check-input skills_checkbox" type="checkbox" value="Journalist" id="journalist">
                                             <label class="form-check-label" for="journalist">
                                                 Journalist
                                             </label>
@@ -582,7 +635,7 @@
                                     
                                     <div class="d-flex justify-content-between mt-2">
                                         <div class="form-check">
-                                            <input class="form-check-input" type="checkbox" value="Literacy Reviewer" id="literacyReviewer">
+                                            <input class="form-check-input skills_checkbox" type="checkbox" value="Literacy Reviewer" id="literacyReviewer">
                                             <label class="form-check-label" for="literacyReviewer">
                                                 Literacy Reviewer
                                             </label>
@@ -598,7 +651,7 @@
                                     
                                     <div class="d-flex justify-content-between mt-2">
                                         <div class="form-check">
-                                            <input class="form-check-input" type="checkbox" value="Lyricist" id="lyricist">
+                                            <input class="form-check-input skills_checkbox" type="checkbox" value="Lyricist" id="lyricist">
                                             <label class="form-check-label" for="lyricist">
                                                 Lyricist
                                             </label>
@@ -614,7 +667,7 @@
                                     
                                     <div class="d-flex justify-content-between mt-2">
                                         <div class="form-check">
-                                            <input class="form-check-input" type="checkbox" value="Scriptwriter-Drama" id="scriptwriterDrama">
+                                            <input class="form-check-input skills_checkbox" type="checkbox" value="Scriptwriter-Drama" id="scriptwriterDrama">
                                             <label class="form-check-label" for="scriptwriterDrama">
                                                 Scriptwriter-Drama
                                             </label>
@@ -630,7 +683,7 @@
                                     
                                     <div class="d-flex justify-content-between mt-2">
                                         <div class="form-check">
-                                            <input class="form-check-input" type="checkbox" value="Scriptwriter-Screen" id="scriptwriterScreen">
+                                            <input class="form-check-input skills_checkbox" type="checkbox" value="Scriptwriter-Screen" id="scriptwriterScreen">
                                             <label class="form-check-label" for="scriptwriterScreen">
                                                 Scriptwriter-Screen
                                             </label>
@@ -647,7 +700,7 @@
                                 
                                     <div class="d-flex justify-content-between mt-2">
                                         <div class="form-check">
-                                            <input class="form-check-input" type="checkbox" value="Literary Critic" id="literary-critic">
+                                            <input class="form-check-input skills_checkbox" type="checkbox" value="Literary Critic" id="literary-critic">
                                             <label class="form-check-label" for="literary-critic">
                                                 Literary Critic
                                             </label>
@@ -663,7 +716,7 @@
                                 
                                     <div class="d-flex justify-content-between mt-2">
                                         <div class="form-check">
-                                            <input class="form-check-input" type="checkbox" value="Translator" id="translator">
+                                            <input class="form-check-input skills_checkbox" type="checkbox" value="Translator" id="translator">
                                             <label class="form-check-label" for="translator">
                                                 Translator
                                             </label>
@@ -757,6 +810,16 @@
                                         toggleButton.textContent = 'See More'; // Revert button text
                                     }
                                 });
+
+                                // Age Range Slider
+    const ageRange = document.getElementById('ageRange');
+    const ageRangeValue = document.getElementById('ageRangeValue');
+    ageRange.addEventListener('input', function() {
+        ageRangeValue.textContent = `Selected Age: 18-${ageRange.value}`;
+    });
+   
+    
+    
                                 
                             </script>
                             

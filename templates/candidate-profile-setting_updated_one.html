@@ -86,26 +86,31 @@
                             <div class="col-md-6">
                                 <div class="mb-3">
                                     <label class="form-label" style="font-family: Arial, sans-serif; font-size: 16px; font-weight: bold;">Profile Picture:</label>
-                                    <input name="profile_picture" id="profile_picture" type="file" class="form-control" accept="image/*">
+                                    <input name="profile_picture" id="profile_picture" type="file" class="form-control" accept="image/*" onchange="updateProfilePictureName()">
+                                    {% if additional_info.profile_picture %}
+                                    <!-- Remove 'profiles/' from the file path -->
+                                    <p id="profile-picture-name">{{ additional_info.profile_picture.name|slice:"9:" }}</p>
+                                {% endif %}
                                 </div>
                             </div>
+                           
                             <div class="col-md-6">
                                 <div class="mb-3">
-                                    <label class="form-label" style="font-family: Arial, sans-serif; font-size: 16px; font-weight: bold;" for="houseNumber">Address 1:</label>
+                                    <label class="form-label" style="font-family: Arial, sans-serif; font-size: 16px; font-weight: bold;" for="houseNumber">Address 1:<span class="text-danger" >*</span></label>
                                     <input type="text" value="{{ additional_info.address1|default:'' }}"  name="houseNumber" id="houseNumber" class="form-control" maxlength="50" placeholder="e.g.,House Number/Building Name">
                                 </div>
                             </div>
                             
                             <div class="col-md-6">
                                 <div class="mb-3">
-                                    <label class="form-label" style="font-family: Arial, sans-serif; font-size: 16px; font-weight: bold;" for="roadName">Address 2:</label>
+                                    <label class="form-label" style="font-family: Arial, sans-serif; font-size: 16px; font-weight: bold;" for="roadName">Address 2:<span class="text-danger" >*</span></label>
                                     <input type="text" value="{{ additional_info.address2|default:'' }}" name="roadName" id="roadName" class="form-control" maxlength="100" placeholder="e.g., Road Name/Area/Colony" >
                                 </div>
                             </div>
                             
                             <div class="col-md-6">
                                 <div class="mb-3">
-                                    <label class="form-label" for="state" style="font-family: Arial, sans-serif; font-size: 16px; font-weight: bold;">Address 3:</label>
+                                    <label class="form-label" for="state" style="font-family: Arial, sans-serif; font-size: 16px; font-weight: bold;">Address 3:<span class="text-danger" >*</span></label>
                                     <input type="text"  value="{{ additional_info.state|default:'' }}" name="state" id="state" class="form-control" maxlength="50" placeholder="e.g.,District,City,State">
                                 </div>
                             </div>
@@ -121,7 +126,7 @@
                            
                             <div class="col-md-6">
                                 <div class="mb-3">
-                                    <label class="form-label"style="font-family: Arial, sans-serif; font-size: 16px; font-weight: bold;">Location:</label>
+                                    <label class="form-label"style="font-family: Arial, sans-serif; font-size: 16px; font-weight: bold;">Location:<span class="text-danger" >*</span></label>
                                     <select class="form-control form-select" value="{{ additional_info.country|default:'' }}" id="Country">
                                                 <option value="India">India</option>
                                                 <option value="USA">USA</option>
@@ -181,9 +186,23 @@
                                         multiple
                                     >
                                     <small class="form-text text-muted">You can select multiple image files.</small>
-                                    <ul id="file-list" class="mt-2 list-unstyled"></ul>
-                                </div>
-                            </div>
+        
+        <!-- File names will be displayed here -->
+        {% if additional_info.images.all %}
+        <ul id="file-list" class="mt-2 list-unstyled" style="font-family: Arial, sans-serif; font-size: 14px; color: #333; padding-left: 0;">
+                            {% for images in additional_info.images.all %}
+           
+                <li style="margin-bottom: 2px;">{{ images.file_name.name|slice:"8:" }}</li>
+          
+            {% endfor %}
+        </ul>
+        {% else %}
+            <ul id="file-list" class="mt-2 list-unstyled" style="font-family: Arial, sans-serif; font-size: 14px; color: #333; padding-left: 0;">
+                <!-- Dynamically added file names will appear here -->
+            </ul>
+        {% endif %}
+    </div>
+</div>
                             <div class="col-lg-12">
                                 <div class="mb-3">
                                     <label class="form-label"style="font-family: Arial, sans-serif; font-size: 16px; font-weight: bold;">Short Bio:</label>
@@ -198,7 +217,7 @@
                             </div>
                             <div class="col-md-12">
                                 <div class="mb-3">
-                                    <label class="form-label"style="font-family: Arial, sans-serif; font-size: 16px; font-weight: bold;">Languages:</label>
+                                    <label class="form-label"style="font-family: Arial, sans-serif; font-size: 16px; font-weight: bold;">Languages:<span class="text-danger" >*</span></label>
                                     <table class="table table-bordered">
                                         <thead>
                                             <tr>
@@ -485,7 +504,20 @@
                                         }
                                     });
                                 });
+                                
+    // Function to update the displayed file name when a new profile picture is selected
+    function updateProfilePictureName() {
+        const fileInput = document.getElementById('profile_picture');
+        const fileNameDisplay = document.getElementById('profile-picture-name');
 
+        if (fileInput.files && fileInput.files[0]) {
+            // Update the display with the new file name
+            fileNameDisplay.textContent = fileInput.files[0].name;
+        } else {
+            // Reset the display if no file is selected (in case the user removes the file)
+            fileNameDisplay.textContent = '';
+        }
+    }
                                 
                                 
                             </script>

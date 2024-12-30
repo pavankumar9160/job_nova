@@ -959,9 +959,9 @@ def update_artist_details_api(request):
             try:
                 experiences_data = json.loads(request.POST['experiences_data'])  # Parse JSON data from the request body
 
-                if experiences_data: # Check if the artist has any existing experiences and clear them if needed
+                if experiences_data:  # If there is experience data provided
+                    # Check if the artist has any existing experiences and clear them if needed
                     if artist.experience_details.exists():
-                        
                         artist.experience_details.all().delete()
 
                     # Save each new experience
@@ -981,7 +981,7 @@ def update_artist_details_api(request):
                             start_date = datetime.strptime(start_date, '%Y-%m-%d').date()  # Assuming format is 'YYYY-MM-DD'
                         except ValueError:
                             return JsonResponse({'error': 'Invalid start_date format'}, status=400)
-                        
+
                         if end_date:
                             try:
                                 end_date = datetime.strptime(end_date, '%Y-%m-%d').date()
@@ -997,13 +997,12 @@ def update_artist_details_api(request):
                             start_date=start_date,
                             end_date=end_date,
                             currently_working=currently_working,
-                            
                         )
 
                         artist.experience_details.add(experience)
                 else:
-            # If no new experience data is provided, don't clear the existing experiences
-                 pass
+                    # If no new experience data is provided, skip this part and don't throw an error
+                    pass
             except json.JSONDecodeError:
                 return JsonResponse({'error': 'Invalid experiences data'}, status=400)
 
@@ -1278,15 +1277,57 @@ def search_artists(request):
     return JsonResponse({'artists_with_details': artists_data})
 
 
-
+from datetime import datetime
+from django.db.models import F, ExpressionWrapper, IntegerField
 
 def filter_artists(request):
+    
+    total_experience_years = 0
+    total_experience_months = 0
    
     category = request.GET.get('category', '')
     location = request.GET.get('location', '')
     selected_skills = request.GET.getlist('skills[]')
-    
+    years_of_experience = request.GET.getlist('years_of_experience[]')
+    age = request.GET.get('age', '')
+    language= request.GET.get('language', '')
     artists = ArtistMasterAdditional.objects.all()
+    
+    # Filtering based on years of experience
+    if years_of_experience:
+        filtered_artists = []
+        for artist in artists:
+            total_experience_years = 0
+            total_experience_months = 0
+            experience_details = artist.experience_details.all()
+       
+            # Calculate total experience for each artist
+            for experience in experience_details:
+                start_date = experience.start_date
+                end_date = experience.end_date if not experience.currently_working else datetime.now().date()  # Consider current date if still working
+
+                years, months = calculate_experience_duration(start_date, end_date)
+                total_experience_years += years
+                total_experience_months += months
+
+            # Normalize months to years and months
+            total_experience_years += total_experience_months // 12
+            total_experience_months = total_experience_months % 12
+
+            # Compare total years of experience with the selected filter range
+            for range_str in years_of_experience:
+                range_parts = range_str.split('-')
+                if len(range_parts) == 2:
+                    min_exp = int(range_parts[0])
+                    max_exp = int(range_parts[1])
+                    if min_exp <= total_experience_years <= max_exp:
+                        filtered_artists.append(artist)
+                        break
+                elif range_str == "11+" and total_experience_years >= 11:
+                    filtered_artists.append(artist)
+                    break
+
+        artists = ArtistMasterAdditional.objects.filter(pk__in=[a.pk for a in filtered_artists])
 
     if category:
         artists = artists.filter(description=category)
@@ -1294,6 +1335,24 @@ def filter_artists(request):
     if location:
         artists = artists.filter(country=location)
         
+    if language:
+        artists = artists.filter(languages_speak__icontains=language)    
+  
+    if age:
+        try:
+        
+            age_int = int(age)
+
+            current_date = datetime.now()
+            current_year = current_date.year
+
+            birth_year = current_year - age_int
+
+            artists = artists.filter(dob__year__lte=birth_year)
+
+        except ValueError:
+            return JsonResponse({'error': 'Invalid age provided'}, status=400)
+     
     if selected_skills:
         
         skill_filter = Q()

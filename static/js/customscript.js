@@ -87,37 +87,39 @@ $(document).ready(function() {
         // Select all list items
         const listItems = document.querySelectorAll('.list-group-item-experience');
 
+        if (listItems.length > 0) {
+            listItems.forEach((listItem) => {
+                // Get the entire text content of the <div> containing the data
+                const divElement = listItem.querySelector('div');
+                const divContent = divElement ? divElement.textContent.trim() : '';
 
-        listItems.forEach((listItem) => {
-            // Get the entire text content of the <div> containing the data
-            const divElement = listItem.querySelector('div');
-            const divContent = divElement ? divElement.textContent.trim() : '';
+                // Extract designation
+                const designationMatch = divContent.match(/^(.*) at/);
+                const designation = designationMatch ? designationMatch[1].trim() : '';
 
-            // Extract designation
-            const designationMatch = divContent.match(/^(.*) at/);
-            const designation = designationMatch ? designationMatch[1].trim() : '';
+                // Extract company name
+                const companyMatch = divContent.match(/at\s+(.*?)\s+\(/)
+                const company = companyMatch ? companyMatch[1].trim() : '';
 
-            // Extract company name
-            const companyMatch = divContent.match(/at\s+(.*?)\s+\(/)
-            const company = companyMatch ? companyMatch[1].trim() : '';
+                // Extract the full date range
+                const dateRangeMatch = divContent.match(/\(([^)]+)\)/);
+                const dateRange = dateRangeMatch ? dateRangeMatch[1].trim() : '';
+                const [startDate, endDate] = dateRange.split('to').map(date => date.trim());
 
-            // Extract the full date range
-            const dateRangeMatch = divContent.match(/\(([^)]+)\)/);
-            const dateRange = dateRangeMatch ? dateRangeMatch[1].trim() : '';
-            const [startDate, endDate] = dateRange.split('to').map(date => date.trim());
-
-            // Determine if currently working
-            const currentlyWorking = endDate === 'Present';
-
-            // Push data to the experiences array
-            experiences.push({
-                designation,
-                company,
-                startDate, // Full start date
-                endDate: currentlyWorking ? null : endDate, // Full end date or null if "Present"
-                currentlyWorking,
+                // Determine if currently working
+                const currentlyWorking = endDate === 'Present';
+                if (designation && company && startDate) {
+                    // Push data to the experiences array
+                    experiences.push({
+                        designation,
+                        company,
+                        startDate, // Full start date
+                        endDate: currentlyWorking ? null : endDate, // Full end date or null if "Present"
+                        currentlyWorking,
+                    });
+                }
             });
-        });
+        }
 
         console.log("experience_data", experiences);
 
@@ -128,7 +130,7 @@ $(document).ready(function() {
             selectedSkills.push($(this).val());
         });
 
-        if (!firstname || !lastname || !gender || !dob || !contact_number || !email || !selectedSkills || selectedSkills.length === 0 || !description) {
+        if (!address1 || !address2 || !state || !firstname || !lastname || !country || !gender || !dob || !contact_number || !email || !selectedSkills || !languages_read || !languages_write || !languages_speak || languages_speak.length === 0 || languages_write.length === 0 || languages_read.length === 0 || selectedSkills.length === 0 || !description) {
             toastr.error("please fill all the required details")
 
             return
@@ -201,7 +203,7 @@ $(document).ready(function() {
                 var errors = xhr.responseJSON;
                 var firstKey = Object.keys(errors)[0];
                 var firstError = errors[firstKey][0];
-                toastr.error(firstError, 'Error');
+                toastr.error(errors, 'error');
             }
         });
 
@@ -442,7 +444,7 @@ $(document).ready(function() {
                         var artistProfileURL = artistProfileBaseURL + artist.id + "/"; // Construct URL dynamically
                         var artistHTML = `
                             <div class="col-md-6 col-12">
-                                <div class="candidate-card position-relative overflow-hidden text-center shadow rounded p-4" style="min-height: 400px; display: flex; flex-direction: column; justify-content: space-between;">
+                                <div class="candidate-card position-relative overflow-hidden text-center shadow rounded p-4"  style="min-height: 100%; display: flex; flex-direction: column; justify-content: space-between;">
                                     <div class="ribbon ribbon-left overflow-hidden">
                                         <span class="text-center d-block bg-warning shadow small h6">
                                             <i class="mdi mdi-star"></i>
@@ -498,8 +500,17 @@ $(document).ready(function() {
         // Get filter values
         var category = $('#description').val();
         var location = $('#Country').val();
-        var selectedSkills = [];
-        $('input[type="checkbox"]:checked').each(function() {
+        let selectedSkills = [];
+        var ageRange = $('#ageRange').val();
+        let experienceRange = [];
+        var language = $('#languageSelect').val();
+
+        $('input[type="checkbox"].experience_checkbox:checked').each(function() {
+            experienceRange.push($(this).val());
+        });
+
+
+        $('input[type="checkbox"].skills_checkbox:checked').each(function() {
             selectedSkills.push($(this).val());
         });
 
@@ -507,9 +518,13 @@ $(document).ready(function() {
         var filterData = {
             'category': category,
             'location': location,
-            'skills[]': selectedSkills
+            'skills[]': selectedSkills,
+            'years_of_experience[]': experienceRange,
+            'age': ageRange,
+            'language': language
         };
-
+        console.log("exp", experienceRange)
+        console.log('skills', selectedSkills)
         var artistProfileBaseURL = "/artist-profile_updated_one/"; // Base URL
 
         // Send AJAX request to get filtered artists
@@ -524,9 +539,13 @@ $(document).ready(function() {
 
                 $('#description').val('');
                 $('#Country').val('');
+
+                $('#experienceRange').val('');
                 // $('input[type="checkbox"]:checked').prop('checked', false); // Uncheck all checkboxes
 
                 console.log(response.artists_with_details);
+
+
 
                 if (response.artists_with_details.length > 0) {
                     response.artists_with_details.forEach(function(artist) {
@@ -541,7 +560,7 @@ $(document).ready(function() {
                         // Build the artist HTML content
                         var artistHTML = `
                             <div class="col-md-6 col-12">
-                                <div class="candidate-card position-relative overflow-hidden text-center shadow rounded p-4"style="min-height: 400px; display: flex; flex-direction: column; justify-content: space-between;">
+                                <div class="candidate-card position-relative overflow-hidden text-center shadow rounded p-4"style="min-height: 100%; display: flex; flex-direction: column; justify-content: space-between;">
                                     <div class="ribbon ribbon-left overflow-hidden">
                                         <span class="text-center d-block bg-warning shadow small h6">
                                             <i class="mdi mdi-star"></i>
