@@ -109,11 +109,15 @@ def artist_profile_setting_updated_one(request):
     profile_picture = None
     additional_info = None
     skills = []
+    cover_photo = None
+    books =[]
     try:
         additional_info = ArtistMasterAdditional.objects.get(user=user)
         profile_picture = additional_info.profile_picture.url if additional_info.profile_picture else None
+        cover_photo = additional_info.cover_photo.url if additional_info.cover_photo else None
         description = additional_info.description if additional_info and additional_info.description else ''
         skills = additional_info.skills.values_list('name', flat=True)
+        books = additional_info.books_published.all()
         firstname = additional_info.firstname if additional_info.firstname else None
         lastname = additional_info.lastname if additional_info.lastname else None
         if firstname or lastname:
@@ -124,15 +128,19 @@ def artist_profile_setting_updated_one(request):
         full_name = None
         description = ''
         skills = []
+        cover_photo = None
+        books =[]
 
       
-    return render(request, 'candidate-profile-setting_updated_one.html',{"user":user,'profile_picture': profile_picture,'full_name':full_name,'description':description,"additional_info":additional_info,'skills': skills})
+    return render(request, 'candidate-profile-setting_updated_one.html',{"user":user,'profile_picture': profile_picture,'full_name':full_name,'description':description,"additional_info":additional_info,'skills': skills,'cover_photo': cover_photo,'books':books})
 
 def artist_profile_setting(request):
     user = request.user
     try:
         additional_info = ArtistMasterAdditional.objects.get(user=user)
         profile_picture = additional_info.profile_picture.url if additional_info.profile_picture else None
+        
+
     except ArtistMasterAdditional.DoesNotExist:
         profile_picture = None 
     
@@ -163,6 +171,7 @@ def artist_profile_updated_one(request):
     user = request.user
     profile_picture = None
     additional_info = None
+    cover_photo =None
     skills = []
     experience_details = []
     images = []
@@ -173,7 +182,8 @@ def artist_profile_updated_one(request):
     try:
         # Try fetching the artist's additional data
         additional_info = ArtistMasterAdditional.objects.get(user=request.user)
-        
+        cover_photo = additional_info.cover_photo.url if additional_info.cover_photo else None
+
         profile_picture = additional_info.profile_picture.url if additional_info.profile_picture else None
         firstname = additional_info.firstname if additional_info.firstname else None
         lastname = additional_info.lastname if additional_info.lastname else None
@@ -202,6 +212,7 @@ def artist_profile_updated_one(request):
         full_name = None 
         skills = []
         experience_details = []
+        cover_photo = None
 
    
     artists_with_details = []
@@ -226,6 +237,7 @@ def artist_profile_updated_one(request):
                   {
                       "artist_user": user,
                       'profile_picture': profile_picture,
+                      'cover_photo':cover_photo,
                       'additional_info': additional_info,
                       'full_name': full_name,
                       "is_logged_in_user": True,
@@ -238,12 +250,13 @@ def artist_profile_updated_one(request):
 
 
 from django.shortcuts import get_object_or_404
-from .models import ArtistMasterBasic, ArtistMasterAdditional, Experience, Gallery
+from .models import ArtistMasterBasic, ArtistMasterAdditional, BooksPublished, Experience, Gallery
 
 def artist_profile_updated_one_Id(request, id):
     
     logged_in_user = request.user
     profile_picture = None
+    cover_photo =None
     skills = []
     experience_details = [] # Initialize a list for experience details
     images=[]
@@ -258,17 +271,26 @@ def artist_profile_updated_one_Id(request, id):
                 if logged_in_additional_info.profile_picture
                 else None
             )
+            cover_photo = (
+                logged_in_additional_info.cover_photo.url
+                if logged_in_additional_info.cover_photo
+                else None
+            )
         except ArtistMasterAdditional.DoesNotExist:
             profile_picture = None
+            cover_photo = None
         
     artist_basic = get_object_or_404(ArtistMasterBasic, id=id)
     additional_info_user = None
     profile_picture_user = None
     full_name_user = None
+    cover_photo_user =None
     
     try:
         additional_info_user = ArtistMasterAdditional.objects.get(user=artist_basic)
         profile_picture_user = additional_info_user.profile_picture.url if additional_info_user.profile_picture else None
+        cover_photo_user = additional_info_user.cover_photo.url if additional_info_user.cover_photo else None
+
         firstname_user = additional_info_user.firstname if additional_info_user.firstname else None
         lastname_user = additional_info_user.lastname if additional_info_user.lastname else None
         full_name_user = f"{firstname_user} {lastname_user}".strip() if firstname_user or lastname_user else None
@@ -289,6 +311,7 @@ def artist_profile_updated_one_Id(request, id):
     except ArtistMasterAdditional.DoesNotExist:
         profile_picture_user = None
         full_name_user = None
+        cover_photo_user = None
     
     artists = ArtistMasterBasic.objects.all().exclude(is_superuser=True).order_by('?')[:3]
 
@@ -308,6 +331,7 @@ def artist_profile_updated_one_Id(request, id):
     return render(request, 'candidate-profile_updated_one.html', {
         "artist_user": artist_basic,
         "profile_picture_user": profile_picture_user,
+        'cover_photo_user': cover_photo_user,
         "additional_info_user": additional_info_user,
         "full_name_user": full_name_user,
         "is_logged_in_user": False,
@@ -874,6 +898,9 @@ def update_artist_details_api(request):
         if 'profile_picture' in request.FILES:
             artist.profile_picture = request.FILES['profile_picture'] 
         
+        if 'cover_photo' in request.FILES:
+            artist.cover_photo = request.FILES['cover_photo'] 
+        
         if 'files' in request.FILES:
             files = request.FILES.getlist('files')  # Use getlist to get multiple files
             if artist.images.exists():
@@ -938,9 +965,40 @@ def update_artist_details_api(request):
         if request.POST.get('highest_qualification'):
             artist.highest_qualification = request.POST.get('highest_qualification')    
         
-        if request.POST.get('books_published'):
-            artist.books_published = request.POST.get('books_published')    
+                
+         # Handling multiple book names and links
+        book_names = request.POST.getlist('book_name')  # Get all values for book_name
+        book_links = request.POST.getlist('book_link')  # Get all values for book_link
+        print("book_names", book_names)
+
+        # Ensure both book_names and book_links are provided and non-empty
+        if book_names and book_links and len(book_names) == len(book_links):
+            # Clear the existing books first before adding new ones
+            artist.books_published.clear()  # Clears the current association of books for the artist
+            
+            books = []
+            for name, link in zip(book_names, book_links):
+                if name and link:  # Ensure neither name nor link is empty
+                    # Create a new book record for each unique pair of name and link
+                    book, created = BooksPublished.objects.get_or_create(
+                        book_name=name,
+                        book_url=link
+                    )
+                    books.append(book)
+            
+            # Set the new books to the artist (removes previous ones and adds the new ones)
+            if books:
+                artist.books_published.set(books)  # Many-to-many set operation
+            
+            artist.save()
+
+            # Delete books that are no longer associated with any artist
+            # Clean up books that are no longer associated with any artist
+            BooksPublished.objects.annotate(artist_count=Count('artist_books')).filter(artist_count=0).delete()
+
+            return JsonResponse({'message': 'Books updated successfully!'}, status=200)
         
+    
         if request.POST.get('availability'):
             artist.availability = request.POST.get('availability')
         
@@ -1206,13 +1264,13 @@ def check_profile_completion(request):
 
     # Fields to check for completion
     required_fields = [
-        'firstname', 'lastname', 'gender', 'dob', 'country', 'address',
+        'firstname', 'lastname', 'gender', 'dob', 'country', 'address1','address2','state','pincode'
         'description', 'introduction', 'languages_read', 'languages_write',
         'languages_speak', 'facebook_link', 'instagram_link', 'linkedin_link',
         'job_title', 'company_name', 'experience', 'portfolio', 'short_bio',
         'availability','certifications',
-        'published_works', 'awards', 'payment_method', 'aadhar_front',
-        'aadhar_back', 'opportunities', 'alternate_email'
+        'published_works', 'awards', #'payment_method', 'aadhar_front',
+        # 'aadhar_back', 'opportunities', 'alternate_email'
     ]
 
     # Check for incomplete fields

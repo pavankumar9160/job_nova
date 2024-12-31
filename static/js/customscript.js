@@ -31,6 +31,8 @@ $(document).ready(function() {
         var email = document.getElementById("email2").value;
         var contact_number = document.getElementById("phone").value;
         var profile_picture = document.getElementById("profile_picture").files[0];
+        var cover_photo = document.getElementById("uploadCoverPhoto").files[0];
+
 
         var languages_read = []
         document.querySelectorAll('input[name="languages_read[]"]:checked').forEach(function(checkbox) {
@@ -56,7 +58,7 @@ $(document).ready(function() {
         var experience = document.getElementById("experience").value;
         var portfolio = document.getElementById("portfolio").value;
         var short_bio = document.getElementById("short_bio").value;
-        var books_published = document.getElementById("books_published").value;
+
         var highest_qualification = document.getElementById("highest_qualification").value;
         var availability = document.getElementById("availability").value;
 
@@ -64,6 +66,7 @@ $(document).ready(function() {
         var published_works = document.getElementById("published_works").value;
         var awards = document.getElementById("awards").value;
         var selectedSkills = [];
+
         const fileArray = [];
         const fileInput = document.getElementById('documents');
         const files = fileInput.files;
@@ -135,9 +138,24 @@ $(document).ready(function() {
 
             return
         }
+        var bookNames = [];
+        var bookLinks = [];
 
+        // Gather book names and links from the inputs
+        document.querySelectorAll('input[name="book_name[]"]').forEach(input => bookNames.push(input.value));
+        document.querySelectorAll('input[name="book_link[]"]').forEach(input => bookLinks.push(input.value));
 
+        // Perform validation to ensure both book names and links are not empty
+        if (bookNames.length === 0 || bookLinks.length === 0) {
+            alert('Please enter at least one book with a name and a link.');
+            return;
+        }
+        bookNames.forEach((name, index) => {
+            formData.append('book_name', name); // Append each book name individually
+            formData.append('book_link', bookLinks[index]); // Append each book link
+        });
 
+        console.log('booknames', bookNames)
 
         formData.append('firstname', firstname);
         formData.append('lastname', lastname);
@@ -157,15 +175,17 @@ $(document).ready(function() {
         formData.append('instagram_link', instagram_link);
         formData.append('linkedin_link', linkedin_link);
         formData.append('email', email);
+
+
         formData.append('contact_number', contact_number);
         formData.append('profile_picture', profile_picture);
-
+        formData.append('cover_photo', cover_photo);
         formData.append('job_title', job_title);
         formData.append('company_name', company_name);
         formData.append('experience', experience);
         formData.append('portfolio', portfolio);
         formData.append('short_bio', short_bio);
-        formData.append('books_published', books_published);
+
         formData.append('highest_qualification', highest_qualification);
         formData.append('availability', availability);
         formData.append('certifications', certifications);
@@ -183,20 +203,7 @@ $(document).ready(function() {
             contentType: false,
             success: function(response) {
                 toastr.success('Details Updated successfully!', 'Success');
-                // const inputFields = ["firstname", "lastname", "gender", "dob", "Country",
-                //     "houseNumber", "roadNumber", "pincode", "state",
-                //     "description", "introduction", "facebook_link", "instagram_link", "linkedin_link", "email2", "phone", "profile_picture", "job_title", "company_name", "experience", "portfolio", "short_bio", "availability", "certifications", "published_works", "awards"
-                // ];
-                // inputFields.forEach(fieldId => {
-                //     document.getElementById(fieldId).value = "";
-                // });
-                // inputFields.forEach(fieldId => {
-                //     document.getElementById(fieldId).value = "";
-                //     $(".skill-checkbox").prop('checked', false);
-
-                // });
-                //const experienceList = document.getElementById('experienceList');
-                //experienceList.innerHTML = '';
+                window.location.href = '/artist-profile_updated_one/'
 
             },
             error: function(xhr) {
@@ -210,121 +217,6 @@ $(document).ready(function() {
     });
 
 
-    // update professionaldetails form
-    // $(document).on('click', '#submit2', function(e) {
-
-    //     console.log("hi");
-    //     e.preventDefault();
-
-
-    //     var job_title = document.getElementById("job_title").value;
-    //     var company_name = document.getElementById("company_name").value;
-    //     var experience = document.getElementById("experience").value;
-    //     var portfolio = document.getElementById("portfolio").value;
-    //     var short_bio = document.getElementById("short_bio").value;
-    //     var availability = document.getElementById("availability").value;
-
-    //     var certifications = document.getElementById("certifications").value;
-    //     var published_works = document.getElementById("published_works").value;
-    //     var awards = document.getElementById("awards").value;
-    //     var selectedSkills = [];
-
-
-
-    //     // Select all list items
-    //     const listItems = document.querySelectorAll('.list-group-item-experience');
-    //     const experiences = [];
-
-    //     listItems.forEach((listItem) => {
-    //         // Get the entire text content of the <div> containing the data
-    //         const divContent = listItem.querySelector('div').textContent.trim();
-
-    //         // Extract designation
-    //         const designationMatch = divContent.match(/^(.*) at/);
-    //         const designation = designationMatch ? designationMatch[1].trim() : '';
-
-    //         // Extract company name
-    //         const companyMatch = divContent.match(/at\s+(.*?)\s+\(/)
-    //         const company = companyMatch ? companyMatch[1].trim() : '';
-
-    //         // Extract the full date range
-    //         const dateRangeMatch = divContent.match(/\(([^)]+)\)/);
-    //         const dateRange = dateRangeMatch ? dateRangeMatch[1].trim() : '';
-    //         const [startDate, endDate] = dateRange.split('to').map(date => date.trim());
-
-    //         // Determine if currently working
-    //         const currentlyWorking = endDate === 'Present';
-
-    //         // Push data to the experiences array
-    //         experiences.push({
-    //             designation,
-    //             company,
-    //             startDate, // Full start date
-    //             endDate: currentlyWorking ? null : endDate, // Full end date or null if "Present"
-    //             currentlyWorking,
-    //         });
-    //     });
-
-    //     console.log("experience_data", experiences);
-
-
-
-
-    //     $(".skill-checkbox:checked").each(function() {
-    //         selectedSkills.push($(this).val());
-    //     });
-
-    //     if (!job_title || !company_name || !experience || !portfolio || !short_bio || !availability || !certifications || !published_works || !awards) {
-    //         toastr.error("please fill all the details")
-
-    //         return
-    //     }
-
-    //     // Create a FormData object
-    //     var formData = new FormData();
-
-    //     // Append form data manually
-    //     formData.append('job_title', job_title);
-    //     formData.append('company_name', company_name);
-    //     formData.append('experience', experience);
-    //     formData.append('portfolio', portfolio);
-    //     formData.append('short_bio', short_bio);
-    //     formData.append('availability', availability);
-    //     formData.append('certifications', certifications);
-    //     formData.append('published_works', published_works);
-    //     formData.append('awards', awards);
-    //     formData.append('skills', selectedSkills.join(','));
-    //     formData.append('experiences_data', JSON.stringify(experiences));
-
-
-
-    //     // Send data via AJAX
-    //     $.ajax({
-    //         url: '/update_professional_details_api/',
-    //         type: 'POST',
-    //         data: formData,
-    //         processData: false,
-    //         contentType: false,
-    //         success: function(response) {
-    //             toastr.success('Professional Details Updated successfully!', 'Success');
-    //             const inputFields = ["job_title", "company_name", "experience", "portfolio", "short_bio", "availability", "certifications", "published_works", "awards"];
-    //             inputFields.forEach(fieldId => {
-    //                 document.getElementById(fieldId).value = "";
-    //                 $(".skill-checkbox").prop('checked', false);
-
-    //             });
-
-    //         },
-    //         error: function(xhr) {
-    //             var errors = xhr.responseJSON;
-    //             var firstKey = Object.keys(errors)[0];
-    //             var firstError = errors[firstKey][0];
-    //             toastr.error(firstError, 'Error');
-    //         }
-    //     });
-
-
-    // });
 
 
 
@@ -537,10 +429,7 @@ $(document).ready(function() {
 
                 container.empty();
 
-                $('#description').val('');
-                $('#Country').val('');
 
-                $('#experienceRange').val('');
                 // $('input[type="checkbox"]:checked').prop('checked', false); // Uncheck all checkboxes
 
                 console.log(response.artists_with_details);
@@ -632,11 +521,15 @@ $(document).ready(function() {
                         var instagramLink = $('#instagram_link').val();
                         var linkedinLink = $('#linkedin_link').val();
                         var profile_picture = $('#profile_picture').prop('files')[0];
+                        var cover_photo = $('#uploadCoverPhoto').prop('files')[0];
+
                         var defaultImage = `${STATIC_URL}images/blank_pic.png`;
+
+                        var defaultCoverImage = `${STATIC_URL}images/hero/bg5.jpg`;
 
                         var experience = document.getElementById("experience").value;
                         var certifications = document.getElementById("certifications").value;
-                        var books_published = $('#books_published').val();
+
                         var highest_qualification = $('#highest_qualification').val();
                         var published_works = document.getElementById("published_works").value;
                         var portfolio = document.getElementById("portfolio").value;
@@ -704,10 +597,15 @@ $(document).ready(function() {
                             selectedSkills.push($(this).val());
                         });
 
+
+
+
                         var fileInput = document.getElementById('documents');
                         var files = fileInput.files;
+                        let profileImage = defaultImage; // Default profile image
+                        let coverImage = defaultCoverImage;
 
-                        function updatePreview(previewImage, files) {
+                        function updatePreview(previewImage, files, previewCoverImage) {
 
 
 
@@ -718,7 +616,7 @@ $(document).ready(function() {
                     <div class="col-12">
                         <div class="position-relative">
                             <div class="candidate-cover">
-                                <img src="${STATIC_URL}images/hero/bg5.jpg" class="img-fluid rounded shadow" alt="">
+                                <img src="${previewCoverImage}" class="img-fluid rounded shadow" alt="">
                             </div>
                             <div class="candidate-profile d-flex align-items-end justify-content-between mx-2">
                                 <div class="d-flex align-items-end">
@@ -729,7 +627,7 @@ $(document).ready(function() {
                                     </div>
                                     
                                 </div>
-                                <a href="{% url 'artist-profile-setting' %}" class="btn btn-sm btn-icon btn-pills btn-soft-primary"><i data-feather="settings" class="icons"></i></a>
+                             <a href="{% url 'artist-profile-setting' %}" class="btn btn-sm btn-icon btn-pills btn-soft-primary"><i data-feather="settings" class="icons"></i></a>
                             </div>
                         </div>
                     </div>
@@ -779,7 +677,7 @@ $(document).ready(function() {
                               <h5 class="mt-4">Books Published:</h5>
                             <div class="d-flex flex-wrap gap-2" id="books_published">
                                 <!-- Books Published will be dynamically added here -->
-                                <span>${books_published}</span>
+                               
                             </div>   
 
                     </div>
@@ -895,6 +793,63 @@ $(document).ready(function() {
                 
             });
 
+            // Gather book names and links from the inputs
+            var bookNames = [];
+            var bookLinks = [];
+
+            document.querySelectorAll('input[name="book_name[]"]').forEach(input => bookNames.push(input.value));
+            document.querySelectorAll('input[name="book_link[]"]').forEach(input => bookLinks.push(input.value));
+
+            // Perform validation to ensure both book names and links are not empty
+            if (bookNames.length === 0 || bookLinks.length === 0 || bookNames.some(name => !name) || bookLinks.some(link => !link)) {
+                alert('Please enter at least one book with a valid name and link.');
+                return;
+            }
+
+            // Combine book names and links into a single array of objects
+            var books = bookNames.map((name, index) => {
+                return {
+                    book_name: name,
+                    book_link: bookLinks[index]
+                };
+            });
+
+            // Get the container for displaying the books
+            const booksContainer = document.getElementById("books_published");
+
+            // Clear previous content before appending new books
+            booksContainer.innerHTML = "";
+
+            // Append the books to the container
+            if (books && books.length > 0) {
+                books.forEach(book => {
+                    if (book.book_name && book.book_link) {
+                        // Create a span element
+                        const span = document.createElement("span");
+
+                        // Create an anchor element
+                        const anchor = document.createElement("a");
+                        anchor.href = book.book_link;
+                        anchor.target = "_blank"; // Open link in a new tab
+                        anchor.className = "text-decoration-none";
+                        anchor.innerText = book.book_name;
+
+                        // Append the anchor to the span
+                        span.appendChild(anchor);
+
+                        // Add a margin for spacing
+                        span.style.marginRight = "10px";
+
+                        // Append the span to the container
+                        booksContainer.appendChild(span);
+                    }
+                });
+            } else {
+                // If no books are available, display a default message
+                const noBooksMessage = document.createElement("span");
+                noBooksMessage.innerText = "No Books Published.";
+                booksContainer.appendChild(noBooksMessage);
+            }
                 
                     const imagePreviewContainer = document.getElementById('image-preview-container');
                     imagePreviewContainer.innerHTML = ''; // Clear previous content
@@ -934,21 +889,53 @@ $(document).ready(function() {
         
 
 
-        if (profile_picture) {
-            // If a file is selected, read it
-            const reader = new FileReader();
-            reader.onload = function(e) {
-                updatePreview(e.target.result,files); // Pass the result of the uploaded file
+          // Handle profile_picture
+    if (profile_picture) {
+        const reader = new FileReader();
+        reader.onload = function (e) {
+            profileImage = e.target.result;
+
+            // Check if cover_photo was already handled or is not present
+            if (!cover_photo) {
+                updatePreview(profileImage,files, coverImage);
                 $('#previewModal').modal('show');
 
-            };
-            reader.readAsDataURL(profile_picture);
-        } else {
-            // If no file is selected, use the default image directly
-            updatePreview(defaultImage,files);
-            $('#previewModal').modal('show');
+            } else if (cover_photo && coverImage !== defaultCoverImage) {
+                updatePreview(profileImage,files, coverImage);
+                $('#previewModal').modal('show');
 
-        }
+            }
+        };
+        reader.readAsDataURL(profile_picture);
+    }
+
+    // Handle cover_photo
+    if (cover_photo) {
+        const reader = new FileReader();
+        reader.onload = function (e) {
+            coverImage = e.target.result;
+
+            // Check if profile_picture was already handled or is not present
+            if (!profile_picture) {
+                updatePreview(profileImage,files, coverImage);
+                $('#previewModal').modal('show');
+
+            } else if (profile_picture && profileImage !== defaultImage) {
+                updatePreview(profileImage,files, coverImage);
+                $('#previewModal').modal('show');
+
+            }
+        };
+        reader.readAsDataURL(cover_photo);
+    }
+
+    // Fallback for when neither file is selected
+    if (!profile_picture && !cover_photo) {
+        updatePreview(profileImage,files, coverImage);
+        $('#previewModal').modal('show');
+
+    }
+
     });
 });
 

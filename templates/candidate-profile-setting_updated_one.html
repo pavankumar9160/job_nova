@@ -8,26 +8,19 @@
         <div class="row">
             <div class="col-12">
                 <div class="position-relative">
-                    <div class="candidate-cover">
-                        <div class="profile-banner relative text-transparent">
-                            <input id="pro-banner" name="profile-banner" type="file" class="hidden" onchange="loadFile(event)" />
-                            <div class="relative shrink-0">
-                                <img src="{% static 'images/hero/bg5.jpg' %}" class="rounded shadow" id="profile-banner" alt="">
-                                <label class="profile-image-label" for="pro-banner"></label>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="candidate-profile d-flex align-items-end mx-2">
-                        <div class="profile-pic">
-                            <input id="pro-img" name="profile-image" type="file" class="d-none" onchange="loadFile(event)" />
-                            <div class="position-relative d-inline-block">
-                                <img src="{% if profile_picture %}{{ profile_picture }}{% else %}{% static 'images/blank_pic.png' %}{% endif %}" class="avatar avatar-medium img-thumbnail rounded-pill shadow-sm" id="profile-image" alt="">
-                                {% comment %} <label class="icons position-absolute bottom-0 end-0" for="pro-img"><span class="btn btn-icon btn-sm btn-pills btn-primary"><i data-feather="camera" class="icons"></i></span></label> {% endcomment %}
-                            </div>
-                        </div>
-                        <div class="ms-2">
-                            <h5 class="mb-0">{{ full_name|default:user.name }}</h5>
-                            <p class="text-muted mb-0">{{ description }}</p>
+                    <div class="candidate-cover position-relative">
+                        <img id="coverPhotoPreview" 
+                             src="{% if cover_photo %}{{ cover_photo }}{% else %}{% static 'images/hero/bg5.jpg' %}{% endif %}" 
+                             class="img-fluid rounded shadow" 
+                             alt="Cover Photo">
+                        <div class="cover-photo-upload position-absolute top-0 end-0 m-2" 
+                             style="z-index: 100; display: flex; align-items: center; justify-content: center;">
+                            <label for="uploadCoverPhoto" class="cursor-pointer" 
+                                   style="z-index: 10; display: inline-block;">
+                                <i data-feather="camera" 
+                                   style="width: 2.5rem; height: 2.5rem; color: white; background: rgba(0, 0, 0, 0.5); padding: 0.7rem; border-radius: 50%;"></i>
+                            </label>
+                            <input type="file" id="uploadCoverPhoto" class="d-none" accept="image/*">
                         </div>
                     </div>
                 </div>
@@ -337,10 +330,26 @@
                             </div>
                             <div class="col-lg-12">
                                 <div class="mb-3">
-                                    <label class="form-label"style="font-family: Arial, sans-serif; font-size: 16px; font-weight: bold;">Books Published:</label>
-                                    <textarea name="books_published"  id="books_published" class="form-control" maxlength="85">{{ additional_info.books_published|default:'' }}</textarea>
+                                    <label class="form-label" style="font-family: Arial, sans-serif; font-size: 16px; font-weight: bold;">Books Published:</label>
+                                    <div id="booksPublishedSection">
+                                        {% for book in books %}
+                                        <div class="book-entry mb-2">
+                                            <input type="text" name="book_name[]" class="form-control mb-1" value="{{ book.book_name }}" placeholder="Enter book name" maxlength="85" required>
+                                            <input type="url" name="book_link[]" class="form-control mb-1"  value="{{ book.book_url }}" placeholder="Enter book link" required>
+                                            <button type="button" class="remove-book-btn btn btn-danger btn-sm">Remove</button>
+                                        </div>
+                                        {% empty %}
+                                        <div class="book-entry mb-2">
+                                            <input type="text" name="book_name[]" class="form-control mb-1" placeholder="Enter book name" maxlength="85" required>
+                                            <input type="url" name="book_link[]" class="form-control mb-1" placeholder="Enter book link" required>
+                                            <button type="button" class="remove-book-btn btn btn-danger btn-sm">Remove</button>
+                                        </div>
+                                    {% endfor %}
+                                    </div>
+                                    <button type="button" id="addBookBtn" class="btn btn-primary btn-sm mt-2">Add A Book</button>
                                 </div>
                             </div>
+                            
                             <div class="col-lg-12">
                                 <div class="mb-3">
                                     <label class="form-label" style="font-family: Arial, sans-serif; font-size: 16px; font-weight: bold;">Portfolio Links / Website:</label>
@@ -504,6 +513,23 @@
                                         }
                                     });
                                 });
+                                document.addEventListener('DOMContentLoaded', function() {
+                                    // JavaScript to handle file upload and live preview
+                                    document.getElementById('uploadCoverPhoto').addEventListener('change', function(event) {
+                                        const file = event.target.files[0]; // Get the uploaded file
+                                        if (file) {
+                                            const reader = new FileReader(); // Create a FileReader to read the file
+                                            reader.onload = function(e) {
+                                                const coverPhotoPreview = document.getElementById('coverPhotoPreview');
+                                                if (coverPhotoPreview) {
+                                                    // Update the src attribute of the cover photo <img>
+                                                    coverPhotoPreview.src = e.target.result;
+                                                }
+                                            };
+                                            reader.readAsDataURL(file); // Read the file as a data URL
+                                        }
+                                    });
+                                });
                                 
     // Function to update the displayed file name when a new profile picture is selected
     function updateProfilePictureName() {
@@ -518,9 +544,52 @@
             fileNameDisplay.textContent = '';
         }
     }
+
+    // Function to add new book entry fields
+document.getElementById('addBookBtn').addEventListener('click', function() {
+    const bookEntries = document.querySelectorAll('.book-entry');
+    let canAddBook = true;
+
+    // Loop through each book entry to check if the fields are filled
+    bookEntries.forEach(entry => {
+        const bookName = entry.querySelector('input[name="book_name[]"]');
+        const bookLink = entry.querySelector('input[name="book_link[]"]');
+
+        if (!bookName.value || !bookLink.value) {
+            canAddBook = false; // If any field is empty, do not allow adding a new book entry
+        }
+    });
+
+    if (canAddBook) {
+        // Only add a new entry if all fields in the current entries are filled
+        const booksPublishedSection = document.getElementById('booksPublishedSection');
+        const newBookEntry = document.createElement('div');
+        newBookEntry.classList.add('book-entry', 'mb-2');
+
+        newBookEntry.innerHTML = `
+            <input type="text" name="book_name[]" class="form-control mb-1" placeholder="Enter book name" maxlength="85" required>
+            <input type="url" name="book_link[]" class="form-control mb-1" placeholder="Enter book link" required>
+            <button type="button" class="remove-book-btn btn btn-danger btn-sm">Remove</button>
+        `;
+
+        // Append the new entry to the section
+        booksPublishedSection.appendChild(newBookEntry);
+    } else {
+        // Optionally, show a message or alert if the current entries are not filled
+        alert("Please fill in both the book name and link before adding another book.");
+    }
+});
+
+// Function to remove a book entry
+document.getElementById('booksPublishedSection').addEventListener('click', function(e) {
+    if (e.target && e.target.classList.contains('remove-book-btn')) {
+        e.target.parentElement.remove();
+    }
+});
+
                                 
                                 
-                            </script>
+    </script>
                             
                             
                             

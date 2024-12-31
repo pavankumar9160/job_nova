@@ -106,7 +106,7 @@
     <h6 class="mb-0">Language</h6>
     <div id="languageOptions">
         <select class="form-select form-control border mt-2" aria-label="Default select example"  id="languageSelect">
-            <option value="" selected> Select Languaage</option>
+            <option value="" selected> Select Language</option>
             <option value="English">English</option>
             <option value="Hindi">Hindi</option>
             <option value="Odia">Odia</option>
@@ -795,6 +795,12 @@
                                     $('#Country').val('');
                                     $("#searchItem2").val('');
                                     $('input[type="checkbox"]:checked').prop('checked', false); 
+                                    $('#ageRange').val('18'); 
+                                   
+                                    const ageRangeValue = document.getElementById('ageRangeValue');
+                                    ageRangeValue.textContent = `Selected Age: 0-18`;
+
+                
                                 })
 
 

@@ -10,7 +10,11 @@
                     <div class="col-12">
                         <div class="position-relative">
                             <div class="candidate-cover">
-                                <img src="{% static 'images/hero/bg5.jpg' %}" class="img-fluid rounded shadow" alt="">
+                                {% if is_logged_in_user %}
+                                <img  src="{% if cover_photo %}{{ cover_photo }}{% else %}{% static 'images/hero/bg5.jpg' %}{% endif %}" class="img-fluid rounded shadow" alt="">
+                                {% else %}
+                                <img  src="{% if cover_photo_user %}{{ cover_photo_user }}{% else %}{% static 'images/hero/bg5.jpg' %}{% endif %}" class="img-fluid rounded shadow" alt="">
+                                {% endif %}
                             </div>
                             <div class="candidate-profile d-flex align-items-end justify-content-between mx-2">
                                 <div class="d-flex align-items-end">
@@ -127,13 +131,20 @@
                             {% endif %}
                         </div>
                         <h5 class="mt-4">Books Published:</h5>
-                        <div class="d-flex flex-wrap gap-2">
-                            {% if info.books_published %}
-                            <span>{{ info.books_published }}</span>
-                           {% else %} 
-                           <span>No Books Published.</span>
-                           {% endif %}
+                        <div class="d-flex flex-wrap gap-3">
+                            {% if info.books_published.all %}
+                                {% for book in info.books_published.all %}
+                                    <span>
+                                        <a href="{{ book.book_url }}" target="_blank" class="text-decoration-none">
+                                            {{ book.book_name }}
+                                        </a>
+                                    </span>
+                                {% endfor %}
+                            {% else %}
+                                <span>No Books Published.</span>
+                            {% endif %}
                         </div>
+
                         
 
                         {% comment %} <h5 class="mt-4">Experience:</h5>
@@ -251,12 +262,19 @@
                             </div>
                             <h5 class="mt-4">Books Published:</h5>
                             <div class="d-flex flex-wrap gap-2">
-                                {% if info.books_published %}
-                                <span>{{ info.books_published }}</span>
-                               {% else %} 
-                               <span>No Books Published.</span>
-                               {% endif %}
-                            </div>    
+                                {% if info.books_published.all %}
+                                    {% for book in info.books_published.all %}
+                                        <span>
+                                            <a href="{{ book.book_url }}" target="_blank" class="text-decoration-none">
+                                                {{ book.book_name }}
+                                            </a>
+                                        </span>
+                                    {% endfor %}
+                                {% else %}
+                                    <span>No Books Published.</span>
+                                {% endif %}
+                            </div>
+                             
 
                         
 

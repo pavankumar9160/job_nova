@@ -54,6 +54,14 @@ class Experience(models.Model):
     end_date = models.DateField(null=True, blank=True)
     currently_working = models.BooleanField(default=False)
     
+class BooksPublished(models.Model):
+    book_name = models.CharField(max_length=255)
+    book_url = models.URLField(blank=True, null=True)
+    
+    def __str__(self):
+        return self.book_name
+      
+    
     
     def __str__(self):
         return f"{self.designation} at {self.company}"
@@ -101,6 +109,7 @@ class ArtistMasterAdditional(models.Model):
     dob = models.DateField(blank=True, null=True)
     country = models.CharField(max_length=100, choices=Location_choices, blank=True, null=True)
     profile_picture = models.ImageField(upload_to='profiles/', blank=True, null=True)
+    cover_photo = models.ImageField(upload_to='coverpics/', blank=True, null=True)
     address1 = models.CharField(max_length=100, blank=True, null=True)
     address2 = models.CharField(max_length=100, blank=True, null=True)
     pincode=models.CharField(max_length=10, blank=True, null=True) 
@@ -119,7 +128,7 @@ class ArtistMasterAdditional(models.Model):
     experience_details = models.ManyToManyField(Experience, related_name='artist_experiences', blank=True)  
     portfolio = models.URLField(blank=True, null=True) 
     short_bio = models.TextField(blank=True, null=True)    
-    books_published = models.TextField(blank=True, null=True)
+    books_published = models.ManyToManyField(BooksPublished, related_name='artist_books', blank=True)  
     highest_qualification = models.TextField(blank=True, null=True)       
     availability = models.CharField(max_length=50, choices=availability_choices,blank=True,null=True)
     skills = models.ManyToManyField(Skill, related_name='skills', blank=True)    
