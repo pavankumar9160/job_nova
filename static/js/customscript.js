@@ -112,12 +112,12 @@ $(document).ready(function() {
                 // Determine if currently working
                 const currentlyWorking = endDate === 'Present';
                 if (designation && company && startDate) {
-                    // Push data to the experiences array
+
                     experiences.push({
                         designation,
                         company,
-                        startDate, // Full start date
-                        endDate: currentlyWorking ? null : endDate, // Full end date or null if "Present"
+                        startDate,
+                        endDate: currentlyWorking ? null : endDate,
                         currentlyWorking,
                     });
                 }
@@ -133,6 +133,8 @@ $(document).ready(function() {
             selectedSkills.push($(this).val());
         });
 
+
+
         if (!address1 || !address2 || !state || !firstname || !lastname || !country || !gender || !dob || !contact_number || !email || !selectedSkills || !languages_read || !languages_write || !languages_speak || languages_speak.length === 0 || languages_write.length === 0 || languages_read.length === 0 || selectedSkills.length === 0 || !description) {
             toastr.error("please fill all the required details")
 
@@ -145,17 +147,15 @@ $(document).ready(function() {
         document.querySelectorAll('input[name="book_name[]"]').forEach(input => bookNames.push(input.value));
         document.querySelectorAll('input[name="book_link[]"]').forEach(input => bookLinks.push(input.value));
 
-        // Perform validation to ensure both book names and links are not empty
-        if (bookNames.length === 0 || bookLinks.length === 0) {
-            alert('Please enter at least one book with a name and a link.');
-            return;
-        }
         bookNames.forEach((name, index) => {
-            formData.append('book_name', name); // Append each book name individually
-            formData.append('book_link', bookLinks[index]); // Append each book link
+            formData.append('book_name', name);
+            formData.append('book_link', bookLinks[index]);
         });
 
         console.log('booknames', bookNames)
+
+        console.log('skills updating are :', selectedSkills)
+
 
         formData.append('firstname', firstname);
         formData.append('lastname', lastname);
@@ -288,6 +288,8 @@ $(document).ready(function() {
 
                 if (response.status === 'incomplete') {
 
+                    console.log(response.missing_fields)
+
                     $('#profileAlertModal').modal('show');
                 } else {
                     console.log(response.message);
@@ -364,7 +366,7 @@ $(document).ready(function() {
                         container.append(artistHTML);
                     });
                 } else {
-                    // If no artists found, display the "No artist found" message
+
                     var noArtistsMessage = `
                         <div class="col-12 text-center">
                             <p class="h5 text-muted">No artist found</p>
@@ -477,7 +479,7 @@ $(document).ready(function() {
                         container.append(artistHTML);
                     });
                 } else {
-                    // If no artists found, display "No artists found" message
+
                     var noArtistsMessage = `
                         <div class="col-12 text-center">
                             <p class="h5 text-muted">No artists found</p>
@@ -501,7 +503,7 @@ $(document).ready(function() {
 
 $(document).ready(function() {
             // Handle the Preview button click
-            $('#previewButton').on('click', function() {
+            $('#previewButton').on('click', async function() {
                         // Get form values
                         var firstName = $('#firstname').val();
                         var lastName = $('#lastname').val();
@@ -520,8 +522,51 @@ $(document).ready(function() {
                         var facebookLink = $('#facebook_link').val();
                         var instagramLink = $('#instagram_link').val();
                         var linkedinLink = $('#linkedin_link').val();
-                        var profile_picture = $('#profile_picture').prop('files')[0];
-                        var cover_photo = $('#uploadCoverPhoto').prop('files')[0];
+
+
+
+
+                        async function getRenderedProfilePhotoAsFile() {
+
+                            const hiddenPreview = document.getElementById("hiddenProfilePicturePreview")
+
+                            const fileInput = document.getElementById("profile_picture");
+
+                            if (fileInput && fileInput.files && fileInput.files[0]) {
+                                return fileInput.files[0]; // Return the uploaded file
+                            }
+
+                            if (hiddenPreview && hiddenPreview.src) {
+
+                                const coverPhotoURL = hiddenPreview.src;
+                                const response = await fetch(coverPhotoURL);
+                                const blob = await response.blob();
+
+                                const file = new File([blob], "profile_photo.jpg", { type: blob.type });
+                                console.log("Rendered Profile Photo as File:", file);
+
+                                return file;
+                            } else {
+
+                                return document.getElementById("profile_picture").files[0];;
+                            }
+
+                        }
+
+                        const profile_picture = await getRenderedProfilePhotoAsFile();
+
+                        async function getRenderedCoverPhotoAsFile() {
+                            const coverPhotoURL = document.getElementById("coverPhotoPreview").src;
+                            const response = await fetch(coverPhotoURL);
+                            const blob = await response.blob();
+
+                            const file = new File([blob], "cover_photo.jpg", { type: blob.type });
+                            console.log("Rendered Cover Photo as File:", file);
+
+                            return file;
+                        }
+                        const cover_photo = await getRenderedCoverPhotoAsFile();
+
 
                         var defaultImage = `${STATIC_URL}images/blank_pic.png`;
 
@@ -554,19 +599,13 @@ $(document).ready(function() {
                         var selectedSkills = [];
 
 
-
-
-
-
-                        // Select all list items
                         const listItems = document.querySelectorAll('.list-group-item-experience');
                         const experiences = [];
 
                         listItems.forEach((listItem) => {
-                            // Get the entire text content of the <div> containing the data
                             const divElement = listItem.querySelector('div');
                             const divContent = divElement ? divElement.textContent.trim() : '';
-                            d
+
 
                             // Extract designation
                             const designationMatch = divContent.match(/^(.*) at/);
@@ -581,17 +620,18 @@ $(document).ready(function() {
                             const dateRange = dateRangeMatch ? dateRangeMatch[1].trim() : '';
                             const [startDate, endDate] = dateRange.split('to').map(date => date.trim());
 
-                            // Determine if currently working
                             const currentlyWorking = endDate === 'Present';
 
-                            // Push data to the experiences array
-                            experiences.push({
-                                designation,
-                                company,
-                                startDate, // Full start date
-                                endDate: currentlyWorking ? null : endDate, // Full end date or null if "Present"
-                                currentlyWorking,
-                            });
+                            if (designation && company && startDate) {
+
+                                experiences.push({
+                                    designation,
+                                    company,
+                                    startDate,
+                                    endDate: currentlyWorking ? null : endDate,
+                                    currentlyWorking,
+                                });
+                            }
                         });
                         $(".skill-checkbox:checked").each(function() {
                             selectedSkills.push($(this).val());
@@ -600,9 +640,35 @@ $(document).ready(function() {
 
 
 
-                        var fileInput = document.getElementById('documents');
-                        var files = fileInput.files;
-                        let profileImage = defaultImage; // Default profile image
+                        async function getRenderedImagesAsFiles() {
+                            const hiddenPreviews = document.querySelectorAll(".hidden-preview");
+                            const fileInput = document.getElementById("documents");
+
+                            let filesArray = [];
+
+                            if (hiddenPreviews.length > 0) {
+                                for (let preview of hiddenPreviews) {
+                                    const fileURL = preview.dataset.fileUrl;
+                                    const fileName = preview.dataset.fileName;
+
+                                    const response = await fetch(fileURL);
+                                    const blob = await response.blob();
+
+                                    const file = new File([blob], fileName, { type: blob.type });
+                                    filesArray.push(file);
+                                }
+                            }
+
+                            if (fileInput && fileInput.files && fileInput.files.length > 0) {
+
+                                filesArray = filesArray.concat(Array.from(fileInput.files));
+                            }
+
+                            return filesArray;
+                        }
+                        var files = await getRenderedImagesAsFiles();
+
+                        let profileImage = defaultImage;
                         let coverImage = defaultCoverImage;
 
                         function updatePreview(previewImage, files, previewCoverImage) {
@@ -627,7 +693,6 @@ $(document).ready(function() {
                                     </div>
                                     
                                 </div>
-                             <a href="{% url 'artist-profile-setting' %}" class="btn btn-sm btn-icon btn-pills btn-soft-primary"><i data-feather="settings" class="icons"></i></a>
                             </div>
                         </div>
                     </div>
@@ -742,37 +807,30 @@ $(document).ready(function() {
                `;
 
 
-                            // Insert the preview content into the modal
                             $('#previewContent').html(previewContent);
 
                             feather.replace();
-
-                            // Now render the skills in the skills container
                             var skillsContainer = document.getElementById("skills-container");
-                            skillsContainer.innerHTML = ''; // Clear previous content
+                            skillsContainer.innerHTML = '';
 
                             selectedSkills.forEach(function(skill) {
                                 var badge = document.createElement("span");
                                 badge.classList.add("badge", "bg-soft-primary", "rounded-pill");
-                                badge.textContent = skill; // Set the skill name as the badge text
-                                skillsContainer.appendChild(badge); // Append the badge to the container
+                                badge.textContent = skill;
+                                skillsContainer.appendChild(badge);
                             });
 
                             const experienceContainer = document.getElementById('experience-container');
-                            experienceContainer.innerHTML = ''; // Clear previous content
+                            experienceContainer.innerHTML = '';
 
-                            if (experiences.length === 0) {
-                                experienceContainer.innerHTML = '<p>No experience available.</p>';
-                                return;
-                            }
+                            if (experiences.length > 0) {
 
-                            experiences.forEach((experience) => {
-                                        // Create a card for each experience
-                                        const card = document.createElement('div');
-                                        card.classList.add('card', 'shadow-sm', 'p-3', 'mb-2', 'bg-light', 'rounded');
 
-                                        // Create the content of the card
-                                        card.innerHTML = `
+                                experiences.forEach((experience) => {
+                                            const card = document.createElement('div');
+                                            card.classList.add('card', 'shadow-sm', 'p-3', 'mb-2', 'bg-light', 'rounded');
+
+                                            card.innerHTML = `
                     <div class="d-flex justify-content-between align-items-center">
                         <h6 class="card-title mb-2">${experience.designation} at ${experience.company}</h6>
                         <span class="badge bg-info text-white">
@@ -786,27 +844,23 @@ $(document).ready(function() {
                     </p>
                 `;
         
-                // Append the card to the container
                 experienceContainer.appendChild(card);
 
 
                 
             });
 
-            // Gather book names and links from the inputs
+        } else{
+            experienceContainer.innerHTML = '<p>No experience available.</p>';
+        
+        }
+
             var bookNames = [];
             var bookLinks = [];
 
             document.querySelectorAll('input[name="book_name[]"]').forEach(input => bookNames.push(input.value));
             document.querySelectorAll('input[name="book_link[]"]').forEach(input => bookLinks.push(input.value));
 
-            // Perform validation to ensure both book names and links are not empty
-            if (bookNames.length === 0 || bookLinks.length === 0 || bookNames.some(name => !name) || bookLinks.some(link => !link)) {
-                alert('Please enter at least one book with a valid name and link.');
-                return;
-            }
-
-            // Combine book names and links into a single array of objects
             var books = bookNames.map((name, index) => {
                 return {
                     book_name: name,
@@ -814,45 +868,37 @@ $(document).ready(function() {
                 };
             });
 
-            // Get the container for displaying the books
             const booksContainer = document.getElementById("books_published");
-
-            // Clear previous content before appending new books
             booksContainer.innerHTML = "";
-
-            // Append the books to the container
             if (books && books.length > 0) {
                 books.forEach(book => {
                     if (book.book_name && book.book_link) {
-                        // Create a span element
+                       
                         const span = document.createElement("span");
 
-                        // Create an anchor element
                         const anchor = document.createElement("a");
                         anchor.href = book.book_link;
-                        anchor.target = "_blank"; // Open link in a new tab
+                        anchor.target = "_blank"; 
                         anchor.className = "text-decoration-none";
                         anchor.innerText = book.book_name;
 
-                        // Append the anchor to the span
                         span.appendChild(anchor);
 
-                        // Add a margin for spacing
                         span.style.marginRight = "10px";
 
-                        // Append the span to the container
                         booksContainer.appendChild(span);
                     }
+                    else {
+                
+                        const noBooksMessage = document.createElement("span");
+                        noBooksMessage.innerText = "No Books Published.";
+                        booksContainer.appendChild(noBooksMessage);
+                    }
                 });
-            } else {
-                // If no books are available, display a default message
-                const noBooksMessage = document.createElement("span");
-                noBooksMessage.innerText = "No Books Published.";
-                booksContainer.appendChild(noBooksMessage);
             }
                 
                     const imagePreviewContainer = document.getElementById('image-preview-container');
-                    imagePreviewContainer.innerHTML = ''; // Clear previous content
+                    imagePreviewContainer.innerHTML = '';
                     console.log("preview the files",files)
                     if (files.length > 0) {
                         for (let i = 0; i < files.length; i++) {
@@ -885,17 +931,13 @@ $(document).ready(function() {
                         imagePreviewContainer.innerHTML = '<p>No images selected.</p>';
                     }
 }
-
-        
-
-
-          // Handle profile_picture
+     
+    
     if (profile_picture) {
         const reader = new FileReader();
         reader.onload = function (e) {
             profileImage = e.target.result;
 
-            // Check if cover_photo was already handled or is not present
             if (!cover_photo) {
                 updatePreview(profileImage,files, coverImage);
                 $('#previewModal').modal('show');
@@ -909,13 +951,11 @@ $(document).ready(function() {
         reader.readAsDataURL(profile_picture);
     }
 
-    // Handle cover_photo
     if (cover_photo) {
         const reader = new FileReader();
         reader.onload = function (e) {
             coverImage = e.target.result;
 
-            // Check if profile_picture was already handled or is not present
             if (!profile_picture) {
                 updatePreview(profileImage,files, coverImage);
                 $('#previewModal').modal('show');
@@ -929,7 +969,6 @@ $(document).ready(function() {
         reader.readAsDataURL(cover_photo);
     }
 
-    // Fallback for when neither file is selected
     if (!profile_picture && !cover_photo) {
         updatePreview(profileImage,files, coverImage);
         $('#previewModal').modal('show');
@@ -942,15 +981,13 @@ $(document).ready(function() {
 
 
 $(document).ready(function() {
-    // Check if there is a search query in the URL
     var urlParams = new URLSearchParams(window.location.search);
     var searchQuery = urlParams.get('search_query');
 
     if (searchQuery) {
         console.log("Search query:", searchQuery);
 
-        // After rendering the results (e.g., your AJAX request or template rendering), remove the query parameter
-        var newURL = window.location.origin + window.location.pathname; // Remove query string
-        window.history.replaceState({}, document.title, newURL); // Replace URL without query parameter
+        var newURL = window.location.origin + window.location.pathname; 
+        window.history.replaceState({}, document.title, newURL);
     }
 });

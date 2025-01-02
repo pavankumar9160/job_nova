@@ -54,18 +54,18 @@ class Experience(models.Model):
     end_date = models.DateField(null=True, blank=True)
     currently_working = models.BooleanField(default=False)
     
+    def __str__(self):
+        return f"{self.designation} at {self.company}"
+    
+    
 class BooksPublished(models.Model):
     book_name = models.CharField(max_length=255)
     book_url = models.URLField(blank=True, null=True)
     
     def __str__(self):
-        return self.book_name
+        return self.book_name 
       
-    
-    
-    def __str__(self):
-        return f"{self.designation} at {self.company}"
-    
+        
 class Gallery(models.Model):
     file_name = models.ImageField(upload_to='gallery/', blank=True, null=True)
     def __str__(self):

@@ -902,9 +902,9 @@ def update_artist_details_api(request):
             artist.cover_photo = request.FILES['cover_photo'] 
         
         if 'files' in request.FILES:
-            files = request.FILES.getlist('files')  # Use getlist to get multiple files
+            files = request.FILES.getlist('files')  
             if artist.images.exists():
-                artist.images.all().delete()  # Delete existing images
+                artist.images.all().delete()  
             
             for file in files:
                 image = Gallery.objects.create(file_name=file)
@@ -965,60 +965,61 @@ def update_artist_details_api(request):
         if request.POST.get('highest_qualification'):
             artist.highest_qualification = request.POST.get('highest_qualification')    
         
-                
-         # Handling multiple book names and links
-        book_names = request.POST.getlist('book_name')  # Get all values for book_name
-        book_links = request.POST.getlist('book_link')  # Get all values for book_link
+        book_names = request.POST.getlist('book_name')  
+        book_links = request.POST.getlist('book_link')  
         print("book_names", book_names)
 
-        # Ensure both book_names and book_links are provided and non-empty
         if book_names and book_links and len(book_names) == len(book_links):
-            # Clear the existing books first before adding new ones
-            artist.books_published.clear()  # Clears the current association of books for the artist
+           
+            artist.books_published.clear() 
             
             books = []
             for name, link in zip(book_names, book_links):
-                if name and link:  # Ensure neither name nor link is empty
-                    # Create a new book record for each unique pair of name and link
+                if name and link:  
+                 
                     book, created = BooksPublished.objects.get_or_create(
                         book_name=name,
                         book_url=link
                     )
                     books.append(book)
             
-            # Set the new books to the artist (removes previous ones and adds the new ones)
             if books:
-                artist.books_published.set(books)  # Many-to-many set operation
+                artist.books_published.set(books)  
             
             artist.save()
 
-            # Delete books that are no longer associated with any artist
-            # Clean up books that are no longer associated with any artist
             BooksPublished.objects.annotate(artist_count=Count('artist_books')).filter(artist_count=0).delete()
-
-            return JsonResponse({'message': 'Books updated successfully!'}, status=200)
+        elif not book_names and not book_links:
+            artist.books_published.clear()  
+            artist.save()
         
-    
         if request.POST.get('availability'):
             artist.availability = request.POST.get('availability')
-        
+            
         if request.POST.get('skills'):
-            skill_names = request.POST.get('skills').split(',')  
+           
+            skill_names = request.POST.get('skills').split(',')
             
-            skills = []
-            for skill_name in skill_names:
-                skill, created = Skill.objects.get_or_create(name=skill_name)
-                skills.append(skill)
-            
-            artist.skills.set(skills)
+            print("skillsinterminal",skill_names)
+
+            if skill_names:
+                skills = []
+                for skill_name in skill_names:
+                    skill_name = skill_name.strip()  # To remove any extra spaces
+                    if skill_name:
+                        skill, created = Skill.objects.get_or_create(name=skill_name)
+                        skills.append(skill)
+                if skills:
+                    artist.skills.set(skills) 
+                    artist.save() 
         
+                
         # Handling experiences data
         if 'experiences_data' in request.POST:
             try:
-                experiences_data = json.loads(request.POST['experiences_data'])  # Parse JSON data from the request body
+                experiences_data = json.loads(request.POST['experiences_data'])  
 
-                if experiences_data:  # If there is experience data provided
-                    # Check if the artist has any existing experiences and clear them if needed
+                if experiences_data:  
                     if artist.experience_details.exists():
                         artist.experience_details.all().delete()
 
@@ -1030,13 +1031,11 @@ def update_artist_details_api(request):
                         end_date = exp.get('endDate')
                         currently_working = exp.get('currentlyWorking')
 
-                        # Validate that required fields are present
                         if not designation or not company or not start_date:
                             return JsonResponse({'error': 'Missing required experience fields'}, status=400)
 
-                        # Convert start_date and end_date to proper DateField format if needed
                         try:
-                            start_date = datetime.strptime(start_date, '%Y-%m-%d').date()  # Assuming format is 'YYYY-MM-DD'
+                            start_date = datetime.strptime(start_date, '%Y-%m-%d').date() 
                         except ValueError:
                             return JsonResponse({'error': 'Invalid start_date format'}, status=400)
 
@@ -1046,9 +1045,8 @@ def update_artist_details_api(request):
                             except ValueError:
                                 return JsonResponse({'error': 'Invalid end_date format'}, status=400)
                         else:
-                            end_date = None  # If no end date, set it as None
+                            end_date = None 
 
-                        # Create and save a new Experience object
                         experience = Experience.objects.create(
                             designation=designation,
                             company=company,
@@ -1059,7 +1057,6 @@ def update_artist_details_api(request):
 
                         artist.experience_details.add(experience)
                 else:
-                    # If no new experience data is provided, skip this part and don't throw an error
                     pass
             except json.JSONDecodeError:
                 return JsonResponse({'error': 'Invalid experiences data'}, status=400)
@@ -1264,7 +1261,7 @@ def check_profile_completion(request):
 
     # Fields to check for completion
     required_fields = [
-        'firstname', 'lastname', 'gender', 'dob', 'country', 'address1','address2','state','pincode'
+        'firstname', 'lastname', 'gender', 'dob', 'country', 'address1','address2','state','pincode',
         'description', 'introduction', 'languages_read', 'languages_write',
         'languages_speak', 'facebook_link', 'instagram_link', 'linkedin_link',
         'job_title', 'company_name', 'experience', 'portfolio', 'short_bio',

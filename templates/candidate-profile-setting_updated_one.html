@@ -81,8 +81,16 @@
                                     <label class="form-label" style="font-family: Arial, sans-serif; font-size: 16px; font-weight: bold;">Profile Picture:</label>
                                     <input name="profile_picture" id="profile_picture" type="file" class="form-control" accept="image/*" onchange="updateProfilePictureName()">
                                     {% if additional_info.profile_picture %}
-                                    <!-- Remove 'profiles/' from the file path -->
-                                    <p id="profile-picture-name">{{ additional_info.profile_picture.name|slice:"9:" }}</p>
+                                    <img id="hiddenProfilePicturePreview" 
+                                    src="{{ additional_info.profile_picture.url }}" 
+                                    style="display: none;" 
+                                    alt="Profile Picture">
+                               
+                                    <p id="profile-picture-name">
+                                        <a href="{{ additional_info.profile_picture.url }}" target="_blank" style="text-decoration: none;">
+                                            {{ additional_info.profile_picture.name }}
+                                        </a>
+                                    </p>
                                 {% endif %}
                                 </div>
                             </div>
@@ -185,8 +193,17 @@
         <ul id="file-list" class="mt-2 list-unstyled" style="font-family: Arial, sans-serif; font-size: 14px; color: #333; padding-left: 0;">
                             {% for images in additional_info.images.all %}
            
-                <li style="margin-bottom: 2px;">{{ images.file_name.name|slice:"8:" }}</li>
-          
+<li style="margin-bottom: 2px;">
+                <a href="{{ images.file_name.url }}" target="_blank" >
+                    {{ images.file_name.name }}
+                </a>
+                <img class="hidden-preview" 
+                src="{{ images.file_name.url }}" 
+                style="display:none;" 
+                data-file-name="{{ images.file_name.name }}" 
+                data-file-url="{{ images.file_name.url }}" 
+                alt="Existing File Preview">
+            </li>          
             {% endfor %}
         </ul>
         {% else %}
@@ -340,8 +357,8 @@
                                         </div>
                                         {% empty %}
                                         <div class="book-entry mb-2">
-                                            <input type="text" name="book_name[]" class="form-control mb-1" placeholder="Enter book name" maxlength="85" required>
-                                            <input type="url" name="book_link[]" class="form-control mb-1" placeholder="Enter book link" required>
+                                            <input type="text" name="book_name[]" class="form-control mb-1" placeholder="Enter book name" maxlength="85">
+                                            <input type="url" name="book_link[]" class="form-control mb-1" placeholder="Enter book link">
                                             <button type="button" class="remove-book-btn btn btn-danger btn-sm">Remove</button>
                                         </div>
                                     {% endfor %}
@@ -514,26 +531,27 @@
                                     });
                                 });
                                 document.addEventListener('DOMContentLoaded', function() {
-                                    // JavaScript to handle file upload and live preview
+                                   
                                     document.getElementById('uploadCoverPhoto').addEventListener('change', function(event) {
-                                        const file = event.target.files[0]; // Get the uploaded file
+                                        const file = event.target.files[0]; 
                                         if (file) {
-                                            const reader = new FileReader(); // Create a FileReader to read the file
+                                            const reader = new FileReader(); 
                                             reader.onload = function(e) {
                                                 const coverPhotoPreview = document.getElementById('coverPhotoPreview');
                                                 if (coverPhotoPreview) {
-                                                    // Update the src attribute of the cover photo <img>
+                                  
                                                     coverPhotoPreview.src = e.target.result;
                                                 }
                                             };
-                                            reader.readAsDataURL(file); // Read the file as a data URL
+                                            reader.readAsDataURL(file); 
                                         }
                                     });
                                 });
-                                
-    // Function to update the displayed file name when a new profile picture is selected
+
     function updateProfilePictureName() {
         const fileInput = document.getElementById('profile_picture');
+        const previewImage = document.getElementById('hiddenProfilePicturePreview');
+
         const fileNameDisplay = document.getElementById('profile-picture-name');
 
         if (fileInput.files && fileInput.files[0]) {
@@ -543,6 +561,7 @@
             // Reset the display if no file is selected (in case the user removes the file)
             fileNameDisplay.textContent = '';
         }
+        
     }
 
     // Function to add new book entry fields
@@ -556,7 +575,7 @@ document.getElementById('addBookBtn').addEventListener('click', function() {
         const bookLink = entry.querySelector('input[name="book_link[]"]');
 
         if (!bookName.value || !bookLink.value) {
-            canAddBook = false; // If any field is empty, do not allow adding a new book entry
+            canAddBook = false; 
         }
     });
 
@@ -567,8 +586,8 @@ document.getElementById('addBookBtn').addEventListener('click', function() {
         newBookEntry.classList.add('book-entry', 'mb-2');
 
         newBookEntry.innerHTML = `
-            <input type="text" name="book_name[]" class="form-control mb-1" placeholder="Enter book name" maxlength="85" required>
-            <input type="url" name="book_link[]" class="form-control mb-1" placeholder="Enter book link" required>
+            <input type="text" name="book_name[]" class="form-control mb-1" placeholder="Enter book name" maxlength="85">
+            <input type="url" name="book_link[]" class="form-control mb-1" placeholder="Enter book link">
             <button type="button" class="remove-book-btn btn btn-danger btn-sm">Remove</button>
         `;
 
