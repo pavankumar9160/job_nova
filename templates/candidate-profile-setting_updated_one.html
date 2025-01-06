@@ -37,14 +37,28 @@
                         <div class="row g-3">
                             <div class="col-md-6">
                                 <div class="mb-3">
-                                    <label class="form-label"style="font-family: Arial, sans-serif; font-size: 16px; font-weight: bold;">First Name:<span class="text-danger" >*</span></label>
-                                    <input name="firstname" id="firstname" type="text" class="form-control"  value="{{ additional_info.firstname|default:'' }}" maxlength="15"required>
+                                    <label class="form-label" style="font-family: Arial, sans-serif; font-size: 16px; font-weight: bold;">
+                                        Title:<span class="text-danger">*</span>
+                                    </label>
+                                    <select name="title" id="title" class="form-control" required>
+                                        <option value="Mr" {% if additional_info.title == "Mr" %}selected{% endif %}>Mr</option>
+                                        <option value="Mrs" {% if additional_info.title == "Mrs" %}selected{% endif %}>Mrs</option>
+                                    </select>
                                 </div>
                             </div>
                             <div class="col-md-6">
                                 <div class="mb-3">
-                                    <label class="form-label" style="font-family: Arial, sans-serif; font-size: 16px; font-weight: bold;">Last Name:<span class="text-danger" >*</span></label>
-                                    <input name="lastname" id="lastname" type="text" class="form-control" maxlength="15" value="{{ additional_info.lastname|default:'' }}" required>
+                                    <label class="form-label"style="font-family: Arial, sans-serif; font-size: 16px; font-weight: bold;">Full Name:<span class="text-danger" >*</span></label>
+                                    <input name="fullname" id="fullname" type="text" class="form-control"  value="{{ additional_info.fullname|default:'' }}" maxlength="30"required>
+                                </div>
+                            </div>
+                            
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label class="form-label" style="font-family: Arial, sans-serif; font-size: 16px; font-weight: bold;">
+                                        Pen Name/Short Name:<span class="text-danger">*</span>
+                                    </label>
+                                    <input name="penname" id="penname" type="text" class="form-control" maxlength="15" value="{{ additional_info.penname|default:'' }}" required>
                                 </div>
                             </div>
                             <div class="col-md-6">
@@ -186,7 +200,7 @@
                                         accept="image/*"
                                         multiple
                                     >
-                                    <small class="form-text text-muted">You can select multiple image files.</small>
+                                <small class="form-text text-muted">You can select multiple image files.</small>
         
         <!-- File names will be displayed here -->
         {% if additional_info.images.all %}
@@ -203,6 +217,12 @@
                 data-file-name="{{ images.file_name.name }}" 
                 data-file-url="{{ images.file_name.url }}" 
                 alt="Existing File Preview">
+                <button     class="remove-image-btn" 
+                style="border: none; background: transparent; color: red; cursor: pointer;" 
+                data-image-id="{{ images.id }}" 
+                title="Remove image">
+            ✖
+        </button>
             </li>          
             {% endfor %}
         </ul>
@@ -298,6 +318,10 @@
                                             <input type="url" class="form-control" id="instagram_link"  value="{{ additional_info.instagram_link|default:'' }}" maxlength="100" placeholder="Instagram URL" >
                                         </div>
                                         <div class="mb-2 d-flex align-items-center">
+                                            <i data-feather="twitter" class="fea icon-sm align-middle me-2" title="Twitter"></i>
+                                            <input type="url" class="form-control" id="twitter_link" value="{{ additional_info.twitter_link|default:'' }}" maxlength="100" placeholder="Twitter URL" >
+                                        </div>
+                                        <div class="mb-2 d-flex align-items-center">
                                             <i data-feather="linkedin" class="fea icon-sm align-middle me-2" title="linkedin"></i>
                                             <input type="url" class="form-control" id="linkedin_link" value="{{ additional_info.linkedin_link|default:'' }}" maxlength="100" placeholder="LinkedIn URL" >
                                         </div>
@@ -308,18 +332,18 @@
                         </div>
                             <h5>Professional Details:</h5>
                             <div class="row g-3">
-                            <div class="col-lg-12">
+                            {% comment %} <div class="col-lg-12">
                                 <div class="mb-3">
                                     <label class="form-label"style="font-family: Arial, sans-serif; font-size: 16px; font-weight: bold;">Professional Title:</label>
                                     <input name="job_title" id="job_title" value="{{ additional_info.job_title|default:'' }}" type="text" class="form-control" maxlength="30" placeholder="Professional Title" >
                                 </div>
-                            </div>
-                            <div class="col-lg-12">
+                            </div> {% endcomment %}
+                            {% comment %} <div class="col-lg-12">
                                 <div class="mb-3">
                                     <label class="form-label"style="font-family: Arial, sans-serif; font-size: 16px; font-weight: bold;">Company / Organization (if applicable):</label>
                                     <input name="company_name" id="company_name" value="{{ additional_info.company_name|default:'' }}" type="text" class="form-control"  maxlength="30" placeholder="Company / Organization" >
                                 </div>
-                            </div>
+                            </div> {% endcomment %}
                             <div class="col-lg-12">
                                 <div class="mb-3">
                                     <label class="form-label"style="font-family: Arial, sans-serif; font-size: 16px; font-weight: bold;">Years of Experience:</label>
@@ -340,25 +364,36 @@
                                 </button>
                             </div>
                             <div class="col-lg-12">
-                                <div class="mb-3">
-                                    <label class="form-label"style="font-family: Arial, sans-serif; font-size: 16px; font-weight: bold;">Education:</label>
-                                    <textarea name="highest_qualification"  id="highest_qualification" class="form-control" maxlength="85">{{ additional_info.highest_qualification|default:'' }}</textarea>
-                                </div>
+                                <label class="form-label" style="font-family: Arial, sans-serif; font-size: 16px; font-weight: bold;">Education List:</label>
+                                <ul id="educationList" class="list-group">
+                                </ul>
+                            </div>
+                            <div class="col-lg-12">
+                                <button type="button" class="btn btn-primary mb-3" data-bs-toggle="modal" data-bs-target="#educationModal" onclick="openAddEducationModal()">
+                                    Add Education
+                                </button>
                             </div>
                             <div class="col-lg-12">
                                 <div class="mb-3">
                                     <label class="form-label" style="font-family: Arial, sans-serif; font-size: 16px; font-weight: bold;">Books Published:</label>
                                     <div id="booksPublishedSection">
                                         {% for book in books %}
-                                        <div class="book-entry mb-2">
-                                            <input type="text" name="book_name[]" class="form-control mb-1" value="{{ book.book_name }}" placeholder="Enter book name" maxlength="85" required>
-                                            <input type="url" name="book_link[]" class="form-control mb-1"  value="{{ book.book_url }}" placeholder="Enter book link" required>
-                                            <button type="button" class="remove-book-btn btn btn-danger btn-sm">Remove</button>
+                                        <div class="book-entry mb-2" data-book-id="{{ book.id }}">
+                                            <input type="text" name="existing_book_name[]" class="form-control mb-1" value="{{ book.book_name }}" placeholder="Enter book name" maxlength="85" readonly >
+                                            <input type="url" name="existing_book_link[]" class="form-control mb-1"  value="{{ book.book_url }}" placeholder="Enter book link" readonly >
+                                            {% if book.book_image %}
+                                            <small>Current Book Image: <a href="{{ book.book_image.url }}" target="_blank">{{ book.book_image }}</a></small>
+                                            <input type="hidden" name="existing_book_image[]" value="{{ book.book_image.url|cut:'/media/' }}">
+                                            {% else %}
+                                            <input type="hidden" name="existing_book_image[]" value="">
+                                            {% endif %}                                            
+                                            <button type="button" class="remove-exisitng-book-btn btn btn-danger btn-sm">Remove</button>
                                         </div>
                                         {% empty %}
                                         <div class="book-entry mb-2">
                                             <input type="text" name="book_name[]" class="form-control mb-1" placeholder="Enter book name" maxlength="85">
                                             <input type="url" name="book_link[]" class="form-control mb-1" placeholder="Enter book link">
+                                            <input type="file" name="book_image[]" class="form-control mb-1" accept="image/*">
                                             <button type="button" class="remove-book-btn btn btn-danger btn-sm">Remove</button>
                                         </div>
                                     {% endfor %}
@@ -374,7 +409,7 @@
                                 </div>
                             </div>
                             
-                            <div class="col-lg-12">
+                            {% comment %} <div class="col-lg-12">
                                 <div class="mb-3">
                                     <label class="form-label"style="font-family: Arial, sans-serif; font-size: 16px; font-weight: bold;">Availability:</label>
                                     <select name="availability" id="availability" class="form-control">
@@ -383,7 +418,7 @@
                                                     <option value="freelance">Freelance</option>
                                                 </select>
                                 </div>
-                            </div>
+                            </div> {% endcomment %}
                             <div class="col-lg-12">
                                 <div class="mb-3">
                                     <label class="form-label" style="font-family: Arial, sans-serif; font-size: 16px; font-weight: bold;">Skills:<span class="text-danger" >*</span></label>
@@ -564,23 +599,49 @@
         
     }
 
-    // Function to add new book entry fields
-document.getElementById('addBookBtn').addEventListener('click', function() {
+ // Function to add a new book entry
+document.getElementById('addBookBtn').addEventListener('click', function () {
     const bookEntries = document.querySelectorAll('.book-entry');
     let canAddBook = true;
 
-    // Loop through each book entry to check if the fields are filled
+    // Validate all existing entries
     bookEntries.forEach(entry => {
+        // Check existing fields
+        const existingBookName = entry.querySelector('input[name="existing_book_name[]"]');
+        const existingBookLink = entry.querySelector('input[name="existing_book_link[]"]');
+        const existingImageElement = entry.querySelector('input[name="existing_book_image[]"]');
+        const existingImage = existingImageElement ? existingImageElement.value : '';
+
+        // Check new fields
         const bookName = entry.querySelector('input[name="book_name[]"]');
         const bookLink = entry.querySelector('input[name="book_link[]"]');
+        const bookImage = entry.querySelector('input[name="book_image[]"]');
 
-        if (!bookName.value || !bookLink.value) {
-            canAddBook = false; 
+        // Validation logic for each entry
+        if (
+            (!existingBookName || existingBookName.value.trim() === '') &&
+            (!bookName || bookName.value.trim() === '') // Either existing or new name should be filled
+        ) {
+            canAddBook = false;
+        }
+
+        if (
+            (!existingBookLink || existingBookLink.value.trim() === '') &&
+            (!bookLink || bookLink.value.trim() === '') // Either existing or new link should be filled
+        ) {
+            canAddBook = false;
+        }
+
+        if (
+            (!existingImage || existingImage.trim() === '') &&
+            (!bookImage || !bookImage.files[0]) // Either existing or new image should be provided
+        ) {
+            canAddBook = false;
         }
     });
 
+    // If validation passes, allow adding a new book entry
     if (canAddBook) {
-        // Only add a new entry if all fields in the current entries are filled
         const booksPublishedSection = document.getElementById('booksPublishedSection');
         const newBookEntry = document.createElement('div');
         newBookEntry.classList.add('book-entry', 'mb-2');
@@ -588,48 +649,114 @@ document.getElementById('addBookBtn').addEventListener('click', function() {
         newBookEntry.innerHTML = `
             <input type="text" name="book_name[]" class="form-control mb-1" placeholder="Enter book name" maxlength="85">
             <input type="url" name="book_link[]" class="form-control mb-1" placeholder="Enter book link">
+            <input type="file" name="book_image[]" class="form-control mb-1" accept="image/*">
             <button type="button" class="remove-book-btn btn btn-danger btn-sm">Remove</button>
         `;
 
-        // Append the new entry to the section
         booksPublishedSection.appendChild(newBookEntry);
     } else {
-        // Optionally, show a message or alert if the current entries are not filled
-        alert("Please fill in both the book name and link before adding another book.");
+        alert("Please ensure all fields (name, link, and image) are filled in existing entries before adding a new book.");
     }
 });
 
 // Function to remove a book entry
-document.getElementById('booksPublishedSection').addEventListener('click', function(e) {
+document.getElementById('booksPublishedSection').addEventListener('click', function (e) {
     if (e.target && e.target.classList.contains('remove-book-btn')) {
         e.target.parentElement.remove();
     }
 });
 
+
+
+// Handle the "Remove" button click event
+document.querySelectorAll('.remove-exisitng-book-btn').forEach(button => {
+    button.addEventListener('click', function() {
+        var bookEntry = this.closest('.book-entry');
+        var bookId = bookEntry ? bookEntry.dataset.bookId : null;  // Get the book ID
+        console.log("clicked")
+        console.log(bookId)
+        if (bookId) {
+            // Make an AJAX call to delete the book
+            $.ajax({
+                url: `/remove-book/${bookId}/`, // Backend endpoint for deletion
+                type: 'DELETE', // HTTP DELETE request
+                headers: {
+                    'Content-Type': 'application/json', // Optional if not sending data
+                },
+                success: function(response) {
+                    // On success, remove the book entry from the DOM
+                    bookEntry.remove();
+                    console.log('Book removed successfully.');
+                },
+                error: function(xhr, status, error) {
+                    console.error('Error removing book:', error);
+                    alert('Failed to remove the book.');
+                }
+            });
+        } else {
+            console.error('Book ID is missing.');
+        }
+    });
+});
+
+document.addEventListener('DOMContentLoaded', function () {
+    const removeButtons = document.querySelectorAll('.remove-image-btn');
+    
+    removeButtons.forEach(button => {
+        button.addEventListener('click', function (e) {
+            e.preventDefault();
+            const imageId = this.getAttribute('data-image-id');
+            
+            // Remove the image element from the UI
+            this.parentElement.remove();
                                 
-                                
+        })
+    })
+    });                        
     </script>
                             
                             
                             
                             
                             
-                            <div class="col-lg-12">
+                            {% comment %} <div class="col-lg-12">
                                 <div class="mb-3">
                                     <label class="form-label"style="font-family: Arial, sans-serif; font-size: 16px; font-weight: bold;">Certifications:</label>
                                     <input type="text" id="certifications" value="{{ additional_info.certifications }}" class="form-control" maxlength="200" placeholder="Certifications">
                                 </div>
-                            </div>
-                            <div class="col-lg-12">
+                            </div> {% endcomment %}
+                            {% comment %} <div class="col-lg-12">
                                 <div class="mb-3">
                                     <label class="form-label"style="font-family: Arial, sans-serif; font-size: 16px; font-weight: bold;">Published Works / Projects:</label>
                                     <textarea name="published_works" id="published_works" maxlength="200" class="form-control" placeholder="Add details about published works (Title, Date, etc.)">{{ additional_info.published_works }}</textarea>
                                 </div>
-                            </div>
+                            </div> {% endcomment %}
                             <div class="col-lg-12">
                                 <div class="mb-3">
-                                    <label class="form-label"style="font-family: Arial, sans-serif; font-size: 16px; font-weight: bold;">Awards / Recognitions:</label>
-                                    <textarea name="awards" id="awards" class="form-control"  maxlength="100" placeholder="Mention any awards or achievements">{{ additional_info.awards }}</textarea>
+                                    <label class="form-label" style="font-family: Arial, sans-serif; font-size: 16px; font-weight: bold;">Awards/Recognitions:</label>
+                                    <div id="awardsSection">
+                                        {% for award in awards %}
+                                        <div class="award-entry mb-2" data-award-id="{{ award.id }}">
+                                            <input type="text" name="existing_award_name[]" class="form-control mb-1" value="{{ award.award_name }}" placeholder="Enter book name" maxlength="85" readonly >
+                                            <input type="text" name="existing_award_year[]" class="form-control mb-1"  value="{{ award.award_year }}" placeholder="Enter book link" readonly >
+                                            {% if award.award_image %}
+                                            <small>Current Award Image: <a href="{{ award.award_image.url }}" target="_blank">{{ award.award_image }}</a></small>
+                                            <input type="hidden" name="existing_award_image[]" value="{{ award.award_image.url|cut:'/media/' }}">
+                                            {% else %}
+                                            <input type="hidden" name="existing_award_image[]" value="">
+                                            {% endif %}                                            
+                                            <button type="button" class="remove-exisitng-award-btn btn btn-danger btn-sm">Remove</button>
+                                        </div>
+                                        {% empty %}
+                                        <div class="award-entry mb-2">
+                                            <input type="text" name="award_name[]" class="form-control mb-1" placeholder="Enter organisation name" maxlength="85">
+                                            <input type="text" name="award_year[]" class="form-control mb-1" placeholder="Enter award year">
+                                            <input type="file" name="award_image[]" class="form-control mb-1" accept="image/*">
+                                            <button type="button" class="remove-award-btn btn btn-danger btn-sm">Remove</button>
+                                        </div>
+                                    {% endfor %}
+                                    </div>
+                                    <button type="button" id="addAwardBtn" class="btn btn-primary btn-sm mt-2">Add An Award</button>
                                 </div>
                             </div>
 
@@ -647,20 +774,20 @@ document.getElementById('booksPublishedSection').addEventListener('click', funct
                     <h5>Others:</h5>
                     <form id="otherDetails">
                         <div class="row g-3">
-                            <div class="mb-3">
+                            {% comment %} <div class="mb-3">
                                 <label class="form-label fw-semibold">Preferred Payment Method:</label>
                                 <select class="form-control form-select" id="payment_method">
                                                 <option value="paypal">PayPal</option>
                                                 <option value="upi">UPI</option>
                                                 <option value="bank_transfer">Bank Transfer</option>
                                             </select>
-                            </div>
+                            </div> {% endcomment %}
                             <div class="mb-3">
                                 <label class="form-label fw-semibold">ID Verification (Aadhar Card - Front & Back) (Optional):</label>
                                 <input type="file" class="form-control" id="aadhar_front" accept="image/*">
                                 <input type="file" class="form-control mt-2" id="aadhar_back" accept="image/*">
                             </div>
-                            <div class="mb-3">
+                            {% comment %} <div class="mb-3">
                                 <label class="form-label fw-semibold">Type of Opportunities:</label>
                                 <select class="form-control form-select" id="opportunities">
                                                 <option value="writing">Writing</option>
@@ -668,7 +795,7 @@ document.getElementById('booksPublishedSection').addEventListener('click', funct
                                                 <option value="editing">Editing</option>
                                                 <option value="consulting">Consulting</option>
                                             </select>
-                            </div>
+                            </div> {% endcomment %}
                             <div class="mb-3">
                                 <label class="form-label fw-semibold">Alternate Email ID:</label>
                                 <input type="email" class="form-control" id="alternate_email" placeholder="Alternate Email ID">
@@ -695,10 +822,10 @@ document.getElementById('booksPublishedSection').addEventListener('click', funct
                                 <label class="form-label fw-semibold">Contact Support:</label>
                                 <a href="mailto:help@sarojaccrosian.com" class="d-block">help@sarojaccrosian.com</a>
                             </div>
-                            <div class="mb-3">
+                            {% comment %} <div class="mb-3">
                                 <label class="form-label fw-semibold">Leave a Feedback / Report an Error:</label>
                                 <textarea class="form-control" id="feedback" rows="4" placeholder="Your feedback or error report..."></textarea>
-                            </div>
+                            </div> {% endcomment %}
                             <div class="col-md-12">
                                 <button id="submit3" class=" btn btn-primary" value="Update Details">Update Details</button>
                             </div>
@@ -722,45 +849,78 @@ document.getElementById('booksPublishedSection').addEventListener('click', funct
 </section>
 
 <!----experience modal----->
-<div class="modal fade" id="experienceModal" tabindex="-1" aria-labelledby="experienceModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="experienceModalLabel">Add/Edit Experience</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-                <form id="experienceForm">
-                    <input type="hidden" id="experienceId" value="">
-                    <div class="mb-3">
-                        <label for="designation" class="form-label">Designation</label>
-                        <input type="text" id="designation" class="form-control" placeholder="Designation" maxlength="50" >
-                    </div>
-                    <div class="mb-3">
-                        <label for="company" class="form-label">Company Name</label>
-                        <input type="text" id="company" class="form-control" placeholder="Company Name" maxlength="50">
-                    </div>
-                    <div class="mb-3">
-                        <label for="startDate" class="form-label">Start Date</label>
-                        <input type="date" id="startDate" class="form-control" >
-                    </div>
-                    <div class="mb-3">
-                        <label for="endDate" class="form-label">End Date</label>
-                        <input type="date" id="endDate" class="form-control">
-                    </div>
-                    <div class="form-check mb-3">
-                        <input type="checkbox" id="currentlyWorking" class="form-check-input" onchange="toggleEndDate()">
-                        <label for="currentlyWorking" class="form-check-label">Currently Working</label>
-                    </div>
-                </form>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                <button type="button" class="btn btn-primary" onclick="saveExperience()">Save</button>
+    <div class="modal fade" id="experienceModal" tabindex="-1" aria-labelledby="experienceModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="experienceModalLabel">Add/Edit Experience</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="experienceForm">
+                        <input type="hidden" id="experienceId" value="">
+                        <div class="mb-3">
+                            <label for="designation" class="form-label">Designation</label>
+                            <input type="text" id="designation" class="form-control" placeholder="Designation" maxlength="50" >
+                        </div>
+                        <div class="mb-3">
+                            <label for="company" class="form-label">Company Name</label>
+                            <input type="text" id="company" class="form-control" placeholder="Company Name" maxlength="50">
+                        </div>
+                        <div class="mb-3">
+                            <label for="startDate" class="form-label">Start Date</label>
+                            <input type="date" id="startDate" class="form-control" >
+                        </div>
+                        <div class="mb-3">
+                            <label for="endDate" class="form-label">End Date</label>
+                            <input type="date" id="endDate" class="form-control">
+                        </div>
+                        <div class="form-check mb-3">
+                            <input type="checkbox" id="currentlyWorking" class="form-check-input" onchange="toggleEndDate()">
+                            <label for="currentlyWorking" class="form-check-label">Currently Working</label>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-primary" onclick="saveExperience()">Save</button>
+                </div>
             </div>
         </div>
     </div>
-</div>
+
+<!----education modal----->
+    <div class="modal fade" id="educationModal" tabindex="-1" aria-labelledby="educationModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="educationModalLabel">Add/Edit Education</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="educationForm">
+                        <input type="hidden" id="educationId" value="">
+                        <div class="mb-3">
+                            <label for="schoolInstitute" class="form-label">School/Institute Name</label>
+                            <input type="text" id="schoolInstitute" class="form-control" placeholder="School/Institute Name" maxlength="100">
+                        </div>
+                        <div class="mb-3">
+                            <label for="qualification" class="form-label">Qualification</label>
+                            <input type="text" id="qualification" class="form-control" placeholder="Qualification" maxlength="50">
+                        </div>
+                        <div class="mb-3">
+                            <label for="yearOfPassing" class="form-label">Year of Passing</label>
+                            <input type="number" id="yearOfPassing" class="form-control" placeholder="Year of Passing" min="1900" max="2100">
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-primary" onclick="saveEducation()">Save</button>
+                </div>
+            </div>
+        </div>
+    </div>
 
 <script>
 
@@ -900,6 +1060,93 @@ document.getElementById('booksPublishedSection').addEventListener('click', funct
         calculateTotalExperience();
       
 
+        // Initialize education data with data from the backend
+window.educations = [
+    {% for education in additional_info.education_details.all %}
+    {
+      id: {{ education.id }},
+      schoolInstitute: "{{ education.instituteName|escapejs }}",
+      qualification: "{{ education.qualification|escapejs }}",
+      yearOfPassing: "{{ education.yearOfPassing }}",
+    },
+    {% endfor %}
+  ];
+  
+  function openAddEducationModal() {
+    document.getElementById('educationId').value = '';
+    document.getElementById('schoolInstitute').value = '';
+    document.getElementById('qualification').value = '';
+    document.getElementById('yearOfPassing').value = '';
+  }
+  
+  function openEditEducationModal(index) {
+    const education = educations[index];
+    document.getElementById('educationId').value = index;
+    document.getElementById('schoolInstitute').value = education.schoolInstitute;
+    document.getElementById('qualification').value = education.qualification;
+    document.getElementById('yearOfPassing').value = education.yearOfPassing;
+  
+    const modal = new bootstrap.Modal(document.getElementById('educationModal'));
+    modal.show();
+  }
+  
+  function saveEducation() {
+    const id = document.getElementById('educationId').value;
+    const schoolInstitute = document.getElementById('schoolInstitute').value;
+    const qualification = document.getElementById('qualification').value;
+    const yearOfPassing = document.getElementById('yearOfPassing').value;
+  
+    if (!schoolInstitute || !qualification || !yearOfPassing) {
+      alert('All fields are required!');
+      return;
+    }
+  
+    if (id) {
+      educations[id] = { schoolInstitute, qualification, yearOfPassing };
+    } else {
+      educations.push({ schoolInstitute, qualification, yearOfPassing });
+    }
+  
+    const modal = bootstrap.Modal.getInstance(document.getElementById('educationModal'));
+    modal.hide();
+  
+    renderEducationList();
+  }
+  
+  function deleteEducation(index) {
+    educations.splice(index, 1);
+    renderEducationList();
+  }
+  
+  function renderEducationList() {
+    const educationList = document.getElementById('educationList');
+    educationList.innerHTML = '';
+  
+    if (educations.length === 0) {
+      educationList.innerHTML = '<li class="list-group-item-education text-center" style="list-style-type:none;">No education details found. Add your first education!</li>';
+      return;
+    }
+  
+    educations.forEach((education, index) => {
+      const listItem = document.createElement('li');
+      listItem.className = 'list-group-item-education mb-2 d-flex justify-content-between align-items-center';
+      listItem.innerHTML = `
+        <div>
+          <strong>${education.qualification}</strong> from ${education.schoolInstitute} 
+          (Year of Passing: ${education.yearOfPassing})
+        </div>
+        <div>
+          <button type="button" class="btn btn-sm btn-warning me-2" onclick="openEditEducationModal(${index})">Edit</button>
+          <button type="button" class="btn btn-sm btn-danger" onclick="deleteEducation(${index})">Delete</button>
+        </div>
+      `;
+      educationList.appendChild(listItem);
+    });
+  }
+  
+  // Initial rendering
+  renderEducationList();
+  
     // Add event listeners for all fields with maxlength
 document.addEventListener("DOMContentLoaded", function() {
     const inputs = document.querySelectorAll("input[maxlength], textarea[maxlength]");
@@ -915,6 +1162,110 @@ document.addEventListener("DOMContentLoaded", function() {
                     this.value = this.value.slice(0, maxLength); // Truncate to the max length
             }
         });
+    });
+});
+
+
+
+
+
+ // Function to add a new book entry
+ document.getElementById('addAwardBtn').addEventListener('click', function () {
+    const awardEntries = document.querySelectorAll('.award-entry');
+    let canAddAward = true;
+
+    // Validate all existing entries
+    awardEntries.forEach(entry => {
+        // Check existing fields
+        const existingAwardName = entry.querySelector('input[name="existing_award_name[]"]');
+        const existingAwardYear = entry.querySelector('input[name="existing_award_year[]"]');
+        const existingAwardImageElement = entry.querySelector('input[name="existing_award_image[]"]');
+        const existingAwardImage = existingAwardImageElement ? existingAwardImageElement.value : '';
+
+        // Check new fields
+        const awardName = entry.querySelector('input[name="award_name[]"]');
+        const awardYear = entry.querySelector('input[name="award_year[]"]');
+        const awardImage = entry.querySelector('input[name="award_image[]"]');
+
+        // Validation logic for each entry
+        if (
+            (!existingAwardName || existingAwardName.value.trim() === '') &&
+            (!awardName || awardName.value.trim() === '') // Either existing or new name should be filled
+        ) {
+            canAddAward = false;
+        }
+
+        if (
+            (!existingAwardYear || existingAwardYear.value.trim() === '') &&
+            (!awardYear || awardYear.value.trim() === '') // Either existing or new link should be filled
+        ) {
+            canAddAward = false;
+        }
+
+        if (
+            (!existingAwardImage || existingAwardImage.trim() === '') &&
+            (!awardImage || !awardImage.files[0]) // Either existing or new image should be provided
+        ) {
+            canAddAward = false;
+        }
+    });
+
+    // If validation passes, allow adding a new book entry
+    if (canAddAward) {
+        const awardsSection = document.getElementById('awardsSection');
+        const newAwardEntry = document.createElement('div');
+        newAwardEntry.classList.add('award-entry', 'mb-2');
+
+        newAwardEntry.innerHTML = `
+            <input type="text" name="award_name[]" class="form-control mb-1" placeholder="Enter award name" maxlength="85">
+            <input type="text" name="award_year[]" class="form-control mb-1" placeholder="Enter award year">
+            <input type="file" name="award_image[]" class="form-control mb-1" accept="image/*">
+            <button type="button" class="remove-award-btn btn btn-danger btn-sm">Remove</button>
+        `;
+
+        awardsSection.appendChild(newAwardEntry);
+    } else {
+        alert("Please ensure all fields (name, year, and image) are filled in existing entries before adding a new award.");
+    }
+});
+
+// Function to remove a book entry
+document.getElementById('awardsSection').addEventListener('click', function (e) {
+    if (e.target && e.target.classList.contains('remove-award-btn')) {
+        e.target.parentElement.remove();
+    }
+});
+
+
+
+// Handle the "Remove" button click event
+document.querySelectorAll('.remove-exisitng-award-btn').forEach(button => {
+    button.addEventListener('click', function() {
+        var awardEntry = this.closest('.award-entry');
+        var awardId = awardEntry ? awardEntry.dataset.awardId : null;  // Get the book ID
+        console.log("clicked")
+        console.log(awardId)
+        if (awardId) {
+            // Make an AJAX call to delete the book
+            $.ajax({
+                url: `/remove-award/${awardId}/`, // Backend endpoint for deletion
+                type: 'DELETE', // HTTP DELETE request
+                headers: {
+                    'Content-Type': 'application/json', // Optional if not sending data
+                },
+                success: function(response) {
+                    // On success, remove the book entry from the DOM
+                    awardEntry.remove();
+                    console.log('Award removed successfully.');
+                },
+                error: function(xhr, status, error) {
+                    console.error('Error removing award:', error);
+                    alert('Failed to remove the award.');
+                }
+            });
+        } else {
+            console.error('Award ID is missing.');
+        }
     });
 });
    

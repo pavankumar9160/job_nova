@@ -111,17 +111,19 @@ def artist_profile_setting_updated_one(request):
     skills = []
     cover_photo = None
     books =[]
+    awards =[]
     try:
         additional_info = ArtistMasterAdditional.objects.get(user=user)
         profile_picture = additional_info.profile_picture.url if additional_info.profile_picture else None
         cover_photo = additional_info.cover_photo.url if additional_info.cover_photo else None
         description = additional_info.description if additional_info and additional_info.description else ''
         skills = additional_info.skills.values_list('name', flat=True)
+        awards = additional_info.awards_received.all()
         books = additional_info.books_published.all()
-        firstname = additional_info.firstname if additional_info.firstname else None
-        lastname = additional_info.lastname if additional_info.lastname else None
-        if firstname or lastname:
-            full_name = f"{firstname} {lastname}".strip()
+        fullname = additional_info.fullname if additional_info.fullname else None
+       
+        if fullname :
+            full_name = f"{fullname}".strip()
 
     except ArtistMasterAdditional.DoesNotExist:
         profile_picture = None 
@@ -130,9 +132,10 @@ def artist_profile_setting_updated_one(request):
         skills = []
         cover_photo = None
         books =[]
+        awards =[]
 
       
-    return render(request, 'candidate-profile-setting_updated_one.html',{"user":user,'profile_picture': profile_picture,'full_name':full_name,'description':description,"additional_info":additional_info,'skills': skills,'cover_photo': cover_photo,'books':books})
+    return render(request, 'candidate-profile-setting_updated_one.html',{"user":user,'profile_picture': profile_picture,'full_name':full_name,'description':description,"additional_info":additional_info,'skills': skills,'cover_photo': cover_photo,'books':books,'awards':awards})
 
 def artist_profile_setting(request):
     user = request.user
@@ -185,11 +188,11 @@ def artist_profile_updated_one(request):
         cover_photo = additional_info.cover_photo.url if additional_info.cover_photo else None
 
         profile_picture = additional_info.profile_picture.url if additional_info.profile_picture else None
-        firstname = additional_info.firstname if additional_info.firstname else None
-        lastname = additional_info.lastname if additional_info.lastname else None
+        fullname = additional_info.fullname if additional_info.fullname else None
         
-        if firstname or lastname:
-            full_name = f"{firstname} {lastname}".strip()
+        
+        if fullname:
+            full_name = f"{fullname}".strip()
         skills = additional_info.skills.all() if additional_info.skills.exists() else []
         experience_details = additional_info.experience_details.all() if additional_info.experience_details.exists() else []
         images = additional_info.images.all()
@@ -250,7 +253,7 @@ def artist_profile_updated_one(request):
 
 
 from django.shortcuts import get_object_or_404
-from .models import ArtistMasterBasic, ArtistMasterAdditional, BooksPublished, Experience, Gallery
+from .models import ArtistMasterBasic, ArtistMasterAdditional, Awards, BooksPublished, Education, Experience, Gallery
 
 def artist_profile_updated_one_Id(request, id):
     
@@ -291,9 +294,8 @@ def artist_profile_updated_one_Id(request, id):
         profile_picture_user = additional_info_user.profile_picture.url if additional_info_user.profile_picture else None
         cover_photo_user = additional_info_user.cover_photo.url if additional_info_user.cover_photo else None
 
-        firstname_user = additional_info_user.firstname if additional_info_user.firstname else None
-        lastname_user = additional_info_user.lastname if additional_info_user.lastname else None
-        full_name_user = f"{firstname_user} {lastname_user}".strip() if firstname_user or lastname_user else None
+        fullname_user = additional_info_user.fullname if additional_info_user.fullname else None
+        full_name_user = f"{fullname_user}".strip() if fullname_user  else None
         skills = additional_info_user.skills.all()
         experience_details = additional_info_user.experience_details.all()
         images = additional_info_user.images.all()
@@ -373,10 +375,10 @@ def artists(request):
     # Filter artists based on the search query
     if search_query:
         artists = ArtistMasterBasic.objects.annotate(
-       full_name=Concat('additional_info__firstname', Value(' '), 'additional_info__lastname')
+       full_name = F('additional_info__full_name')
                 ).filter(
                     Q(additional_info__skills__name__icontains=search_query) |  # Search by skills
-                    Q(full_name__icontains=search_query) |  # Combined firstname and lastname
+                    Q(full_name__icontains=search_query) |  
                     Q(name__icontains=search_query)  # Search by artist name
                 ).prefetch_related('additional_info', 'additional_info__skills').exclude(is_superuser=True).distinct()
     else:
@@ -879,12 +881,15 @@ def update_artist_details_api(request):
                 artist.dob = dob
             except ValueError:
                 return JsonResponse({'error': 'Invalid date format. It must be in YYYY-MM-DD format.'}, status=400)
-       
-        if request.POST.get('firstname'):
-            artist.firstname = request.POST.get('firstname')
+            
+        if request.POST.get('title'):
+            artist.title = request.POST.get('title')
+            
+        if request.POST.get('fullname'):
+            artist.fullname = request.POST.get('fullname')
         
-        if request.POST.get('lastname'):
-            artist.lastname = request.POST.get('lastname')
+        if request.POST.get('penname'):
+            artist.penname = request.POST.get('penname')
         
         if request.POST.get('gender'):
             artist.gender = request.POST.get('gender')
@@ -945,6 +950,9 @@ def update_artist_details_api(request):
         
         if request.POST.get('linkedin_link'):
             artist.linkedin_link = request.POST.get('linkedin_link')
+        
+        if request.POST.get('twitter_link'):
+            artist.twitter_link = request.POST.get('twitter_link')    
             
         # Update only if the field has a value
         if request.POST.get('job_title'):
@@ -964,35 +972,49 @@ def update_artist_details_api(request):
             
         if request.POST.get('highest_qualification'):
             artist.highest_qualification = request.POST.get('highest_qualification')    
-        
-        book_names = request.POST.getlist('book_name')  
-        book_links = request.POST.getlist('book_link')  
-        print("book_names", book_names)
-
-        if book_names and book_links and len(book_names) == len(book_links):
-           
-            artist.books_published.clear() 
             
+        
+        book_names =request.POST.getlist('book_name[]')
+        book_links = request.POST.getlist('book_link[]')
+        book_images = request.FILES.getlist('book_image[]')
+       
+        
+        print("book_images",book_images)
+        
+
+        if book_names and book_links:
             books = []
-            for name, link in zip(book_names, book_links):
-                if name and link:  
-                 
-                    book, created = BooksPublished.objects.get_or_create(
-                        book_name=name,
-                        book_url=link
-                    )
+
+            for i, (name, link) in enumerate(zip(book_names, book_links)):
+                
+                if not name or not link:
+                 continue  # Skip if name or year is invalid
+                
+                book = BooksPublished(book_name=name, book_url=link)
+
+                
+                if i < len(book_images) and book_images[i]:  # New image uploaded
+                    book.book_image = book_images[i]
+                else:  # No image provided
+                    book.book_image = None
+
+                # Save the book
+                try:
+                    book.save()
                     books.append(book)
-            
+                except Exception as e:
+                    print(f"Error saving book {name}: {e}")
+
             if books:
-                artist.books_published.set(books)  
-            
+                artist.books_published.add(*books)
+
+            # Save the artist instance
             artist.save()
 
-            BooksPublished.objects.annotate(artist_count=Count('artist_books')).filter(artist_count=0).delete()
-        elif not book_names and not book_links:
-            artist.books_published.clear()  
-            artist.save()
-        
+        # Clean up books with no associated artists
+            books_without_artists = BooksPublished.objects.annotate(artist_count=Count('artist_books')).filter(artist_count=0)
+            books_without_artists.delete()
+
         if request.POST.get('availability'):
             artist.availability = request.POST.get('availability')
             
@@ -1012,18 +1034,16 @@ def update_artist_details_api(request):
                 if skills:
                     artist.skills.set(skills) 
                     artist.save() 
-        
-                
-        # Handling experiences data
+
         if 'experiences_data' in request.POST:
             try:
                 experiences_data = json.loads(request.POST['experiences_data'])  
-
+                artist.experience_details.all().delete()
+                
                 if experiences_data:  
                     if artist.experience_details.exists():
                         artist.experience_details.all().delete()
 
-                    # Save each new experience
                     for exp in experiences_data:
                         designation = exp.get('designation')
                         company = exp.get('company')
@@ -1060,6 +1080,79 @@ def update_artist_details_api(request):
                     pass
             except json.JSONDecodeError:
                 return JsonResponse({'error': 'Invalid experiences data'}, status=400)
+            
+        if 'education_data' in request.POST:
+            try:
+                education_data = json.loads(request.POST['education_data'])  
+                artist.education_details.all().delete()
+                
+                if education_data:  
+                    if artist.education_details.exists():
+                        artist.education_details.all().delete()
+
+                    for edu in education_data:
+                        instituteName = edu.get('instituteName')
+                        qualification = edu.get('qualification')
+                        yearOfPassing = edu.get('yearOfPassing')
+                       
+
+                        if not instituteName or not qualification or not yearOfPassing:
+                            return JsonResponse({'error': 'Missing required education fields'}, status=400)
+
+                        education = Education.objects.create(
+                            instituteName=instituteName,
+                            qualification=qualification,
+                            yearOfPassing=yearOfPassing,
+                            
+                        )
+
+                        artist.education_details.add(education)
+                else:
+                    pass
+            except json.JSONDecodeError:
+                return JsonResponse({'error': 'Invalid education data'}, status=400) 
+            
+        award_names =request.POST.getlist('award_name[]')
+        award_years = request.POST.getlist('award_year[]')
+        award_images = request.FILES.getlist('award_image[]')
+       
+        print("award_names",award_names)
+        print("award_images",award_images)
+        
+
+        if award_names and award_years:
+            awards = []
+
+            for i, (name, year) in enumerate(zip(award_names, award_years)):
+                if not name or not year:
+                 continue  # Skip if name or year is invalid
+                
+                award = Awards(award_name=name, award_year=year)
+
+                
+                if i < len(award_images) and award_images[i]:  # New image uploaded
+                    award.award_image = award_images[i]
+                else:  # No image provided
+                    award.award_image = None
+
+                # Save the book
+                try:
+                    award.save()
+                    awards.append(award)
+                except Exception as e:
+                    print(f"Error saving award {name}: {e}")
+
+            if awards:
+                artist.awards_received.add(*awards)
+
+            # Save the artist instance
+            artist.save()
+
+        # Clean up books with no associated artists
+            awards_without_artists = Awards.objects.annotate(artist_count=Count('artist_awards')).filter(artist_count=0)
+            awards_without_artists.delete()
+
+                
 
         if request.POST.get('certifications'):
             artist.certifications = request.POST.get('certifications')
@@ -1261,7 +1354,7 @@ def check_profile_completion(request):
 
     # Fields to check for completion
     required_fields = [
-        'firstname', 'lastname', 'gender', 'dob', 'country', 'address1','address2','state','pincode',
+        'fullname', 'penname','title', 'gender', 'dob', 'country', 'address1','address2','state','pincode',
         'description', 'introduction', 'languages_read', 'languages_write',
         'languages_speak', 'facebook_link', 'instagram_link', 'linkedin_link',
         'job_title', 'company_name', 'experience', 'portfolio', 'short_bio',
@@ -1300,14 +1393,14 @@ def search_artists(request):
     if search_query:
         # Filter artists based on the search query
        artists = ArtistMasterBasic.objects.annotate(
-       full_name=Concat('additional_info__firstname', Value(' '), 'additional_info__lastname')
+       full_name = F('additional_info__full_name')
                 ).filter(
                     Q(additional_info__skills__name__icontains=search_query) |  # Search by skills
                     Q(additional_info__description__icontains=search_query) |
                     Q(additional_info__country__icontains=search_query) |
                     Q(additional_info__state__icontains=search_query) |
                     Q(additional_info__languages_speak__icontains=search_query) |
-                    Q(full_name__icontains=search_query) |  # Combined firstname and lastname
+                    Q(full_name__icontains=search_query) |  
                     Q(name__icontains=search_query)  # Search by artist name
                 ).prefetch_related('additional_info', 'additional_info__skills').exclude(is_superuser=True).distinct() # Prefetch related skills
 
@@ -1535,5 +1628,29 @@ def reset_password(request, user_id, token):
     
     return render(request, "helpcenter-support.html", {"user_id": user_id, "token": token})
 
+
+@csrf_exempt
+def remove_book(request, book_id):
+    if request.method == 'DELETE':
+        try:
+            book = BooksPublished.objects.get(id=book_id)
+            book.delete()  # Delete the book
+            return JsonResponse({'success': True})
+        except BooksPublished.DoesNotExist:
+            return JsonResponse({'success': False, 'error': 'Book not found'})
+    return JsonResponse({'success': False, 'error': 'Invalid request method'})
+
+
+
+@csrf_exempt
+def remove_award(request, award_id):
+    if request.method == 'DELETE':
+        try:
+            award = Awards.objects.get(id=award_id)
+            award.delete()  # Delete the award
+            return JsonResponse({'success': True})
+        except BooksPublished.DoesNotExist:
+            return JsonResponse({'success': False, 'error': 'Award not found'})
+    return JsonResponse({'success': False, 'error': 'Invalid request method'})
 
 

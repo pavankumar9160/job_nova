@@ -13,8 +13,10 @@ $(document).ready(function() {
 
         var formData = new FormData();
 
-        var firstname = document.getElementById("firstname").value;
-        var lastname = document.getElementById("lastname").value;
+        var fullname = document.getElementById("fullname").value;
+        var penname = document.getElementById("penname").value;
+        var title = document.getElementById("title").value;
+
         var gender = document.getElementById("gender").value;
         var dob = document.getElementById("dob").value;
 
@@ -28,6 +30,7 @@ $(document).ready(function() {
         var facebook_link = document.getElementById("facebook_link").value;
         var instagram_link = document.getElementById("instagram_link").value;
         var linkedin_link = document.getElementById("linkedin_link").value;
+        var twitter_link = document.getElementById("twitter_link").value;
         var email = document.getElementById("email2").value;
         var contact_number = document.getElementById("phone").value;
         var profile_picture = document.getElementById("profile_picture").files[0];
@@ -53,18 +56,18 @@ $(document).ready(function() {
         console.log(languages_speak);
 
 
-        var job_title = document.getElementById("job_title").value;
-        var company_name = document.getElementById("company_name").value;
+        // var job_title = document.getElementById("job_title").value;
+        // var company_name = document.getElementById("company_name").value;
         var experience = document.getElementById("experience").value;
         var portfolio = document.getElementById("portfolio").value;
         var short_bio = document.getElementById("short_bio").value;
 
-        var highest_qualification = document.getElementById("highest_qualification").value;
-        var availability = document.getElementById("availability").value;
+        // var highest_qualification = document.getElementById("highest_qualification").value;
+        // var availability = document.getElementById("availability").value;
 
-        var certifications = document.getElementById("certifications").value;
-        var published_works = document.getElementById("published_works").value;
-        var awards = document.getElementById("awards").value;
+        // var certifications = document.getElementById("certifications").value;
+        // var published_works = document.getElementById("published_works").value;
+
         var selectedSkills = [];
 
         const fileArray = [];
@@ -126,6 +129,41 @@ $(document).ready(function() {
 
         console.log("experience_data", experiences);
 
+        const education = []; // Initialize an empty array to store education details
+
+        // Select all list items in the education list
+        const EducationlistItems = document.querySelectorAll('.list-group-item-education');
+
+
+        if (EducationlistItems.length > 0) { // Loop through each list item and extract the details
+            EducationlistItems.forEach((item) => {
+                const div = item.querySelector('div');
+                const strong = div ? div.querySelector('strong') : null; // Ensure div exists before querying for strong
+                const fullText = div ? div.textContent.trim() : ''; // Check if div is not null
+                const qualification = strong ? strong.textContent.trim() : ''; // Ensure strong exists
+                const yearOfPassingMatch = item.innerHTML.match(/Year of Passing: (\d{4})/); // Regex to extract year of passing
+                const yearOfPassing = yearOfPassingMatch ? yearOfPassingMatch[1] : null;
+
+                let instituteName = fullText
+                    .replace(qualification, '') // Remove qualification text
+                    .replace(/Year of Passing:.*/, '') // Remove "Year of Passing" and everything after
+                    .replace(/from\s*/i, '') // Remove "from" at the beginning
+                    .replace(/\n/g, '') // Remove newline characters
+                    .replace(/\(\s*$/, '') // Remove leftover "(" at the end
+                    .trim(); // Trim any extra spaces
+
+                if (instituteName && qualification && yearOfPassing) {
+                    // Push the extracted details into the education array
+                    education.push({
+                        instituteName,
+                        qualification,
+                        yearOfPassing,
+                    });
+                }
+            });
+        }
+        // Log the result to verify
+        console.log('education_data', education);
 
 
 
@@ -135,30 +173,95 @@ $(document).ready(function() {
 
 
 
-        if (!address1 || !address2 || !state || !firstname || !lastname || !country || !gender || !dob || !contact_number || !email || !selectedSkills || !languages_read || !languages_write || !languages_speak || languages_speak.length === 0 || languages_write.length === 0 || languages_read.length === 0 || selectedSkills.length === 0 || !description) {
+        if (!address1 || !address2 || !state || !fullname || !penname || !country || !gender || !dob || !contact_number || !email || !selectedSkills || !languages_read || !languages_write || !languages_speak || languages_speak.length === 0 || languages_write.length === 0 || languages_read.length === 0 || selectedSkills.length === 0 || !description) {
             toastr.error("please fill all the required details")
 
             return
         }
-        var bookNames = [];
-        var bookLinks = [];
 
-        // Gather book names and links from the inputs
-        document.querySelectorAll('input[name="book_name[]"]').forEach(input => bookNames.push(input.value));
-        document.querySelectorAll('input[name="book_link[]"]').forEach(input => bookLinks.push(input.value));
+        var awardNames = [];
+        var awardYears = [];
+        var awardImages = [];
 
-        bookNames.forEach((name, index) => {
-            formData.append('book_name', name);
-            formData.append('book_link', bookLinks[index]);
+
+        // Gather book names, links, and images from the inputs
+        document.querySelectorAll('input[name="award_name[]"]').forEach(input => awardNames.push(input.value));
+        document.querySelectorAll('input[name="award_year[]"]').forEach(input => awardYears.push(input.value));
+        document.querySelectorAll('input[name="award_image[]"]').forEach((input) => {
+            if (input.files.length > 0 && input.files[0]) {
+                awardImages.push(input.files[0]); // Add the uploaded file to bookImages
+
+            } else {
+                awardImages.push(null); // Push null for no new image
+
+
+            }
         });
 
-        console.log('booknames', bookNames)
+        // Append the book details including image to formData
+        awardNames.forEach((name, index) => {
+            formData.append('award_name[]', name);
+            formData.append('award_year[]', awardYears[index]);
+
+            if (awardImages[index]) {
+                formData.append('award_image[]', awardImages[index]);
+            } else {
+                return
+            }
+
+
+        });
+
+
+        console.log('awardnames', awardNames);
+        console.log('awardImages', awardImages);
+
 
         console.log('skills updating are :', selectedSkills)
 
 
-        formData.append('firstname', firstname);
-        formData.append('lastname', lastname);
+
+        var bookNames = [];
+        var bookLinks = [];
+        var bookImages = [];
+
+
+        // Gather book names, links, and images from the inputs
+        document.querySelectorAll('input[name="book_name[]"]').forEach(input => bookNames.push(input.value));
+        document.querySelectorAll('input[name="book_link[]"]').forEach(input => bookLinks.push(input.value));
+        document.querySelectorAll('input[name="book_image[]"]').forEach((input) => {
+            if (input.files.length > 0 && input.files[0]) {
+                bookImages.push(input.files[0]); // Add the uploaded file to bookImages
+
+            } else {
+                bookImages.push(null); // Push null for no new image
+
+
+            }
+        });
+
+        // Append the book details including image to formData
+        bookNames.forEach((name, index) => {
+            formData.append('book_name[]', name);
+            formData.append('book_link[]', bookLinks[index]);
+
+            if (bookImages[index]) {
+                formData.append('book_image[]', bookImages[index]);
+            } else {
+                return
+            }
+
+
+        });
+
+
+        console.log('booknames', bookNames);
+        console.log('bookImages', bookImages);
+
+
+        formData.append('title', title);
+        formData.append('fullname', fullname);
+        formData.append('penname', penname);
         formData.append('gender', gender);
         formData.append('dob', dob);
         formData.append('country', country);
@@ -174,25 +277,27 @@ $(document).ready(function() {
         formData.append('facebook_link', facebook_link);
         formData.append('instagram_link', instagram_link);
         formData.append('linkedin_link', linkedin_link);
+        formData.append('twitter_link', twitter_link);
         formData.append('email', email);
 
 
         formData.append('contact_number', contact_number);
         formData.append('profile_picture', profile_picture);
         formData.append('cover_photo', cover_photo);
-        formData.append('job_title', job_title);
-        formData.append('company_name', company_name);
+        // formData.append('job_title', job_title);
+        // formData.append('company_name', company_name);
         formData.append('experience', experience);
         formData.append('portfolio', portfolio);
         formData.append('short_bio', short_bio);
 
-        formData.append('highest_qualification', highest_qualification);
-        formData.append('availability', availability);
-        formData.append('certifications', certifications);
-        formData.append('published_works', published_works);
-        formData.append('awards', awards);
+        // formData.append('highest_qualification', highest_qualification);
+        // formData.append('availability', availability);
+        // formData.append('certifications', certifications);
+        // formData.append('published_works', published_works);
         formData.append('skills', selectedSkills.join(','));
         formData.append('experiences_data', JSON.stringify(experiences));
+        formData.append('education_data', JSON.stringify(education));
+
 
 
         $.ajax({
@@ -224,10 +329,10 @@ $(document).ready(function() {
         console.log("hi");
         e.preventDefault();
 
-        var payment_method = document.getElementById("payment_method").value;
+        // var payment_method = document.getElementById("payment_method").value;
         var aadhar_front = document.getElementById("aadhar_front").files[0];
         var aadhar_back = document.getElementById("aadhar_back").files[0];
-        var opportunities = document.getElementById("opportunities").value;
+        // var opportunities = document.getElementById("opportunities").value;
         var alternate_email = document.getElementById("alternate_email").value;
         var newsletter_subscribe = document.getElementById("newsletter_subscribe").checked;
         var old_password = document.getElementById("old_password").value;
@@ -235,7 +340,7 @@ $(document).ready(function() {
         var confirm_password = document.getElementById("confirm_password").value;
         var hide_phone = document.getElementById("hide_phone").checked;
         var hide_email = document.getElementById("hide_email").checked;
-        var feedback = document.getElementById("feedback").value;
+        // var feedback = document.getElementById("feedback").value;
 
         if (!payment_method || !aadhar_front || !aadhar_back || !opportunities || !alternate_email || !old_password || !new_password || !confirm_password || !feedback) {
             toastr.error("please fill all the details")
@@ -245,10 +350,10 @@ $(document).ready(function() {
 
         var formData = new FormData();
 
-        formData.append('payment_method', payment_method);
+        // formData.append('payment_method', payment_method);
         formData.append('aadhar_front', aadhar_front);
         formData.append('aadhar_back', aadhar_back);
-        formData.append('opportunities', opportunities);
+        // formData.append('opportunities', opportunities);
         formData.append('alternate_email', alternate_email);
         formData.append('newsletter_subscribe', newsletter_subscribe);
         formData.append('old_password', old_password);
@@ -256,7 +361,7 @@ $(document).ready(function() {
         formData.append('confirm_password', confirm_password);
         formData.append('hide_phone', hide_phone);
         formData.append('hide_email', hide_email);
-        formData.append('feedback', feedback);
+        // formData.append('feedback', feedback);
 
         $.ajax({
             url: '/update_other_details_api/',
@@ -505,9 +610,10 @@ $(document).ready(function() {
             // Handle the Preview button click
             $('#previewButton').on('click', async function() {
                         // Get form values
-                        var firstName = $('#firstname').val();
-                        var lastName = $('#lastname').val();
-                        var name = firstName + " " + lastName;
+                        var title = $('#title').val();
+                        var fullName = $('#fullname').val();
+                        var penName = $('#penname').val();
+                        var name = fullName;
                         var dob = $('#dob').val();
                         var phone = $('#phone').val();
                         var email = $('#email2').val();
@@ -522,6 +628,8 @@ $(document).ready(function() {
                         var facebookLink = $('#facebook_link').val();
                         var instagramLink = $('#instagram_link').val();
                         var linkedinLink = $('#linkedin_link').val();
+                        var twitterLink = $('#twitter_link').val();
+
 
 
 
@@ -573,10 +681,10 @@ $(document).ready(function() {
                         var defaultCoverImage = `${STATIC_URL}images/hero/bg5.jpg`;
 
                         var experience = document.getElementById("experience").value;
-                        var certifications = document.getElementById("certifications").value;
+                        // var certifications = document.getElementById("certifications").value;
 
-                        var highest_qualification = $('#highest_qualification').val();
-                        var published_works = document.getElementById("published_works").value;
+
+                        // var published_works = document.getElementById("published_works").value;
                         var portfolio = document.getElementById("portfolio").value;
                         var languages_read = []
                         document.querySelectorAll('input[name="languages_read[]"]:checked').forEach(function(checkbox) {
@@ -730,15 +838,18 @@ $(document).ready(function() {
                                 <!-- Skills will be dynamically added here -->
                             </div>
                              <h5 class="mt-4">Education:</h5>
-                            <div class="d-flex flex-wrap gap-2" id="highest_qualification">
-                                <!-- Books Published will be dynamically added here -->
-                                <span>${highest_qualification}</span>
-                            </div> 
-                            <h5 class="mt-4">Experience Details:</h5>
+                           <div class="d-flex flex-column gap-3" id="education-container">
+                                    <!-- Experience cards will be dynamically added here -->
+                                </div>
+                            <h5 class="mt-4">Professional Details:</h5>
                             <div class="d-flex flex-column gap-3" id="experience-container">
                                     <!-- Experience cards will be dynamically added here -->
                                 </div>
-
+                             <h5 class="mt-4">Awards:</h5>
+                            <div class="d-flex flex-wrap gap-2" id="awards_received">
+                                <!-- Books Published will be dynamically added here -->
+                               
+                            </div>   
                               <h5 class="mt-4">Books Published:</h5>
                             <div class="d-flex flex-wrap gap-2" id="books_published">
                                 <!-- Books Published will be dynamically added here -->
@@ -790,7 +901,7 @@ $(document).ready(function() {
                                             <li class="list-inline-item"><a href="${linkedinLink}" target="_blank" class="rounded"><i data-feather="linkedin" class="fea icon-sm align-middle" title="Linkedin"></i></a></li>
                                             <li class="list-inline-item"><a href="${facebookLink}" target="_blank" class="rounded"><i data-feather="facebook" class="fea icon-sm align-middle" title="facebook"></i></a></li>
                                             <li class="list-inline-item"><a href="${instagramLink}" target="_blank" class="rounded"><i data-feather="instagram" class="fea icon-sm align-middle" title="instagram"></i></a></li>
-                                            <li class="list-inline-item"><a href="https://twitter.com/shreethemes" target="_blank" class="rounded"><i data-feather="twitter" class="fea icon-sm align-middle" title="twitter"></i></a></li>
+                                            <li class="list-inline-item"><a href="${twitterLink}" target="_blank" class="rounded"><i data-feather="twitter" class="fea icon-sm align-middle" title="twitter"></i></a></li>
                                         </ul><!--end icon-->
                                     </div>
                                      <div class="mt-4">
@@ -855,48 +966,275 @@ $(document).ready(function() {
         
         }
 
-            var bookNames = [];
-            var bookLinks = [];
+        const educationContainer = document.getElementById('education-container');
+        educationContainer.innerHTML = '';
 
-            document.querySelectorAll('input[name="book_name[]"]').forEach(input => bookNames.push(input.value));
-            document.querySelectorAll('input[name="book_link[]"]').forEach(input => bookLinks.push(input.value));
+        if (educations.length > 0) {
+            educations.forEach((education, index) => {
+                const card = document.createElement('div');
+                card.classList.add('card', 'shadow-sm', 'p-3', 'mb-2', 'bg-light', 'rounded');
 
-            var books = bookNames.map((name, index) => {
-                return {
-                    book_name: name,
-                    book_link: bookLinks[index]
-                };
+                card.innerHTML = `
+                    <div class="d-flex justify-content-between align-items-center">
+                        <h6 class="card-title mb-2">${education.qualification} from ${education.schoolInstitute}</h6>
+                        <span class="badge bg-info text-white">Year of Passing: ${education.yearOfPassing}</span>
+                    </div>
+                `;
+
+               
+
+                educationContainer.appendChild(card);
             });
+        } else {
+            educationContainer.innerHTML = '<p>No education details available.</p>';
+        }
 
-            const booksContainer = document.getElementById("books_published");
-            booksContainer.innerHTML = "";
-            if (books && books.length > 0) {
-                books.forEach(book => {
-                    if (book.book_name && book.book_link) {
-                       
-                        const span = document.createElement("span");
+        // Variables for existing books
+var existingBookNames = [];
+var existingBookLinks = [];
+var existingBookImages = [];
 
-                        const anchor = document.createElement("a");
-                        anchor.href = book.book_link;
-                        anchor.target = "_blank"; 
-                        anchor.className = "text-decoration-none";
-                        anchor.innerText = book.book_name;
-
-                        span.appendChild(anchor);
-
-                        span.style.marginRight = "10px";
-
-                        booksContainer.appendChild(span);
-                    }
-                    else {
-                
-                        const noBooksMessage = document.createElement("span");
-                        noBooksMessage.innerText = "No Books Published.";
-                        booksContainer.appendChild(noBooksMessage);
-                    }
-                });
+        var bookNames = [];
+        var bookLinks = [];
+        var bookImages = [];
+        
+        // Gather book names, links, and images from the inputs
+        document.querySelectorAll('input[name="book_name[]"]').forEach(input => bookNames.push(input.value));
+        document.querySelectorAll('input[name="book_link[]"]').forEach(input => bookLinks.push(input.value));
+        
+        document.querySelectorAll('input[name="book_image[]"]').forEach(input => {
+            if (input.files[0]) {
+                bookImages.push(input.files[0]);
+            } else {
+                bookImages.push(null); // No image selected
             }
+        });
+
+
+// Gather existing book data
+document.querySelectorAll('input[name="existing_book_name[]"]').forEach(input => existingBookNames.push(input.value));
+document.querySelectorAll('input[name="existing_book_link[]"]').forEach(input => existingBookLinks.push(input.value));
+document.querySelectorAll('input[name="existing_book_image[]"]').forEach(input => {
+    existingBookImages.push(input.value || null); // Push the image URL or null
+});
+
+        
+        // Combine new books and existing books into one array
+var books = [
+    ...existingBookNames.map((name, index) => ({
+        book_name: name,
+        book_link: existingBookLinks[index],
+        book_image: existingBookImages[index] ? existingBookImages[index] : null,
+        is_existing: true // Mark as existing
+    })),
+    ...bookNames.map((name, index) => ({
+        book_name: name,
+        book_link: bookLinks[index],
+        book_image: bookImages[index] ? bookImages[index] : null,
+        is_existing: false // Mark as new
+    }))
+];
+        
+        const booksContainer = document.getElementById("books_published");
+        booksContainer.innerHTML = "";
+        
+        if (books && books.length > 0) {
+            books.forEach(book => {
+                if (book.book_name && book.book_link) {
+                    // Create a div for each book entry
+            const bookEntry = document.createElement("div");
+            bookEntry.className = "book-entry mb-3 text-center";
+            bookEntry.style.width = "100px"; // Fixed width for proper alignment
+        
+                    // Create image preview element (Image should be on top)
+                    if (book.book_image) {
+                        const img = document.createElement("img");
+                         // Set the preview image src
+                            img.alt = book.book_name;
+                            img.style.width = "50px"; // Fixed width for image
+                img.style.height = "50px"; // Fixed height for image
+                img.style.objectFit = "cover"; // Ensure proper fit
+                img.style.borderRadius = "8px"; // Rounded corners
+                img.style.boxShadow = "0 4px 6px rgba(0,0,0,0.1)"; // Shadow for better visual appeal
+                img.style.cursor = "pointer"; // Indicate it's clickable
+                             // Set image source
+                if (book.is_existing) {
+                    img.src = `/media/${book.book_image}`;// Use the existing image URL
+                } else {
+                    const reader = new FileReader();
+                    reader.onload = function (e) {
+                        img.src = e.target.result; // Set the preview image src
+                    };
+                    reader.readAsDataURL(book.book_image); // Read the image file as a DataURL
+                }
+                            // Add click event to open the image in a new tab
+                            img.addEventListener("click", function() {
+                                window.open(img.src, "_blank"); // Open image in a new tab
+                            });
+                            
+                            // Append the image to the book entry first (it should be the first child)
+                            bookEntry.appendChild(img);
+                        
                 
+                        // Read the image file as a DataURL
+                    }
+        
+                    // Create book name and link (The book name should be below the image)
+                    const bookInfo = document.createElement("div");
+                    
+                    bookInfo.className = "mt-2"; // Add margin for spacing
+
+            // Create the anchor element for the book name
+            const anchor = document.createElement("a");
+            anchor.href = book.book_link; // Link to the book
+            anchor.target = "_blank"; // Open the link in a new tab
+            anchor.className = "text-decoration-none"; // Remove default text decoration
+            anchor.style.color = "#0d6efd"; // Bootstrap primary color
+            anchor.innerText = book.book_name; // Set the book name as the link text
+        
+                    // Append the book name and link to the book info
+                    bookInfo.appendChild(anchor);
+                    
+                    // Append the book info (name and link) below the image
+                    bookEntry.appendChild(bookInfo);
+        
+                    // Append the entire book entry to the books container
+                    booksContainer.appendChild(bookEntry);
+                }
+            });
+        } else {
+            const noBooksMessage = document.createElement("span");
+            noBooksMessage.innerText = "No Books Published.";
+            booksContainer.appendChild(noBooksMessage);
+        }
+        
+
+
+                // Variables for existing books
+var existingAwardNames = [];
+var existingAwardYears = [];
+var existingAwardImages = [];
+
+        var awardNames = [];
+        var awardYears = [];
+        var awardImages = [];
+        
+        // Gather book names, links, and images from the inputs
+        document.querySelectorAll('input[name="award_name[]"]').forEach(input => awardNames.push(input.value));
+        document.querySelectorAll('input[name="award_year[]"]').forEach(input => awardYears.push(input.value));
+        
+        document.querySelectorAll('input[name="award_image[]"]').forEach(input => {
+            if (input.files[0]) {
+                awardImages.push(input.files[0]);
+            } else {
+                awardImages.push(null); // No image selected
+            }
+        });
+
+
+// Gather existing book data
+document.querySelectorAll('input[name="existing_award_name[]"]').forEach(input => existingAwardNames.push(input.value));
+document.querySelectorAll('input[name="existing_award_year[]"]').forEach(input => existingAwardYears.push(input.value));
+document.querySelectorAll('input[name="existing_award_image[]"]').forEach(input => {
+    existingAwardImages.push(input.value || null); // Push the image URL or null
+});
+
+        
+        // Combine new books and existing books into one array
+var awards = [
+    ...existingAwardNames.map((name, index) => ({
+        award_name: name,
+        award_year: existingAwardYears[index],
+        award_image: existingAwardImages[index] ? existingAwardImages[index] : null,
+        is_existing: true // Mark as existing
+    })),
+    ...awardNames.map((name, index) => ({
+        award_name: name,
+        award_year: awardYears[index],
+        award_image: awardImages[index] ? awardImages[index] : null,
+        is_existing: false // Mark as new
+    }))
+];
+        
+        const awardsContainer = document.getElementById("awards_received");
+        awardsContainer.innerHTML = "";
+        
+        if (awards && awards.length > 0) {
+            awards.forEach(award => {
+                if (award.award_name && award.award_year) {
+                    // Create a div for each book entry
+            const awardEntry = document.createElement("div");
+            awardEntry.className = "award-entry mb-3 text-center";
+            awardEntry.style.width = "100px"; // Fixed width for proper alignment
+        
+                    // Create image preview element (Image should be on top)
+                    if (award.award_image) {
+                        const img = document.createElement("img");
+                         // Set the preview image src
+                            img.alt = award.award_name;
+                            img.style.width = "50px"; // Fixed width for image
+                img.style.height = "50px"; // Fixed height for image
+                img.style.objectFit = "cover"; // Ensure proper fit
+                img.style.borderRadius = "8px"; // Rounded corners
+                img.style.boxShadow = "0 4px 6px rgba(0,0,0,0.1)"; // Shadow for better visual appeal
+                img.style.cursor = "pointer"; // Indicate it's clickable
+                             // Set image source
+                if (award.is_existing) {
+                    img.src = `/media/${award.award_image}`;// Use the existing image URL
+                } else {
+                    const reader = new FileReader();
+                    reader.onload = function (e) {
+                        img.src = e.target.result; // Set the preview image src
+                    };
+                    reader.readAsDataURL(award.award_image); // Read the image file as a DataURL
+                }
+                            // Add click event to open the image in a new tab
+                            img.addEventListener("click", function() {
+                                window.open(img.src, "_blank"); // Open image in a new tab
+                            });
+                            
+                            // Append the image to the book entry first (it should be the first child)
+                            awardEntry.appendChild(img);
+                        
+                
+                        // Read the image file as a DataURL
+                    }
+        
+                    // Create book name and link (The book name should be below the image)
+                    const awardInfo = document.createElement("div");
+                    
+                    awardInfo.className = "mt-2 font-weight-bold bg-soft-primary"; // Add margin for spacing
+
+            // Create the anchor element for the book name
+
+            awardInfo.style.fontSize = "14px"; // Bootstrap primary color
+            awardInfo.innerText = award.award_name; // Set the book name as the link text
+
+            const awardInfo1 = document.createElement("div");
+                    
+            awardInfo1.className = "text-muted"; // Add margin for spacing
+
+    // Create the anchor element for the book name
+
+    awardInfo1.style.fontSize = "12px"; // Bootstrap primary color
+    awardInfo1.innerText = award.award_year; // Set the book name as the link text
+            
+                    // Append the book info (name and link) below the image
+                    awardEntry.appendChild(awardInfo);
+                    awardEntry.appendChild(awardInfo1);
+
+        
+                    // Append the entire book entry to the books container
+                    awardsContainer.appendChild(awardEntry);
+                }
+            });
+        } else {
+            const noAwardsMessage = document.createElement("span");
+            noAwardsMessage.innerText = "No Awards.";
+            awardsContainer.appendChild(noAwardsMessage);
+        }
+        
+
                     const imagePreviewContainer = document.getElementById('image-preview-container');
                     imagePreviewContainer.innerHTML = '';
                     console.log("preview the files",files)

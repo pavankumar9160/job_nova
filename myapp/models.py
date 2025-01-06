@@ -56,14 +56,34 @@ class Experience(models.Model):
     
     def __str__(self):
         return f"{self.designation} at {self.company}"
+
+
+class Education(models.Model):
+    instituteName = models.CharField(max_length=255)
+    qualification = models.CharField(max_length=255)
+    yearOfPassing = models.CharField(max_length=10)
+    
+    def __str__(self):
+        return f"{self.qualification} at {self.instituteName}"    
     
     
 class BooksPublished(models.Model):
     book_name = models.CharField(max_length=255)
     book_url = models.URLField(blank=True, null=True)
+    book_image = models.ImageField(upload_to='book_images/', blank=True, null=True)
+    
+    
+    
+    
+class Awards(models.Model):
+    award_name = models.CharField(max_length=255)
+    award_year = models.CharField(blank=True, null=True,max_length=10)
+    award_image = models.ImageField(upload_to='award_images/', blank=True, null=True)    
+
+    
     
     def __str__(self):
-        return self.book_name 
+        return self.award_name 
       
         
 class Gallery(models.Model):
@@ -102,9 +122,16 @@ class ArtistMasterAdditional(models.Model):
         ('editing', 'Editing'),
         ('consulting', 'Consulting'),
     ]
+    
+    title = [
+        ('Mr','Mr'),
+        ('Mrs','Mrs'),
+    ]
+    
     user = models.ForeignKey(ArtistMasterBasic, on_delete=models.CASCADE,related_name='additional_info')
-    firstname = models.CharField(max_length=100, blank=True, null=True)
-    lastname = models.CharField(max_length=100, blank=True, null=True)
+    title = models.CharField(max_length=100, choices=title, blank=True, null=True)
+    fullname = models.CharField(max_length=80, blank=True, null=True)
+    penname = models.CharField(max_length=80, blank=True, null=True)
     gender = models.CharField(max_length=10, choices=Gender_choices, blank=True, null=True)
     dob = models.DateField(blank=True, null=True)
     country = models.CharField(max_length=100, choices=Location_choices, blank=True, null=True)
@@ -122,6 +149,7 @@ class ArtistMasterAdditional(models.Model):
     facebook_link = models.URLField(blank=True, null=True)
     instagram_link = models.URLField(blank=True, null=True)
     linkedin_link = models.URLField(blank=True, null=True)
+    twitter_link = models.URLField(blank=True, null=True)
     job_title = models.CharField(max_length=255, blank=True, null=True)
     company_name = models.CharField(max_length=255, blank=True, null=True)
     experience = models.CharField(blank=True, null=True,max_length=500)
@@ -129,7 +157,9 @@ class ArtistMasterAdditional(models.Model):
     portfolio = models.URLField(blank=True, null=True) 
     short_bio = models.TextField(blank=True, null=True)    
     books_published = models.ManyToManyField(BooksPublished, related_name='artist_books', blank=True)  
-    highest_qualification = models.TextField(blank=True, null=True)       
+    awards_received = models.ManyToManyField(Awards, related_name='artist_awards', blank=True)  
+
+    education_details = models.ManyToManyField(Education, related_name='artist_education', blank=True)  
     availability = models.CharField(max_length=50, choices=availability_choices,blank=True,null=True)
     skills = models.ManyToManyField(Skill, related_name='skills', blank=True)    
     images = models.ManyToManyField(Gallery, related_name='images', blank=True) 

@@ -62,8 +62,10 @@ urlpatterns = [
       path('filter-artists/', views.filter_artists, name='filter_artists'),
       path('reset-your-password/',views.reset_user_password,name="reset-your-password"),
       path('reset-password/<int:user_id>/<str:token>/',views.reset_password, name='reset_password'),
+     path('remove-book/<int:book_id>/', views.remove_book, name='remove-book'),
+          path('remove-award/<int:award_id>/', views.remove_award, name='remove-award'),
+
      
-      
 
 
 
