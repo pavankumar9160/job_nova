@@ -1,6 +1,9 @@
 from django.db import models
 
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager,PermissionsMixin
+from django.forms import ValidationError
+from PIL import Image
+
 
 class ArtistMasterBasicManager(BaseUserManager):
     def create_user(self, email, password=None, **extra_fields):
@@ -78,6 +81,7 @@ class BooksPublished(models.Model):
 class Awards(models.Model):
     award_name = models.CharField(max_length=255)
     award_year = models.CharField(blank=True, null=True,max_length=10)
+    award_by_organisation = models.CharField(blank=True, null=True,max_length=100)
     award_image = models.ImageField(upload_to='award_images/', blank=True, null=True)    
 
     
@@ -123,13 +127,10 @@ class ArtistMasterAdditional(models.Model):
         ('consulting', 'Consulting'),
     ]
     
-    title = [
-        ('Mr','Mr'),
-        ('Mrs','Mrs'),
-    ]
+    
     
     user = models.ForeignKey(ArtistMasterBasic, on_delete=models.CASCADE,related_name='additional_info')
-    title = models.CharField(max_length=100, choices=title, blank=True, null=True)
+    title = models.CharField(max_length=100,blank=True, null=True)
     fullname = models.CharField(max_length=80, blank=True, null=True)
     penname = models.CharField(max_length=80, blank=True, null=True)
     gender = models.CharField(max_length=10, choices=Gender_choices, blank=True, null=True)
@@ -189,4 +190,36 @@ class ArtistMasterAdditional(models.Model):
 
 
 
+
+class Blog(models.Model):
+    author = models.CharField(max_length=255, blank=False)  
+    blog_date = models.DateField(auto_now_add=True)  
+    blog_banner = models.ImageField(upload_to='blog_banners/', blank=False)  
+    blog_heading = models.CharField(max_length=100, blank=False)  
+    blog_body = models.TextField(max_length=3000, blank=False) 
+    blog_tags = models.CharField(max_length=255, blank=True) 
     
+    
+    def clean(self):
+        # Image validation for fixed size (1920x1080)
+        if self.blog_banner:
+            try:
+                img = Image.open(self.blog_banner)
+                if img.size != (1920, 1080):
+                    raise ValidationError("The blog banner must be 1920x1080 pixels.")
+            except IOError:
+                raise ValidationError("Invalid image file.")
+
+    def clean(self):
+        
+        tags = self.blog_tags.split(',')
+        if len(tags) > 5:
+            raise ValidationError("You can only add up to 5 tags.")
+    
+    def __str__(self):
+        return self.blog_heading
+
+    class Meta:
+        verbose_name = 'Blog'
+        verbose_name_plural = 'Blogs'
+ 

@@ -8,7 +8,7 @@ urlpatterns = [
 
    path('',views.index,name="index"),
    path('aboutus/',views.aboutus,name="aboutus"),
-   path('blog-detail/',views.blog_detail,name="blog-detail"),
+   path('blog-detail/<int:blog_id>/',views.blog_detail,name="blog-detail"),
    path('blog-sidebar/',views.blog_sidebar,name="blog-sidebar"),
    path('blogs/',views.blogs,name="blogs"),
    path('artist-profile_updated_one/',views.artist_profile_updated_one,name="artist-profile_updated_one"),
@@ -63,7 +63,9 @@ urlpatterns = [
       path('reset-your-password/',views.reset_user_password,name="reset-your-password"),
       path('reset-password/<int:user_id>/<str:token>/',views.reset_password, name='reset_password'),
      path('remove-book/<int:book_id>/', views.remove_book, name='remove-book'),
-          path('remove-award/<int:award_id>/', views.remove_award, name='remove-award'),
+    path('remove-award/<int:award_id>/', views.remove_award, name='remove-award'),
+    path('remove-image/<int:image_id>/', views.remove_image, name='remove_image'),
+
 
      
 

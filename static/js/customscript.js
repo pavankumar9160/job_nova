@@ -181,12 +181,16 @@ $(document).ready(function() {
 
         var awardNames = [];
         var awardYears = [];
+        var awardByOrganisations = [];
+
         var awardImages = [];
 
 
         // Gather book names, links, and images from the inputs
         document.querySelectorAll('input[name="award_name[]"]').forEach(input => awardNames.push(input.value));
         document.querySelectorAll('input[name="award_year[]"]').forEach(input => awardYears.push(input.value));
+        document.querySelectorAll('input[name="award_by_organisation[]"]').forEach(input => awardByOrganisations.push(input.value));
+
         document.querySelectorAll('input[name="award_image[]"]').forEach((input) => {
             if (input.files.length > 0 && input.files[0]) {
                 awardImages.push(input.files[0]); // Add the uploaded file to bookImages
@@ -202,6 +206,8 @@ $(document).ready(function() {
         awardNames.forEach((name, index) => {
             formData.append('award_name[]', name);
             formData.append('award_year[]', awardYears[index]);
+            formData.append('award_by_organisation[]', awardByOrganisations[index]);
+
 
             if (awardImages[index]) {
                 formData.append('award_image[]', awardImages[index]);
@@ -845,7 +851,7 @@ $(document).ready(function() {
                             <div class="d-flex flex-column gap-3" id="experience-container">
                                     <!-- Experience cards will be dynamically added here -->
                                 </div>
-                             <h5 class="mt-4">Awards:</h5>
+                             <h5 class="mt-4">Awards & Recognitions:</h5>
                             <div class="d-flex flex-wrap gap-2" id="awards_received">
                                 <!-- Books Published will be dynamically added here -->
                                
@@ -1113,16 +1119,21 @@ var books = [
                 // Variables for existing books
 var existingAwardNames = [];
 var existingAwardYears = [];
+var existingAwardByOrganisations = [];
+
 var existingAwardImages = [];
 
         var awardNames = [];
         var awardYears = [];
         var awardImages = [];
+        var awardByOrganisations = [];
+
         
         // Gather book names, links, and images from the inputs
         document.querySelectorAll('input[name="award_name[]"]').forEach(input => awardNames.push(input.value));
         document.querySelectorAll('input[name="award_year[]"]').forEach(input => awardYears.push(input.value));
-        
+        document.querySelectorAll('input[name="award_by_organisation[]"]').forEach(input => awardByOrganisations.push(input.value));
+
         document.querySelectorAll('input[name="award_image[]"]').forEach(input => {
             if (input.files[0]) {
                 awardImages.push(input.files[0]);
@@ -1135,6 +1146,9 @@ var existingAwardImages = [];
 // Gather existing book data
 document.querySelectorAll('input[name="existing_award_name[]"]').forEach(input => existingAwardNames.push(input.value));
 document.querySelectorAll('input[name="existing_award_year[]"]').forEach(input => existingAwardYears.push(input.value));
+document.querySelectorAll('input[name="existing_award_by_organisation[]"]').forEach(input => existingAwardByOrganisations.push(input.value));
+
+
 document.querySelectorAll('input[name="existing_award_image[]"]').forEach(input => {
     existingAwardImages.push(input.value || null); // Push the image URL or null
 });
@@ -1145,12 +1159,15 @@ var awards = [
     ...existingAwardNames.map((name, index) => ({
         award_name: name,
         award_year: existingAwardYears[index],
+        award_by_organisation: existingAwardByOrganisations[index],
         award_image: existingAwardImages[index] ? existingAwardImages[index] : null,
         is_existing: true // Mark as existing
     })),
     ...awardNames.map((name, index) => ({
         award_name: name,
         award_year: awardYears[index],
+        award_by_organisation: awardByOrganisations[index],
+
         award_image: awardImages[index] ? awardImages[index] : null,
         is_existing: false // Mark as new
     }))
@@ -1161,7 +1178,7 @@ var awards = [
         
         if (awards && awards.length > 0) {
             awards.forEach(award => {
-                if (award.award_name && award.award_year) {
+                if (award.award_name && award.award_year && award.award_by_organisation) {
                     // Create a div for each book entry
             const awardEntry = document.createElement("div");
             awardEntry.className = "award-entry mb-3 text-center";
@@ -1218,10 +1235,21 @@ var awards = [
 
     awardInfo1.style.fontSize = "12px"; // Bootstrap primary color
     awardInfo1.innerText = award.award_year; // Set the book name as the link text
+
+    const awardInfo2 = document.createElement("div");
+                    
+    awardInfo2.className = "text-muted"; // Add margin for spacing
+
+// Create the anchor element for the book name
+
+awardInfo2.style.fontSize = "10px"; // Bootstrap primary color
+awardInfo2.innerText = award.award_by_organisation;
             
                     // Append the book info (name and link) below the image
                     awardEntry.appendChild(awardInfo);
                     awardEntry.appendChild(awardInfo1);
+                    awardEntry.appendChild(awardInfo2);
+
 
         
                     // Append the entire book entry to the books container
@@ -1230,7 +1258,7 @@ var awards = [
             });
         } else {
             const noAwardsMessage = document.createElement("span");
-            noAwardsMessage.innerText = "No Awards.";
+            noAwardsMessage.innerText = "No Awards & Recognitions.";
             awardsContainer.appendChild(noAwardsMessage);
         }
         

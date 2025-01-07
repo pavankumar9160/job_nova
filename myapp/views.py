@@ -22,7 +22,8 @@ def index(request):
             except ArtistMasterAdditional.DoesNotExist:
                 profile_picture = None 
     artists = ArtistMasterBasic.objects.all().exclude(is_superuser=True).order_by('?')[:3]
-
+    blogs = Blog.objects.all()
+    print("blog",blogs)
     # Prefetch related additional details and skills
     additional_details = ArtistMasterAdditional.objects.select_related('user').prefetch_related('skills')
 
@@ -36,7 +37,7 @@ def index(request):
             'skills': skills
         })             
         
-    return render(request, 'index-three.html',{"user":user,'profile_picture': profile_picture,"artists_with_details":artists_with_details})
+    return render(request, 'index-three.html',{"user":user,'profile_picture': profile_picture,"artists_with_details":artists_with_details,"blogs":blogs})
 
 def aboutus(request):
     user = request.user
@@ -51,7 +52,7 @@ def aboutus(request):
         profile_picture = None
     return render(request, 'aboutus.html',{"user":user,'profile_picture': profile_picture})
 
-def blog_detail(request):
+def blog_detail(request, blog_id):
     user = request.user
     if user.is_authenticated:
         try:
@@ -62,7 +63,18 @@ def blog_detail(request):
     else:
        
         profile_picture = None
-    return render(request, 'blog-detail.html',{"user":user,'profile_picture': profile_picture})
+    # Use get_object_or_404 to handle missing blogs gracefully
+    blog = get_object_or_404(Blog, id=blog_id)    
+    blog_tags = blog.blog_tags.split(",")
+
+    # Pass a single dictionary with all required data
+    context = {
+        "user": user,
+        "profile_picture": profile_picture,
+        "blog": blog,
+        "blog_tags": blog_tags,
+    }
+    return render(request, 'blog-detail.html', context)
 
 def blog_sidebar(request):
     user = request.user
@@ -88,7 +100,21 @@ def blogs(request):
     else:
        
         profile_picture = None
-    return render(request, 'blogs.html',{"user":user,'profile_picture': profile_picture})
+    # Fetch all blogs
+    blog_list = Blog.objects.all()
+
+    # Implement pagination with 9 blogs per page
+    paginator = Paginator(blog_list, 9)
+    page_number = request.GET.get('page')  # Get current page number from the query parameter
+    blogs = paginator.get_page(page_number)  # Get blogs for the current page
+
+    context = {
+        "user": user,
+        "profile_picture": profile_picture,
+        "blogs": blogs,
+    }
+    return render(request, 'blogs.html', context)
+
 
 def artist_profile(request):
     user = request.user
@@ -253,7 +279,7 @@ def artist_profile_updated_one(request):
 
 
 from django.shortcuts import get_object_or_404
-from .models import ArtistMasterBasic, ArtistMasterAdditional, Awards, BooksPublished, Education, Experience, Gallery
+from .models import ArtistMasterBasic, ArtistMasterAdditional, Awards, Blog, BooksPublished, Education, Experience, Gallery
 
 def artist_profile_updated_one_Id(request, id):
     
@@ -1652,5 +1678,22 @@ def remove_award(request, award_id):
         except BooksPublished.DoesNotExist:
             return JsonResponse({'success': False, 'error': 'Award not found'})
     return JsonResponse({'success': False, 'error': 'Invalid request method'})
+
+
+
+from django.http import JsonResponse
+from django.views.decorators.csrf import csrf_exempt
+
+@csrf_exempt 
+def remove_image(request, image_id):
+    if request.method == "DELETE":
+        try:
+            # Assume `Image` is your model
+            image = Gallery.objects.get(id=image_id)
+            image.delete()
+            return JsonResponse({'message': 'Image removed successfully.'}, status=200)
+        except Gallery.DoesNotExist:
+            return JsonResponse({'error': 'Image not found.'}, status=404)
+    return JsonResponse({'error': 'Invalid request method.'}, status=400)
 
 

@@ -7,5 +7,6 @@ admin.site.register(Skill)
 admin.site.register(Gallery)
 admin.site.register(Experience)
 admin.site.register(BooksPublished)
+admin.site.register(Blog)
 
 

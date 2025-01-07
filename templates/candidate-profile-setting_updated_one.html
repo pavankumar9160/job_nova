@@ -40,12 +40,11 @@
                                     <label class="form-label" style="font-family: Arial, sans-serif; font-size: 16px; font-weight: bold;">
                                         Title:<span class="text-danger">*</span>
                                     </label>
-                                    <select name="title" id="title" class="form-control" required>
-                                        <option value="Mr" {% if additional_info.title == "Mr" %}selected{% endif %}>Mr</option>
-                                        <option value="Mrs" {% if additional_info.title == "Mrs" %}selected{% endif %}>Mrs</option>
-                                    </select>
+                                    <!-- Change the select to an input field -->
+                                    <input type="text" name="title" id="title" class="form-control" placeholder = "Mr, Mrs, Dr, Prof, .......etc." required value="{{ additional_info.title|default:'' }}">
                                 </div>
                             </div>
+                            
                             <div class="col-md-6">
                                 <div class="mb-3">
                                     <label class="form-label"style="font-family: Arial, sans-serif; font-size: 16px; font-weight: bold;">Full Name:<span class="text-danger" >*</span></label>
@@ -217,7 +216,7 @@
                 data-file-name="{{ images.file_name.name }}" 
                 data-file-url="{{ images.file_name.url }}" 
                 alt="Existing File Preview">
-                <button     class="remove-image-btn" 
+                <button type="button" class="remove-image-btn" 
                 style="border: none; background: transparent; color: red; cursor: pointer;" 
                 data-image-id="{{ images.id }}" 
                 title="Remove image">
@@ -706,13 +705,39 @@ document.addEventListener('DOMContentLoaded', function () {
         button.addEventListener('click', function (e) {
             e.preventDefault();
             const imageId = this.getAttribute('data-image-id');
-            
-            // Remove the image element from the UI
-            this.parentElement.remove();
-                                
-        })
-    })
-    });                        
+            const buttonElement = this;
+
+            console.log(imageId);
+
+            if (confirm("Are you sure you want to remove this image?")) {
+                fetch(`/remove-image/${imageId}/`, {
+                    method: 'DELETE', 
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                })
+                .then(response => {
+                    if (response.ok) {
+                        return response.json();
+                    } else {
+                        throw new Error("Failed to remove the image.");
+                    }
+                })
+                .then(data => {
+                    alert(data.message || "Image removed successfully.");
+                    buttonElement.parentElement.remove();
+                })
+                .catch(error => {
+                    console.error("Error:", error);
+                    alert("An error occurred while trying to remove the image.");
+                });
+            }
+        });
+    });
+});
+
+
+                        
     </script>
                             
                             
@@ -733,12 +758,14 @@ document.addEventListener('DOMContentLoaded', function () {
                             </div> {% endcomment %}
                             <div class="col-lg-12">
                                 <div class="mb-3">
-                                    <label class="form-label" style="font-family: Arial, sans-serif; font-size: 16px; font-weight: bold;">Awards/Recognitions:</label>
+                                    <label class="form-label" style="font-family: Arial, sans-serif; font-size: 16px; font-weight: bold;">Awards & Recognitions:</label>
                                     <div id="awardsSection">
                                         {% for award in awards %}
                                         <div class="award-entry mb-2" data-award-id="{{ award.id }}">
                                             <input type="text" name="existing_award_name[]" class="form-control mb-1" value="{{ award.award_name }}" placeholder="Enter book name" maxlength="85" readonly >
                                             <input type="text" name="existing_award_year[]" class="form-control mb-1"  value="{{ award.award_year }}" placeholder="Enter book link" readonly >
+                                            <input type="text" name="existing_award_by_organisation[]" class="form-control mb-1"  value="{{ award.award_by_organisation }}" placeholder="Enter Award by Organisation" readonly >
+
                                             {% if award.award_image %}
                                             <small>Current Award Image: <a href="{{ award.award_image.url }}" target="_blank">{{ award.award_image }}</a></small>
                                             <input type="hidden" name="existing_award_image[]" value="{{ award.award_image.url|cut:'/media/' }}">
@@ -751,6 +778,8 @@ document.addEventListener('DOMContentLoaded', function () {
                                         <div class="award-entry mb-2">
                                             <input type="text" name="award_name[]" class="form-control mb-1" placeholder="Enter organisation name" maxlength="85">
                                             <input type="text" name="award_year[]" class="form-control mb-1" placeholder="Enter award year">
+                                            <input type="text" name="award_by_organisation[]" class="form-control mb-1" placeholder="Enter award by organisation">
+
                                             <input type="file" name="award_image[]" class="form-control mb-1" accept="image/*">
                                             <button type="button" class="remove-award-btn btn btn-danger btn-sm">Remove</button>
                                         </div>
@@ -1179,12 +1208,16 @@ document.addEventListener("DOMContentLoaded", function() {
         // Check existing fields
         const existingAwardName = entry.querySelector('input[name="existing_award_name[]"]');
         const existingAwardYear = entry.querySelector('input[name="existing_award_year[]"]');
+        const existingAwardByOrganisation = entry.querySelector('input[name="existing_award_by_organisation[]"]');
+
         const existingAwardImageElement = entry.querySelector('input[name="existing_award_image[]"]');
         const existingAwardImage = existingAwardImageElement ? existingAwardImageElement.value : '';
 
         // Check new fields
         const awardName = entry.querySelector('input[name="award_name[]"]');
         const awardYear = entry.querySelector('input[name="award_year[]"]');
+        const awardByOrganisation = entry.querySelector('input[name="award_by_organisation[]"]');
+
         const awardImage = entry.querySelector('input[name="award_image[]"]');
 
         // Validation logic for each entry
@@ -1201,6 +1234,13 @@ document.addEventListener("DOMContentLoaded", function() {
         ) {
             canAddAward = false;
         }
+        if (
+            (!existingAwardByOrganisation || existingAwardByOrganisation.value.trim() === '') &&
+            (!awardByOrganisation || awardByOrganisation.value.trim() === '') 
+        ) {
+            canAddAward = false;
+        }
+
 
         if (
             (!existingAwardImage || existingAwardImage.trim() === '') &&
@@ -1219,13 +1259,14 @@ document.addEventListener("DOMContentLoaded", function() {
         newAwardEntry.innerHTML = `
             <input type="text" name="award_name[]" class="form-control mb-1" placeholder="Enter award name" maxlength="85">
             <input type="text" name="award_year[]" class="form-control mb-1" placeholder="Enter award year">
+            <input type="text" name="award_by_organisation[]" class="form-control mb-1" placeholder="Enter award by organisation">
             <input type="file" name="award_image[]" class="form-control mb-1" accept="image/*">
             <button type="button" class="remove-award-btn btn btn-danger btn-sm">Remove</button>
         `;
 
         awardsSection.appendChild(newAwardEntry);
     } else {
-        alert("Please ensure all fields (name, year, and image) are filled in existing entries before adding a new award.");
+        alert("Please ensure all fields (name, year,organisation, and image) are filled in existing entries before adding a new award.");
     }
 });
 
