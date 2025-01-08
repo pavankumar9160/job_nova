@@ -314,7 +314,7 @@ $(document).ready(function() {
             contentType: false,
             success: function(response) {
                 toastr.success('Details Updated successfully!', 'Success');
-                window.location.href = '/artist-profile_updated_one/'
+                window.location.href = '/artist-profile-setting_updated_one/'
 
             },
             error: function(xhr) {
@@ -448,7 +448,7 @@ $(document).ready(function() {
                         }
                         var artistProfileURL = artistProfileBaseURL + artist.id + "/"; // Construct URL dynamically
                         var artistHTML = `
-                            <div class="col-md-6 col-12">
+                            <div class="artist-card-container col-md-6 col-12">
                                 <div class="candidate-card position-relative overflow-hidden text-center shadow rounded p-4"  style="min-height: 100%; display: flex; flex-direction: column; justify-content: space-between;">
                                     <div class="ribbon ribbon-left overflow-hidden">
                                         <span class="text-center d-block bg-warning shadow small h6">
@@ -561,7 +561,7 @@ $(document).ready(function() {
                         var artistProfileURL = artistProfileBaseURL + artist.id + "/"; // Construct URL dynamically
                         // Build the artist HTML content
                         var artistHTML = `
-                            <div class="col-md-6 col-12">
+                            <div class="artist-card-container col-md-6 col-12">
                                 <div class="candidate-card position-relative overflow-hidden text-center shadow rounded p-4"style="min-height: 100%; display: flex; flex-direction: column; justify-content: space-between;">
                                     <div class="ribbon ribbon-left overflow-hidden">
                                         <span class="text-center d-block bg-warning shadow small h6">
@@ -1173,94 +1173,88 @@ var awards = [
     }))
 ];
         
-        const awardsContainer = document.getElementById("awards_received");
-        awardsContainer.innerHTML = "";
-        
-        if (awards && awards.length > 0) {
-            awards.forEach(award => {
-                if (award.award_name && award.award_year && award.award_by_organisation) {
-                    // Create a div for each book entry
-            const awardEntry = document.createElement("div");
-            awardEntry.className = "award-entry mb-3 text-center";
-            awardEntry.style.width = "100px"; // Fixed width for proper alignment
-        
-                    // Create image preview element (Image should be on top)
-                    if (award.award_image) {
-                        const img = document.createElement("img");
-                         // Set the preview image src
-                            img.alt = award.award_name;
-                            img.style.width = "50px"; // Fixed width for image
-                img.style.height = "50px"; // Fixed height for image
-                img.style.objectFit = "cover"; // Ensure proper fit
-                img.style.borderRadius = "8px"; // Rounded corners
-                img.style.boxShadow = "0 4px 6px rgba(0,0,0,0.1)"; // Shadow for better visual appeal
-                img.style.cursor = "pointer"; // Indicate it's clickable
-                             // Set image source
+const awardsContainer = document.getElementById("awards_received");
+awardsContainer.innerHTML = "";
+
+if (awards && awards.length > 0) {
+    awards.forEach(award => {
+        if (award.award_name && award.award_year && award.award_by_organisation) {
+            // Create the card container
+            const card = document.createElement("div");
+            card.className = "card shadow-sm bg-light";
+            card.style.width = "150px";
+            card.style.borderRadius = "10px";
+
+            // Create the card body
+            const cardBody = document.createElement("div");
+            cardBody.className = "card-body p-2 text-center";
+
+            // Award Image
+            if (award.award_image) {
+                const imageLink = document.createElement("a");
+                imageLink.href = award.is_existing
+                    ? `/media/${award.award_image}`
+                    : "#"; // Fallback if image is not existing
+                imageLink.target = "_blank";
+
+                const img = document.createElement("img");
+                img.alt = award.award_name;
+                img.className = "img-fluid rounded-square";
+                img.style.width = "70px";
+                img.style.height = "70px";
+                img.style.objectFit = "cover";
+                img.style.boxShadow = "0 4px 6px rgba(0, 0, 0, 0.3)";
+
                 if (award.is_existing) {
-                    img.src = `/media/${award.award_image}`;// Use the existing image URL
+                    img.src = `/media/${award.award_image}`;
                 } else {
                     const reader = new FileReader();
                     reader.onload = function (e) {
-                        img.src = e.target.result; // Set the preview image src
+                        img.src = e.target.result;
                     };
-                    reader.readAsDataURL(award.award_image); // Read the image file as a DataURL
+                    reader.readAsDataURL(award.award_image);
                 }
-                            // Add click event to open the image in a new tab
-                            img.addEventListener("click", function() {
-                                window.open(img.src, "_blank"); // Open image in a new tab
-                            });
-                            
-                            // Append the image to the book entry first (it should be the first child)
-                            awardEntry.appendChild(img);
-                        
-                
-                        // Read the image file as a DataURL
-                    }
-        
-                    // Create book name and link (The book name should be below the image)
-                    const awardInfo = document.createElement("div");
-                    
-                    awardInfo.className = "mt-2 font-weight-bold bg-soft-primary"; // Add margin for spacing
 
-            // Create the anchor element for the book name
+                imageLink.appendChild(img);
+                cardBody.appendChild(imageLink);
+            }
 
-            awardInfo.style.fontSize = "14px"; // Bootstrap primary color
-            awardInfo.innerText = award.award_name; // Set the book name as the link text
+            // Award Details
+            const detailsContainer = document.createElement("div");
+            detailsContainer.className = "mt-2";
 
-            const awardInfo1 = document.createElement("div");
-                    
-            awardInfo1.className = "text-muted"; // Add margin for spacing
+            // Award Name
+            const awardName = document.createElement("div");
+            awardName.className = "font-weight-bold text-dark";
+            awardName.style.fontSize = "14px";
+            awardName.innerText = award.award_name;
+            detailsContainer.appendChild(awardName);
 
-    // Create the anchor element for the book name
+            // Award Year
+            const awardYear = document.createElement("div");
+            awardYear.className = "text-muted";
+            awardYear.style.fontSize = "12px";
+            awardYear.innerText = award.award_year;
+            detailsContainer.appendChild(awardYear);
 
-    awardInfo1.style.fontSize = "12px"; // Bootstrap primary color
-    awardInfo1.innerText = award.award_year; // Set the book name as the link text
+            // Award By Organisation
+            const awardByOrganisation = document.createElement("div");
+            awardByOrganisation.className = "text-muted";
+            awardByOrganisation.style.fontSize = "10px";
+            awardByOrganisation.innerText = award.award_by_organisation;
+            detailsContainer.appendChild(awardByOrganisation);
 
-    const awardInfo2 = document.createElement("div");
-                    
-    awardInfo2.className = "text-muted"; // Add margin for spacing
-
-// Create the anchor element for the book name
-
-awardInfo2.style.fontSize = "10px"; // Bootstrap primary color
-awardInfo2.innerText = award.award_by_organisation;
-            
-                    // Append the book info (name and link) below the image
-                    awardEntry.appendChild(awardInfo);
-                    awardEntry.appendChild(awardInfo1);
-                    awardEntry.appendChild(awardInfo2);
-
-
-        
-                    // Append the entire book entry to the books container
-                    awardsContainer.appendChild(awardEntry);
-                }
-            });
-        } else {
-            const noAwardsMessage = document.createElement("span");
-            noAwardsMessage.innerText = "No Awards & Recognitions.";
-            awardsContainer.appendChild(noAwardsMessage);
+            cardBody.appendChild(detailsContainer);
+            card.appendChild(cardBody);
+            awardsContainer.appendChild(card);
         }
+    });
+} else {
+    const noAwardsMessage = document.createElement("span");
+    noAwardsMessage.innerText = "No Awards & Recognitions.";
+    awardsContainer.appendChild(noAwardsMessage);
+}
+
         
 
                     const imagePreviewContainer = document.getElementById('image-preview-container');
@@ -1282,8 +1276,8 @@ awardInfo2.innerText = award.award_by_organisation;
                                 img.src = e.target.result;
                                 img.alt = 'Preview Image';
                                 img.classList.add('img-fluid', 'rounded');
-                                img.style.width = '100%';
-                                img.style.height = '100%';
+                                img.style.width = '50px';
+                                img.style.height = '50px';
                                 img.style.objectFit = 'cover';
 
                                 imageBlock.appendChild(img);

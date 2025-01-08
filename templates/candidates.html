@@ -36,6 +36,14 @@
 
         <!-- Start -->
         <section class="section">
+            <div class="d-flex justify-content-end mb-3">
+                <label for="toggleColumns" class="me-2">Artists per row:</label>
+                <select id="toggleColumns" class="form-select form-select-sm" style="width: auto;">
+                    <option value="col-md-6">2 per row</option>
+                    <option value="col-md-4">3 per row</option>
+                    <option value="col-md-3">4 per row</option>
+                </select>
+            </div>
             <div class="container">
                 <div class="row g-4">
                     <div class="col-lg-4 col-md-6 col-12">
@@ -115,8 +123,7 @@
             <option value="Kannada">Kannada</option>
             <option value="Malayalam">Malayalam</option>
         </select>
-    </div>
-</div>
+    </div></div>
 
 
                                
@@ -771,17 +778,32 @@
    
     
     
+        document.getElementById('toggleColumns').addEventListener('change', function() {
+            // Get the selected column class
+            const selectedClass = this.value;
+    
+            // Get all artist card containers
+            const artistCards = document.querySelectorAll('.artist-card-container');
+    
+            // Update the column class for each card
+            artistCards.forEach(card => {
+                card.className = `artist-card-container ${selectedClass} col-12`;
+            });
+        });
+    
+    
                                 
                             </script>
                             
                         </div>
                     </div>
-
+                   
+                    
                     <div class="col-lg-8 col-md-6 col-12">
                         <div class="row g-4">
                             {% if paginated_artists %}
                             {% for artist in paginated_artists %}
-    <div class="col-md-6 col-12" >
+    <div class="artist-card-container col-md-6 col-12" >
         <div class="candidate-card position-relative overflow-hidden text-center shadow rounded p-4" style="min-height: 100%; display: flex; flex-direction: column; justify-content: space-between;">
             <div class="ribbon ribbon-left overflow-hidden">
                 <span class="text-center d-block bg-warning shadow small h6">

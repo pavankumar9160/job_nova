@@ -401,7 +401,7 @@ def artists(request):
     # Filter artists based on the search query
     if search_query:
         artists = ArtistMasterBasic.objects.annotate(
-       full_name = F('additional_info__full_name')
+       full_name = F('additional_info__fullname')
                 ).filter(
                     Q(additional_info__skills__name__icontains=search_query) |  # Search by skills
                     Q(full_name__icontains=search_query) |  
@@ -852,7 +852,10 @@ def login_api(request):
         
         user = authenticate(request, username=email_or_contact, password=password)
         
-        if user is not None:        
+        if user is not None:
+            # Check if user is active
+            if not user.is_active:
+                return JsonResponse({'error': 'Your account has been disabled. Please contact support.'}, status=400)        
             login(request,user)
             
             return JsonResponse({'message': 'Login successful', 'redirect_url': '/artist-profile_updated_one/'})
@@ -1141,19 +1144,22 @@ def update_artist_details_api(request):
         award_names =request.POST.getlist('award_name[]')
         award_years = request.POST.getlist('award_year[]')
         award_images = request.FILES.getlist('award_image[]')
+        award_by_organisations = request.POST.getlist('award_by_organisation[]')
+
        
         print("award_names",award_names)
+        print("award_by_organisations",award_by_organisations)
         print("award_images",award_images)
         
 
-        if award_names and award_years:
+        if award_names and award_years and award_by_organisations :
             awards = []
 
-            for i, (name, year) in enumerate(zip(award_names, award_years)):
-                if not name or not year:
+            for i, (name, year, organisation) in enumerate(zip(award_names, award_years,award_by_organisations)):
+                if not name or not year or not organisation:
                  continue  # Skip if name or year is invalid
                 
-                award = Awards(award_name=name, award_year=year)
+                award = Awards(award_name=name, award_year=year, award_by_organisation=organisation )
 
                 
                 if i < len(award_images) and award_images[i]:  # New image uploaded
@@ -1382,10 +1388,9 @@ def check_profile_completion(request):
     required_fields = [
         'fullname', 'penname','title', 'gender', 'dob', 'country', 'address1','address2','state','pincode',
         'description', 'introduction', 'languages_read', 'languages_write',
-        'languages_speak', 'facebook_link', 'instagram_link', 'linkedin_link',
-        'job_title', 'company_name', 'experience', 'portfolio', 'short_bio',
-        'availability','certifications',
-        'published_works', 'awards', #'payment_method', 'aadhar_front',
+        'languages_speak', 'facebook_link', 'instagram_link', 'linkedin_link','twitter_link',
+        'job_title', 'experience', 'portfolio', 'short_bio',
+         #'payment_method', 'aadhar_front',
         # 'aadhar_back', 'opportunities', 'alternate_email'
     ]
 
@@ -1419,7 +1424,7 @@ def search_artists(request):
     if search_query:
         # Filter artists based on the search query
        artists = ArtistMasterBasic.objects.annotate(
-       full_name = F('additional_info__full_name')
+       full_name = F('additional_info__fullname')
                 ).filter(
                     Q(additional_info__skills__name__icontains=search_query) |  # Search by skills
                     Q(additional_info__description__icontains=search_query) |
@@ -1679,10 +1684,6 @@ def remove_award(request, award_id):
             return JsonResponse({'success': False, 'error': 'Award not found'})
     return JsonResponse({'success': False, 'error': 'Invalid request method'})
 
-
-
-from django.http import JsonResponse
-from django.views.decorators.csrf import csrf_exempt
 
 @csrf_exempt 
 def remove_image(request, image_id):

@@ -101,24 +101,15 @@ class ArtistMasterAdditional(models.Model):
     Gender_choices = [('Male', 'Male'), ('Female', 'Female'), ('Other', 'Other')]
     Location_choices = [('India', 'India'), ('USA', 'USA'), ('Canada', 'Canada'), ('UK', 'UK'), ('Australia', 'Australia')]
     Literacy_world_choices = [('Writer', 'Writer'), ('Publisher', 'Publisher'),
-                              ('Editor', 'Editor'), ('Poet', 'Poet'), 
-                              ('Essayist', 'Essayist'), ('Novelist', 'Novelist'),
-                              ('Blogger', 'Blogger'), ('Short Story Writer', 'Short Story Writer'),
-                              ('Motivational Speaker', 'Motivational Speaker'), 
-                              ('Spiritual Leader', 'Spiritual Leader'),
-                              ('Literary Critic', 'Literary Critic')]
+                              ('Editor', 'Editor'), ('Poet', 'Poet'), ('Printer', 'Printer'),('Standup Comedian','Standup Comedian'),('Compere/Emcee','Compere/Emcee'),
+                              ('Essayist', 'Essayist'),('Book Store Owner','Book Store Owner'),('Digital Marketplace/Platform','Digital Marketplace/Platform'), ('Novelist', 'Novelist'),('Artist', 'Artist'),('Social Media Influencer','Social Media Influencer'),
+                              ('Blogger', 'Blogger'),('Entertainment Troupe Owner','Entertainment Troupe Owner'), ('Short Story Writer', 'Short Story Writer'),('Digital Marketer','Digital Marketer'),
+                              ('Motivational Speaker', 'Motivational Speaker'), ('Digital Graphics Designer','Digital Graphics Designer'),('Event Manager','Event Manager'),('Columnist','Columnist'),('Journalist','Journalist'),
+                              ('Digital Content Creator','Digital Content Creator'),('Spiritual Leader', 'Spiritual Leader'),('Public Relations Manager','Public Relations Manager'),
+                              ('Literary Critic', 'Literary Critic'),('Literary Reviewer', 'Literary Reviewer'),('Lyricist','Lyricist'),('Scriptwriter-Drama','Scriptwriter-Drama'),('Scriptwriter-Screen','Scriptwriter-Screen'),('Translator','Translator')]
     
-    availability_choices=[
-            ('full_time', 'Full-time'),
-            ('part_time', 'Part-time'),
-            ('freelance', 'Freelance')
-        ]
     
-    PAYMENT_METHOD_CHOICES = [
-        ('paypal', 'PayPal'),
-        ('upi', 'UPI'),
-        ('bank_transfer', 'Bank Transfer'),
-    ]
+    
 
     OPPORTUNITY_CHOICES = [
         ('writing', 'Writing'),
@@ -161,16 +152,8 @@ class ArtistMasterAdditional(models.Model):
     awards_received = models.ManyToManyField(Awards, related_name='artist_awards', blank=True)  
 
     education_details = models.ManyToManyField(Education, related_name='artist_education', blank=True)  
-    availability = models.CharField(max_length=50, choices=availability_choices,blank=True,null=True)
     skills = models.ManyToManyField(Skill, related_name='skills', blank=True)    
     images = models.ManyToManyField(Gallery, related_name='images', blank=True) 
-    
- 
-    certifications = models.TextField(blank=True, null=True)  
-    published_works = models.TextField(blank=True, null=True) 
-    awards = models.TextField(blank=True, null=True) 
-    
-    payment_method = models.CharField(max_length=20, choices=PAYMENT_METHOD_CHOICES,blank=True, null=True)
     aadhar_front = models.ImageField(upload_to='uploads/', blank=True, null=True)
     aadhar_back = models.ImageField(upload_to='uploads/', blank=True, null=True)
     opportunities = models.CharField(max_length=20, choices=OPPORTUNITY_CHOICES,blank=True, null=True)
@@ -186,7 +169,7 @@ class ArtistMasterAdditional(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
 
     def __str__(self):
-        return f"{self.firstname} {self.lastname}"
+        return f"{self.fullname}"
 
 
 
