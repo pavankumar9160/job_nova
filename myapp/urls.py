@@ -65,6 +65,8 @@ urlpatterns = [
      path('remove-book/<int:book_id>/', views.remove_book, name='remove-book'),
     path('remove-award/<int:award_id>/', views.remove_award, name='remove-award'),
     path('remove-image/<int:image_id>/', views.remove_image, name='remove_image'),
+    path('upload-gallery-image/', views.upload_gallery_image, name='upload_gallery_image'),
+
 
 
      

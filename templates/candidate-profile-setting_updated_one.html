@@ -225,10 +225,10 @@
             </li>          
             {% endfor %}
         </ul>
-        {% else %}
+        {% comment %} {% else %}
             <ul id="file-list" class="mt-2 list-unstyled" style="font-family: Arial, sans-serif; font-size: 14px; color: #333; padding-left: 0;">
                 <!-- Dynamically added file names will appear here -->
-            </ul>
+            </ul> {% endcomment %}
         {% endif %}
     </div>
 </div>
@@ -378,8 +378,14 @@
                                     <div id="booksPublishedSection">
                                         {% for book in books %}
                                         <div class="book-entry mb-2" data-book-id="{{ book.id }}">
-                                            <input type="text" name="existing_book_name[]" class="form-control mb-1" value="{{ book.book_name }}" placeholder="Enter book name" maxlength="85" readonly >
-                                            <input type="url" name="existing_book_link[]" class="form-control mb-1"  value="{{ book.book_url }}" placeholder="Enter book link" readonly >
+                                            <input type="text" name="existing_book_name[]" class="form-control mb-1" value="{{ book.book_name }}" maxlength="85" readonly >
+                                            <input type="url" name="existing_book_link[]" class="form-control mb-1"  value="{{ book.book_url }}" readonly >
+                                            <input type="text" name="existing_book_category[]" class="form-control mb-1"  value="{{ book.book_category }}" readonly >
+                                            <input type="text" name="existing_book_chapter_name[]" class="form-control mb-1"  value="{{ book.book_chapter_name }}" readonly >
+                                            <input type="text" name="existing_book_page_no[]" class="form-control mb-1"  value="{{ book.book_page_no }}" readonly >
+                                            <input type="text" name="existing_book_publisher[]" class="form-control mb-1"  value="{{ book.book_publisher }}" readonly >
+                                            <input type="text" name="existing_book_editor[]" class="form-control mb-1"  value="{{ book.book_editor }}" readonly >
+
                                             {% if book.book_image %}
                                             <small>Current Book Image: <a href="{{ book.book_image.url }}" target="_blank">{{ book.book_image }}</a></small>
                                             <input type="hidden" name="existing_book_image[]" value="{{ book.book_image.url|cut:'/media/' }}">
@@ -392,6 +398,11 @@
                                         <div class="book-entry mb-2">
                                             <input type="text" name="book_name[]" class="form-control mb-1" placeholder="Enter book name" maxlength="85">
                                             <input type="url" name="book_link[]" class="form-control mb-1" placeholder="Enter book link">
+                                            <input type="text" name="book_category[]" class="form-control mb-1" placeholder="Enter book category">
+                                            <input type="text" name="book_chapter_name[]" class="form-control mb-1"  placeholder="Enter book chapter name">
+                                            <input type="text" name="book_page_no[]" class="form-control mb-1"  placeholder="Enter book page no">
+                                            <input type="text" name="book_publisher[]" class="form-control mb-1" placeholder="Enter book publisher">
+                                            <input type="text" name="book_editor[]" class="form-control mb-1"  placeholder="Enter book editor">
                                             <input type="file" name="book_image[]" class="form-control mb-1" accept="image/*">
                                             <button type="button" class="remove-book-btn btn btn-danger btn-sm">Remove</button>
                                         </div>
@@ -541,29 +552,73 @@
                                     });
                                 });
 
-                                document.addEventListener('DOMContentLoaded', function () {
-                                    const fileInput = document.getElementById('documents');
-                                    const fileList = document.getElementById('file-list');
+                                document.getElementById("documents").addEventListener("change", function () {
+                                    const files = this.files;
+                                    const fileList = document.getElementById("file-list");
+                                    const formData = new FormData();
+                                    const add_id = {{ additional_info.id }} 
+                                    console.log('additional_info_id',add_id)
+                                    for (let i = 0; i < files.length; i++) {
+                                        formData.append("documents[]", files[i]);
+                                    }
+                                    formData.append("user_id", "{{ additional_info.id }}"); // Pass the user ID
                                 
-                                    fileInput.addEventListener('change', function () {
-                                        fileList.innerHTML = '';
+                                    fetch("/upload-gallery-image/", {
+                                        method: "POST",
+                                        body: formData,
+                                    })
+                                    .then(response => response.json())
+                                    .then(data => {
+                                        if (data.status === "success") {
+                                          data.uploaded_images.forEach(image => {
+                                                const listItem = document.createElement("li");
+                                                listItem.style.marginBottom = "2px";
                                 
-                                        const files = fileInput.files;
-                                        console.log(files);
+                                                // Create link for image
+                                                const link = document.createElement("a");
+                                                link.href = image.file_url;
+                                                link.target = "_blank";
+                                                link.textContent = image.file_name;
                                 
-                                        if (files.length > 0) {
-                                            for (let i = 0; i < files.length; i++) {
-                                                const listItem = document.createElement('li');
-                                                listItem.textContent = files[i].name;
-                                                fileList.appendChild(listItem);
-                                            }
+                                                // Create hidden preview image
+                                                const previewImg = document.createElement("img");
+                                                previewImg.className = "hidden-preview";
+                                                previewImg.src = image.file_url;
+                                                previewImg.style.display = "none";
+                                                previewImg.dataset.fileName = image.file_name;
+                                                previewImg.dataset.fileUrl = image.file_url;
+                                                previewImg.alt = "Existing File Preview";
+                                
+                                                // Create remove button
+                                                const removeButton = document.createElement("button");
+                                                removeButton.classList.add('remove-image-btn')
+                                                removeButton.type = "button";
+                                                removeButton.style.border = "none";
+                                                removeButton.style.background = "transparent";
+                                                removeButton.style.color = "red";
+                                                removeButton.style.cursor = "pointer";
+                                                removeButton.textContent = "✖";
+                                                removeButton.dataset.imageId = image.id;
+                                                removeButton.title = "Remove image";
+                                               
+                                
+                                                // Append elements to list item
+                                                listItem.appendChild(link);
+                                                listItem.appendChild(previewImg);
+                                                listItem.appendChild(removeButton);
+                                
+                                                // Append list item to file list
+                                                fileList.appendChild(listItem); 
+                                            }); 
                                         } else {
-                                            const noFilesMessage = document.createElement('li');
-                                            noFilesMessage.textContent = 'No files selected.';
-                                            fileList.appendChild(noFilesMessage);
+                                            alert("Failed to upload images. Please try again.");
                                         }
+                                    })
+                                    .catch(error => {
+                                        console.error("Error uploading files:", error);
                                     });
                                 });
+
                                 document.addEventListener('DOMContentLoaded', function() {
                                    
                                     document.getElementById('uploadCoverPhoto').addEventListener('change', function(event) {
@@ -608,12 +663,22 @@ document.getElementById('addBookBtn').addEventListener('click', function () {
         // Check existing fields
         const existingBookName = entry.querySelector('input[name="existing_book_name[]"]');
         const existingBookLink = entry.querySelector('input[name="existing_book_link[]"]');
+        const existingBookCategory = entry.querySelector('input[name="existing_book_category[]"]');
+        const existingBookChapterName = entry.querySelector('input[name="existing_book_chapter_name[]"]');
+        const existingPublisher = entry.querySelector('input[name="existing_book_publisher[]"]');
+        const existingBookPageNo = entry.querySelector('input[name="existing_book_page_no[]"]');
+        const existingBookEditor = entry.querySelector('input[name="existing_book_editor[]"]');
         const existingImageElement = entry.querySelector('input[name="existing_book_image[]"]');
         const existingImage = existingImageElement ? existingImageElement.value : '';
 
         // Check new fields
         const bookName = entry.querySelector('input[name="book_name[]"]');
         const bookLink = entry.querySelector('input[name="book_link[]"]');
+        const bookCategory = entry.querySelector('input[name="book_category[]"]');
+        const bookChapterName = entry.querySelector('input[name="book_chapter_name[]"]');
+        const bookPublisher= entry.querySelector('input[name="book_publisher[]"]');
+        const bookEditor = entry.querySelector('input[name="book_editor[]"]');
+        const bookPageNo = entry.querySelector('input[name="book_page_no[]"]');
         const bookImage = entry.querySelector('input[name="book_image[]"]');
 
         // Validation logic for each entry
@@ -627,6 +692,37 @@ document.getElementById('addBookBtn').addEventListener('click', function () {
         if (
             (!existingBookLink || existingBookLink.value.trim() === '') &&
             (!bookLink || bookLink.value.trim() === '') // Either existing or new link should be filled
+        ) {
+            canAddBook = false;
+        }
+
+        if (
+            (!existingBookCategory || existingBookCategory.value.trim() === '') &&
+            (!bookCategory || bookCategory.value.trim() === '') // Either existing or new link should be filled
+        ) {
+            canAddBook = false;
+        }
+        if (
+            (!existingBookChapterName || existingBookChapterName.value.trim() === '') &&
+            (!bookChapterName || bookChapterName.value.trim() === '') // Either existing or new link should be filled
+        ) {
+            canAddBook = false;
+        }
+        if (
+            (!existingPublisher || existingPublisher.value.trim() === '') &&
+            (!bookPublisher || bookPublisher.value.trim() === '') // Either existing or new link should be filled
+        ) {
+            canAddBook = false;
+        }
+        if (
+            (!existingBookEditor || existingBookEditor.value.trim() === '') &&
+            (!bookEditor || bookEditor.value.trim() === '') // Either existing or new link should be filled
+        ) {
+            canAddBook = false;
+        }
+        if (
+            (!existingBookPageNo || existingBookPageNo.value.trim() === '') &&
+            (!bookPageNo || bookPageNo.value.trim() === '') // Either existing or new link should be filled
         ) {
             canAddBook = false;
         }
@@ -648,17 +744,21 @@ document.getElementById('addBookBtn').addEventListener('click', function () {
         newBookEntry.innerHTML = `
             <input type="text" name="book_name[]" class="form-control mb-1" placeholder="Enter book name" maxlength="85">
             <input type="url" name="book_link[]" class="form-control mb-1" placeholder="Enter book link">
+            <input type="text" name="book_category[]" class="form-control mb-1" placeholder="Enter book category">
+            <input type="text" name="book_chapter_name[]" class="form-control mb-1"  placeholder="Enter book chapter name">
+            <input type="text" name="book_page_no[]" class="form-control mb-1"  placeholder="Enter book page no">
+            <input type="text" name="book_publisher[]" class="form-control mb-1" placeholder="Enter book publisher">
+            <input type="text" name="book_editor[]" class="form-control mb-1"  placeholder="Enter book editor">
             <input type="file" name="book_image[]" class="form-control mb-1" accept="image/*">
             <button type="button" class="remove-book-btn btn btn-danger btn-sm">Remove</button>
         `;
 
         booksPublishedSection.appendChild(newBookEntry);
     } else {
-        alert("Please ensure all fields (name, link, and image) are filled in existing entries before adding a new book.");
+        alert("Please ensure all fields (name, link,category,chapter name,page no,publisher,editor and image) are filled in existing entries before adding a new book.");
     }
 });
 
-// Function to remove a book entry
 document.getElementById('booksPublishedSection').addEventListener('click', function (e) {
     if (e.target && e.target.classList.contains('remove-book-btn')) {
         e.target.parentElement.remove();
@@ -667,7 +767,6 @@ document.getElementById('booksPublishedSection').addEventListener('click', funct
 
 
 
-// Handle the "Remove" button click event
 document.querySelectorAll('.remove-exisitng-book-btn').forEach(button => {
     button.addEventListener('click', function() {
         var bookEntry = this.closest('.book-entry');
@@ -675,15 +774,13 @@ document.querySelectorAll('.remove-exisitng-book-btn').forEach(button => {
         console.log("clicked")
         console.log(bookId)
         if (bookId) {
-            // Make an AJAX call to delete the book
             $.ajax({
-                url: `/remove-book/${bookId}/`, // Backend endpoint for deletion
-                type: 'DELETE', // HTTP DELETE request
+                url: `/remove-book/${bookId}/`, 
+                type: 'DELETE', 
                 headers: {
-                    'Content-Type': 'application/json', // Optional if not sending data
+                    'Content-Type': 'application/json', 
                 },
                 success: function(response) {
-                    // On success, remove the book entry from the DOM
                     bookEntry.remove();
                     console.log('Book removed successfully.');
                 },
@@ -762,9 +859,11 @@ document.addEventListener('DOMContentLoaded', function () {
                                     <div id="awardsSection">
                                         {% for award in awards %}
                                         <div class="award-entry mb-2" data-award-id="{{ award.id }}">
-                                            <input type="text" name="existing_award_name[]" class="form-control mb-1" value="{{ award.award_name }}" placeholder="Enter book name" maxlength="85" readonly >
-                                            <input type="text" name="existing_award_year[]" class="form-control mb-1"  value="{{ award.award_year }}" placeholder="Enter book link" readonly >
-                                            <input type="text" name="existing_award_by_organisation[]" class="form-control mb-1"  value="{{ award.award_by_organisation }}" placeholder="Enter Award by Organisation" readonly >
+                                            <input type="text" name="existing_award_name[]" class="form-control mb-1" value="{{ award.award_name }}" maxlength="85" readonly >
+                                            <input type="text" name="existing_award_year[]" class="form-control mb-1"  value="{{ award.award_year }}"  readonly >
+                                            <input type="text" name="existing_award_category[]" class="form-control mb-1"  value="{{ award.award_category }}" readonly >
+                                            <input type="text" name="existing_award_sub_category[]" class="form-control mb-1"  value="{{ award.award_sub_category }}" readonly >
+                                            <input type="text" name="existing_award_by_organisation[]" class="form-control mb-1"  value="{{ award.award_by_organisation }}"  readonly >
 
                                             {% if award.award_image %}
                                             <small>Current Award Image: <a href="{{ award.award_image.url }}" target="_blank">{{ award.award_image }}</a></small>
@@ -776,8 +875,10 @@ document.addEventListener('DOMContentLoaded', function () {
                                         </div>
                                         {% empty %}
                                         <div class="award-entry mb-2">
-                                            <input type="text" name="award_name[]" class="form-control mb-1" placeholder="Enter organisation name" maxlength="85">
+                                            <input type="text" name="award_name[]" class="form-control mb-1" placeholder="Enter award name" maxlength="85">
                                             <input type="text" name="award_year[]" class="form-control mb-1" placeholder="Enter award year">
+                                            <input type="text" name="award_category[]" class="form-control mb-1" placeholder="Enter award category">
+                                            <input type="text" name="award_sub_category[]" class="form-control mb-1" placeholder="Enter award sub category">
                                             <input type="text" name="award_by_organisation[]" class="form-control mb-1" placeholder="Enter award by organisation">
 
                                             <input type="file" name="award_image[]" class="form-control mb-1" accept="image/*">
@@ -1208,6 +1309,10 @@ document.addEventListener("DOMContentLoaded", function() {
         // Check existing fields
         const existingAwardName = entry.querySelector('input[name="existing_award_name[]"]');
         const existingAwardYear = entry.querySelector('input[name="existing_award_year[]"]');
+        const existingAwardCategory = entry.querySelector('input[name="existing_award_category[]"]');
+
+        const existingAwardSubCategory = entry.querySelector('input[name="existing_award_sub_category[]"]');
+
         const existingAwardByOrganisation = entry.querySelector('input[name="existing_award_by_organisation[]"]');
 
         const existingAwardImageElement = entry.querySelector('input[name="existing_award_image[]"]');
@@ -1216,6 +1321,9 @@ document.addEventListener("DOMContentLoaded", function() {
         // Check new fields
         const awardName = entry.querySelector('input[name="award_name[]"]');
         const awardYear = entry.querySelector('input[name="award_year[]"]');
+        const awardCategory = entry.querySelector('input[name="award_category[]"]');
+        const awardSubCategory = entry.querySelector('input[name="award_sub_category[]"]');
+
         const awardByOrganisation = entry.querySelector('input[name="award_by_organisation[]"]');
 
         const awardImage = entry.querySelector('input[name="award_image[]"]');
@@ -1231,6 +1339,18 @@ document.addEventListener("DOMContentLoaded", function() {
         if (
             (!existingAwardYear || existingAwardYear.value.trim() === '') &&
             (!awardYear || awardYear.value.trim() === '') // Either existing or new link should be filled
+        ) {
+            canAddAward = false;
+        }
+        if (
+            (!existingAwardCategory || existingAwardCategory.value.trim() === '') &&
+            (!awardCategory || awardCategory.value.trim() === '') // Either existing or new link should be filled
+        ) {
+            canAddAward = false;
+        }
+        if (
+            (!existingAwardSubCategory || existingAwardSubCategory.value.trim() === '') &&
+            (!awardSubCategory || awardSubCategory.value.trim() === '') // Either existing or new link should be filled
         ) {
             canAddAward = false;
         }
@@ -1259,6 +1379,8 @@ document.addEventListener("DOMContentLoaded", function() {
         newAwardEntry.innerHTML = `
             <input type="text" name="award_name[]" class="form-control mb-1" placeholder="Enter award name" maxlength="85">
             <input type="text" name="award_year[]" class="form-control mb-1" placeholder="Enter award year">
+            <input type="text" name="award_category[]" class="form-control mb-1" placeholder="Enter award category">
+            <input type="text" name="award_sub_category[]" class="form-control mb-1" placeholder="Enter award sub category">
             <input type="text" name="award_by_organisation[]" class="form-control mb-1" placeholder="Enter award by organisation">
             <input type="file" name="award_image[]" class="form-control mb-1" accept="image/*">
             <button type="button" class="remove-award-btn btn btn-danger btn-sm">Remove</button>
@@ -1266,7 +1388,7 @@ document.addEventListener("DOMContentLoaded", function() {
 
         awardsSection.appendChild(newAwardEntry);
     } else {
-        alert("Please ensure all fields (name, year,organisation, and image) are filled in existing entries before adding a new award.");
+        alert("Please ensure all fields (name, year,organisation,category,sub category and image) are filled in existing entries before adding a new award.");
     }
 });
 

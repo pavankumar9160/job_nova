@@ -71,8 +71,13 @@ class Education(models.Model):
     
     
 class BooksPublished(models.Model):
-    book_name = models.CharField(max_length=255)
+    book_name = models.CharField(max_length=255,blank=True, null=True)
     book_url = models.URLField(blank=True, null=True)
+    book_category = models.CharField(max_length=255,blank=True, null=True)
+    book_chapter_name = models.CharField(max_length=255,blank=True, null=True)
+    book_page_no = models.CharField(max_length=255,blank=True, null=True)
+    book_publisher = models.CharField(max_length=255,blank=True, null=True)
+    book_editor = models.CharField(max_length=255,blank=True, null=True)
     book_image = models.ImageField(upload_to='book_images/', blank=True, null=True)
     
     
@@ -82,6 +87,8 @@ class Awards(models.Model):
     award_name = models.CharField(max_length=255)
     award_year = models.CharField(blank=True, null=True,max_length=10)
     award_by_organisation = models.CharField(blank=True, null=True,max_length=100)
+    award_category = models.CharField(blank=True, null=True,max_length=100)
+    award_sub_category=models.CharField(blank=True, null=True,max_length=100)
     award_image = models.ImageField(upload_to='award_images/', blank=True, null=True)    
 
     

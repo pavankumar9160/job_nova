@@ -935,14 +935,14 @@ def update_artist_details_api(request):
         if 'cover_photo' in request.FILES:
             artist.cover_photo = request.FILES['cover_photo'] 
         
-        if 'files' in request.FILES:
-            files = request.FILES.getlist('files')  
-            if artist.images.exists():
-                artist.images.all().delete()  
+        # if 'files' in request.FILES:
+        #     files = request.FILES.getlist('files')  
+        #     if artist.images.exists():
+        #         artist.images.all().delete()  
             
-            for file in files:
-                image = Gallery.objects.create(file_name=file)
-                artist.images.add(image)       
+        #     for file in files:
+        #         image = Gallery.objects.create(file_name=file)
+        #         artist.images.add(image)       
         
         if request.POST.get('address1'):
             artist.address1 = request.POST.get('address1')
@@ -1004,6 +1004,12 @@ def update_artist_details_api(request):
             
         
         book_names =request.POST.getlist('book_name[]')
+        book_categories =request.POST.getlist('book_category[]')
+        book_chapterNames =request.POST.getlist('book_chapter_name[]')
+        book_pageNos =request.POST.getlist('book_page_no[]')
+        book_publishers =request.POST.getlist('book_publisher[]')
+        book_editors =request.POST.getlist('book_editor[]')
+
         book_links = request.POST.getlist('book_link[]')
         book_images = request.FILES.getlist('book_image[]')
        
@@ -1011,15 +1017,15 @@ def update_artist_details_api(request):
         print("book_images",book_images)
         
 
-        if book_names and book_links:
+        if book_names and book_links and book_categories and book_chapterNames and book_pageNos and book_publishers and book_editors:
             books = []
 
-            for i, (name, link) in enumerate(zip(book_names, book_links)):
+            for i, (name, link,category,chapterName,pageNo,publisher,editor) in enumerate(zip(book_names, book_links,book_categories,book_chapterNames,book_pageNos,book_publishers,book_editors)):
                 
                 if not name or not link:
                  continue  # Skip if name or year is invalid
                 
-                book = BooksPublished(book_name=name, book_url=link)
+                book = BooksPublished(book_name=name, book_url=link,book_category=category,book_chapter_name = chapterName,book_page_no = pageNo,book_publisher= publisher,book_editor = editor)
 
                 
                 if i < len(book_images) and book_images[i]:  # New image uploaded
@@ -1143,6 +1149,8 @@ def update_artist_details_api(request):
             
         award_names =request.POST.getlist('award_name[]')
         award_years = request.POST.getlist('award_year[]')
+        award_categories = request.POST.getlist('award_category[]')
+        award_sub_categories = request.POST.getlist('award_sub_category[]')
         award_images = request.FILES.getlist('award_image[]')
         award_by_organisations = request.POST.getlist('award_by_organisation[]')
 
@@ -1152,14 +1160,14 @@ def update_artist_details_api(request):
         print("award_images",award_images)
         
 
-        if award_names and award_years and award_by_organisations :
+        if award_names and award_years and award_by_organisations and award_categories and award_sub_categories :
             awards = []
 
-            for i, (name, year, organisation) in enumerate(zip(award_names, award_years,award_by_organisations)):
-                if not name or not year or not organisation:
+            for i, (name, year, organisation,category,subCategory) in enumerate(zip(award_names, award_years,award_by_organisations,award_categories,award_sub_categories)):
+                if not name or not year or not organisation or not category or not subCategory :
                  continue  # Skip if name or year is invalid
                 
-                award = Awards(award_name=name, award_year=year, award_by_organisation=organisation )
+                award = Awards(award_name=name, award_year=year, award_by_organisation=organisation,award_category=category,award_sub_category=subCategory )
 
                 
                 if i < len(award_images) and award_images[i]:  # New image uploaded
@@ -1696,5 +1704,33 @@ def remove_image(request, image_id):
         except Gallery.DoesNotExist:
             return JsonResponse({'error': 'Image not found.'}, status=404)
     return JsonResponse({'error': 'Invalid request method.'}, status=400)
+
+
+
+from django.core.files.images import ImageFile
+
+@csrf_exempt
+def upload_gallery_image(request):
+    
+    if request.method == 'POST':
+        user_id = request.POST.get('user_id')  
+        print('surya_id',user_id)
+        user_instance = ArtistMasterAdditional.objects.get(id=user_id)
+
+        uploaded_files = request.FILES.getlist('documents[]')  
+        uploaded_images = []
+
+        for file in uploaded_files:
+            gallery_image = Gallery.objects.create(file_name=ImageFile(file))
+            user_instance.images.add(gallery_image)
+            uploaded_images.append({
+                'id': gallery_image.id,
+                'file_name': gallery_image.file_name.name,
+                'file_url': gallery_image.file_name.url
+            })
+
+        return JsonResponse({'status': 'success', 'uploaded_images': uploaded_images})
+    return JsonResponse({'status': 'error', 'message': 'Invalid request'}, status=400)
+
 
 

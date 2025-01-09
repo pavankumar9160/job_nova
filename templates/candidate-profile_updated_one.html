@@ -167,50 +167,108 @@
                             {% endif %}
                         </div> {% endcomment %}
                         <h5 class="mt-4">Awards & Recognitions:</h5>
-<div class="d-flex flex-wrap gap-4 justify-content-start">
+<div class="table-responsive">
     {% if info.awards_received.all %}
-        {% for award in info.awards_received.all %}
-            <div class="card shadow-sm bg-light" style="width: 120px; border-radius: 10px;">
-                <div class="card-body p-2 text-center">
-                    <!-- Award Image -->
-                    <a href="{{ award.award_image.url }}" target="_blank">
-                        <img src="{{ award.award_image.url }}" alt="{{ award.award_name }}" 
-                             class="img-fluid rounded-square" 
-                             style="width: 70px; height: 70px; object-fit: cover; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);">
-                    </a>
-
-                    <!-- Award Details -->
-                    <div class="mt-2">
-                        <div class="font-weight-bold text-dark" style="font-size: 14px;">{{ award.award_name }}</div>
-                        <div class="text-muted" style="font-size: 12px;">{{ award.award_year }}</div>
-                        <div class="text-muted" style="font-size: 10px;">{{ award.award_by_organisation }}</div>
-                    </div>
-                </div>
-            </div>
-        {% endfor %}
+        <table class="table table-striped table-bordered" style="width: 100%; margin-top: 20px;">
+            <thead>
+                <tr>
+                    <th style="text-align: center;">Sl. No.</th>
+                    <th style="text-align: center;">Award Name</th>
+                    <th style="text-align: center;">Award Year</th>
+                    <th style="text-align: center;">Category</th>
+                    <th style="text-align: center;">Sub-Category</th>
+                    <th style="text-align: center;">By Organisation</th>
+                    <th style="text-align: center;">Image</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for award in info.awards_received.all %}
+                    <tr>
+                        <td style="text-align: center;">{{ forloop.counter }}</td>
+                        <td style="text-align: center;">{{ award.award_name }}</td>
+                        <td style="text-align: center;">{{ award.award_year }}</td>
+                        <td style="text-align: center;">{{ award.award_category|default:"-" }}</td>
+                        <td style="text-align: center;">{{ award.award_sub_category|default:"-" }}</td>
+                        <td style="text-align: center;">{{ award.award_by_organisation }}</td>
+                        <td style="text-align: center;">
+                            {% if award.award_image %}
+                                <a href="{{ award.award_image.url }}" target="_blank">
+                                    <img src="{{ award.award_image.url }}" alt="{{ award.award_name }}" 
+                                         style="width: 50px; height: 50px; object-fit: cover; border-radius: 5px;">
+                                </a>
+                            {% else %}
+                                N/A
+                            {% endif %}
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
     {% else %}
         <span>No Awards & Recognitions.</span>
     {% endif %}
 </div>
 
-                        
 <h5 class="mt-4">Books Published:</h5>
-<div class="d-flex flex-wrap gap-3">
+<div id="books_published" class="table-responsive">
     {% if info.books_published.all %}
-        {% for book in info.books_published.all %}
-            <div class="text-center" style="width: 100px;">
-                <!-- Book Image -->
-                <a href="{{ book.book_image.url }}" target="_blank">
-                    <img src="{{ book.book_image.url }}" alt="{{ book.book_name }}" class="img-fluid"  
-                         style="width: 50px; height: 50px; object-fit: cover; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">
-                </a>                <!-- Clickable Book Name -->
-                <div class="mt-2">
-                    <a href="{{ book.book_url }}" target="_blank" class="text-decoration-none bg-soft-primary">
-                        {{ book.book_name }}
-                    </a>
-                </div>
-            </div>
-        {% endfor %}
+        <table class="table table-bordered table-striped" style="width: 100%;">
+            <thead>
+                <tr>
+                    <th style="text-align: center;">Sl. No.</th>
+                    <th style="text-align: center;">Book Name</th>
+                    <th style="text-align: center;">Category</th>
+                    <th style="text-align: center;">Chapter Name</th>
+                    <th style="text-align: center;">Page No.</th>
+                    <th style="text-align: center;">Publisher</th>
+                    <th style="text-align: center;">Editor</th>
+                    <th style="text-align: center;">Image</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for book in info.books_published.all %}
+                    <tr>
+                        <!-- Serial Number -->
+                        <td style="text-align: center;">{{ forloop.counter }}</td>
+
+                        <!-- Book Name -->
+                        <td style="text-align: center;">
+                            <a href="{{ book.book_url }}" target="_blank" class="text-decoration-none text-dark">
+                                {{ book.book_name|default:"N/A" }}
+                            </a>
+                        </td>
+
+                        <!-- Category -->
+                        <td style="text-align: center;">{{ book.book_category|default:"N/A" }}</td>
+
+                        <!-- Chapter Name -->
+                        <td style="text-align: center;">{{ book.book_chapter_name|default:"N/A" }}</td>
+
+                        <!-- Page No. -->
+                        <td style="text-align: center;">{{ book.book_page_no|default:"N/A" }}</td>
+
+                        <!-- Publisher -->
+                        <td style="text-align: center;">{{ book.book_publisher|default:"N/A" }}</td>
+
+                        <!-- Editor -->
+                        <td style="text-align: center;">{{ book.book_editor|default:"N/A" }}</td>
+
+                        <!-- Book Image -->
+                        <td style="text-align: center;">
+                            {% if book.book_image %}
+                                <a href="{{ book.book_image.url }}" target="_blank">
+                                    <img src="{{ book.book_image.url }}" alt="{{ book.book_name }}" 
+                                         class="img-fluid rounded" 
+                                         style="width: 50px; height: 50px; object-fit: cover; cursor: pointer;">
+                                </a>
+                            {% else %}
+                                N/A
+                            {% endif %}
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
     {% else %}
         <span>No Books Published.</span>
     {% endif %}
@@ -367,52 +425,110 @@
         <span>No Awards & Recognitions.</span>
     {% endif %}
 </div> {% endcomment %}
-
 <h5 class="mt-4">Awards & Recognitions:</h5>
-<div class="d-flex flex-wrap gap-4 justify-content-start">
+<div class="table-responsive">
     {% if info.awards_received.all %}
-        {% for award in info.awards_received.all %}
-            <div class="card shadow-sm bg-light" style="width: 150px; border-radius: 10px;">
-                <div class="card-body p-2 text-center">
-                    <!-- Award Image -->
-                    <a href="{{ award.award_image.url }}" target="_blank">
-                        <img src="{{ award.award_image.url }}" alt="{{ award.award_name }}" 
-                             class="img-fluid rounded-square" 
-                             style="width: 70px; height: 70px; object-fit: cover; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);">
-                    </a>
-
-                    <!-- Award Details -->
-                    <div class="mt-2">
-                        <div class="font-weight-bold text-dark" style="font-size: 14px;">{{ award.award_name }}</div>
-                        <div class="text-muted" style="font-size: 12px;">{{ award.award_year }}</div>
-                        <div class="text-muted" style="font-size: 10px;">{{ award.award_by_organisation }}</div>
-                    </div>
-                </div>
-            </div>
-        {% endfor %}
+        <table class="table table-striped table-bordered" style="width: 100%; margin-top: 20px;">
+            <thead>
+                <tr>
+                    <th style="text-align: center;">Sl. No.</th>
+                    <th style="text-align: center;">Award Name</th>
+                    <th style="text-align: center;">Award Year</th>
+                    <th style="text-align: center;">Category</th>
+                    <th style="text-align: center;">Sub-Category</th>
+                    <th style="text-align: center;">By Organisation</th>
+                    <th style="text-align: center;">Image</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for award in info.awards_received.all %}
+                    <tr>
+                        <td style="text-align: center;">{{ forloop.counter }}</td>
+                        <td style="text-align: center;">{{ award.award_name }}</td>
+                        <td style="text-align: center;">{{ award.award_year }}</td>
+                        <td style="text-align: center;">{{ award.award_category|default:"-" }}</td>
+                        <td style="text-align: center;">{{ award.award_sub_category|default:"-" }}</td>
+                        <td style="text-align: center;">{{ award.award_by_organisation }}</td>
+                        <td style="text-align: center;">
+                            {% if award.award_image %}
+                                <a href="{{ award.award_image.url }}" target="_blank">
+                                    <img src="{{ award.award_image.url }}" alt="{{ award.award_name }}" 
+                                         style="width: 50px; height: 50px; object-fit: cover; border-radius: 5px;">
+                                </a>
+                            {% else %}
+                                N/A
+                            {% endif %}
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
     {% else %}
         <span>No Awards & Recognitions.</span>
     {% endif %}
 </div>
 
-
+                      
 <h5 class="mt-4">Books Published:</h5>
-<div class="d-flex flex-wrap gap-3">
+<div id="books_published" class="table-responsive">
     {% if info.books_published.all %}
-        {% for book in info.books_published.all %}
-            <div class="text-center"style="width: 100px;">
-                <!-- Book Image -->
-                <a href="{{ book.book_image.url }}" target="_blank">
-                    <img src="{{ book.book_image.url }}" alt="{{ book.book_name }}" class="img-fluid"  
-                         style="width: 50px; height: 50px; object-fit: cover; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">
-                </a>                <!-- Clickable Book Name -->
-                <div class="mt-2">
-                    <a href="{{ book.book_url }}" target="_blank" class="text-decoration-none bg-soft-primary">
-                        {{ book.book_name }}
-                    </a>
-                </div>
-            </div>
-        {% endfor %}
+        <table class="table table-bordered table-striped" style="width: 100%;">
+            <thead>
+                <tr>
+                    <th style="text-align: center;">Sl. No.</th>
+                    <th style="text-align: center;">Book Name</th>
+                    <th style="text-align: center;">Category</th>
+                    <th style="text-align: center;">Chapter Name</th>
+                    <th style="text-align: center;">Page No.</th>
+                    <th style="text-align: center;">Publisher</th>
+                    <th style="text-align: center;">Editor</th>
+                    <th style="text-align: center;">Image</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for book in info.books_published.all %}
+                    <tr>
+                        <!-- Serial Number -->
+                        <td style="text-align: center;">{{ forloop.counter }}</td>
+
+                        <!-- Book Name -->
+                        <td style="text-align: center;">
+                            <a href="{{ book.book_url }}" target="_blank" class="text-decoration-none text-dark">
+                                {{ book.book_name|default:"N/A" }}
+                            </a>
+                        </td>
+
+                        <!-- Category -->
+                        <td style="text-align: center;">{{ book.book_category|default:"N/A" }}</td>
+
+                        <!-- Chapter Name -->
+                        <td style="text-align: center;">{{ book.book_chapter_name|default:"N/A" }}</td>
+
+                        <!-- Page No. -->
+                        <td style="text-align: center;">{{ book.book_page_no|default:"N/A" }}</td>
+
+                        <!-- Publisher -->
+                        <td style="text-align: center;">{{ book.book_publisher|default:"N/A" }}</td>
+
+                        <!-- Editor -->
+                        <td style="text-align: center;">{{ book.book_editor|default:"N/A" }}</td>
+
+                        <!-- Book Image -->
+                        <td style="text-align: center;">
+                            {% if book.book_image %}
+                                <a href="{{ book.book_image.url }}" target="_blank">
+                                    <img src="{{ book.book_image.url }}" alt="{{ book.book_name }}" 
+                                         class="img-fluid rounded" 
+                                         style="width: 50px; height: 50px; object-fit: cover; cursor: pointer;">
+                                </a>
+                            {% else %}
+                                N/A
+                            {% endif %}
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
     {% else %}
         <span>No Books Published.</span>
     {% endif %}
@@ -516,10 +632,10 @@
                                         <h5 class="mb-3">Gallery:</h5>
                                         <div class="row">
                                             {% for image in images %}
-                                                <div class="col-6 col-md-3 mb-4">
+                                                <div class="col-6 col-md-4 mb-4">
                                                     <div class="image-block border rounded p-1">
                                                         <a href="{{ image.file_name.url }}" target="_blank">
-                                                        <img src="{{ image.file_name.url }}" alt="Artist Image" class="img-fluid rounded" style="width: 50px; height: 50px; object-fit: cover;">
+                                                        <img src="{{ image.file_name.url }}" alt="Artist Image" class="img-fluid rounded" style="width: 70px; height: 70px; object-fit: cover;">
                                                         </a>
                                                     </div>
                                                 </div>
@@ -618,10 +734,10 @@
                                         <h5 class="mb-3">Gallery:</h5>
                                         <div class="row">
                                             {% for image in images %}
-                                                <div class="col-6 col-md-3 mb-4">
+                                                <div class="col-6 col-md-4 mb-4">
                                                     <div class="image-block border rounded p-1">
                                                         <a href="{{ image.file_name.url }}" target="_blank">
-                                                        <img src="{{ image.file_name.url }}" alt="Artist Image" class="img-fluid rounded" style="width: 50px; height: 50px; object-fit: cover;">
+                                                        <img src="{{ image.file_name.url }}" alt="Artist Image" class="img-fluid rounded" style="width: 70px; height: 70px; object-fit: cover;">
                                                         </a>
                                                     </div>
                                                 </div>

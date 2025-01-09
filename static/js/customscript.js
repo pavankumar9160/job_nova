@@ -70,23 +70,23 @@ $(document).ready(function() {
 
         var selectedSkills = [];
 
-        const fileArray = [];
-        const fileInput = document.getElementById('documents');
-        const files = fileInput.files;
-        console.log('files are: ', files)
+        // const fileArray = [];
+        // const fileInput = document.getElementById('documents');
+        // const files = fileInput.files;
+        // console.log('files are: ', files)
 
-        // Create an array to hold the selected files
+        // // Create an array to hold the selected files
 
-        if (files.length > 0) {
-            for (let i = 0; i < files.length; i++) {
-                formData.append('files', files[i])
-                fileArray.push(files[i]);
-            }
+        // if (files.length > 0) {
+        //     for (let i = 0; i < files.length; i++) {
+        //         formData.append('files', files[i])
+        //         fileArray.push(files[i]);
+        //     }
 
-            console.log('Selected files:', fileArray); // Check if files are populated
-        } else {
-            console.log('No files selected');
-        }
+        //     console.log('Selected files:', fileArray); // Check if files are populated
+        // } else {
+        //     console.log('No files selected');
+        // }
 
         const experiences = [];
 
@@ -181,14 +181,17 @@ $(document).ready(function() {
 
         var awardNames = [];
         var awardYears = [];
+        var awardCategories = [];
+        var awardSubCategories = [];
         var awardByOrganisations = [];
-
         var awardImages = [];
 
 
         // Gather book names, links, and images from the inputs
         document.querySelectorAll('input[name="award_name[]"]').forEach(input => awardNames.push(input.value));
         document.querySelectorAll('input[name="award_year[]"]').forEach(input => awardYears.push(input.value));
+        document.querySelectorAll('input[name="award_category[]"]').forEach(input => awardCategories.push(input.value));
+        document.querySelectorAll('input[name="award_sub_category[]"]').forEach(input => awardSubCategories.push(input.value));
         document.querySelectorAll('input[name="award_by_organisation[]"]').forEach(input => awardByOrganisations.push(input.value));
 
         document.querySelectorAll('input[name="award_image[]"]').forEach((input) => {
@@ -206,6 +209,8 @@ $(document).ready(function() {
         awardNames.forEach((name, index) => {
             formData.append('award_name[]', name);
             formData.append('award_year[]', awardYears[index]);
+            formData.append('award_category[]', awardCategories[index]);
+            formData.append('award_sub_category[]', awardSubCategories[index]);
             formData.append('award_by_organisation[]', awardByOrganisations[index]);
 
 
@@ -229,12 +234,28 @@ $(document).ready(function() {
 
         var bookNames = [];
         var bookLinks = [];
+        var bookCategories = []
+        var bookChapterNames = []
+        var bookPageNos = []
+        var bookPublishers = []
+        var bookEditors = []
         var bookImages = [];
 
 
         // Gather book names, links, and images from the inputs
         document.querySelectorAll('input[name="book_name[]"]').forEach(input => bookNames.push(input.value));
         document.querySelectorAll('input[name="book_link[]"]').forEach(input => bookLinks.push(input.value));
+        document.querySelectorAll('input[name="book_category[]"]').forEach(input => bookCategories.push(input.value));
+
+        document.querySelectorAll('input[name="book_chapter_name[]"]').forEach(input => bookChapterNames.push(input.value));
+
+        document.querySelectorAll('input[name="book_page_no[]"]').forEach(input => bookPageNos.push(input.value));
+
+        document.querySelectorAll('input[name="book_publisher[]"]').forEach(input => bookPublishers.push(input.value));
+
+        document.querySelectorAll('input[name="book_editor[]"]').forEach(input => bookEditors.push(input.value));
+
+
         document.querySelectorAll('input[name="book_image[]"]').forEach((input) => {
             if (input.files.length > 0 && input.files[0]) {
                 bookImages.push(input.files[0]); // Add the uploaded file to bookImages
@@ -250,6 +271,13 @@ $(document).ready(function() {
         bookNames.forEach((name, index) => {
             formData.append('book_name[]', name);
             formData.append('book_link[]', bookLinks[index]);
+            formData.append('book_category[]', bookCategories[index]);
+            formData.append('book_chapter_name[]', bookChapterNames[index]);
+            formData.append('book_page_no[]', bookPageNos[index]);
+            formData.append('book_publisher[]', bookPublishers[index]);
+            formData.append('book_editor[]', bookEditors[index]);
+
+
 
             if (bookImages[index]) {
                 formData.append('book_image[]', bookImages[index]);
@@ -773,10 +801,10 @@ $(document).ready(function() {
                                 }
                             }
 
-                            if (fileInput && fileInput.files && fileInput.files.length > 0) {
+                            // if (fileInput && fileInput.files && fileInput.files.length > 0) {
 
-                                filesArray = filesArray.concat(Array.from(fileInput.files));
-                            }
+                            //     filesArray = filesArray.concat(Array.from(fileInput.files));
+                            // }
 
                             return filesArray;
                         }
@@ -998,16 +1026,35 @@ $(document).ready(function() {
         // Variables for existing books
 var existingBookNames = [];
 var existingBookLinks = [];
+var existingBookCategories = [];
+var existingBookChapterNames = [];
+var existingBookPageNos = [];
+var existingBookPublishers = [];
+var existingBookEditors = [];
 var existingBookImages = [];
 
         var bookNames = [];
         var bookLinks = [];
+        var bookCategories = [];
+        var bookChapterNames = [];
+        var bookPageNos = [];
+        var bookPublishers = [];
+        var bookEditors = [];
         var bookImages = [];
         
         // Gather book names, links, and images from the inputs
         document.querySelectorAll('input[name="book_name[]"]').forEach(input => bookNames.push(input.value));
         document.querySelectorAll('input[name="book_link[]"]').forEach(input => bookLinks.push(input.value));
-        
+        document.querySelectorAll('input[name="book_category[]"]').forEach(input => bookCategories.push(input.value));
+
+        document.querySelectorAll('input[name="book_chapter_name[]"]').forEach(input => bookChapterNames.push(input.value));
+
+        document.querySelectorAll('input[name="book_page_no[]"]').forEach(input => bookPageNos.push(input.value));
+
+        document.querySelectorAll('input[name="book_publisher[]"]').forEach(input => bookPublishers.push(input.value));
+
+        document.querySelectorAll('input[name="book_editor[]"]').forEach(input => bookEditors.push(input.value));
+
         document.querySelectorAll('input[name="book_image[]"]').forEach(input => {
             if (input.files[0]) {
                 bookImages.push(input.files[0]);
@@ -1020,6 +1067,11 @@ var existingBookImages = [];
 // Gather existing book data
 document.querySelectorAll('input[name="existing_book_name[]"]').forEach(input => existingBookNames.push(input.value));
 document.querySelectorAll('input[name="existing_book_link[]"]').forEach(input => existingBookLinks.push(input.value));
+document.querySelectorAll('input[name="existing_book_category[]"]').forEach(input => existingBookCategories.push(input.value));
+document.querySelectorAll('input[name="existing_book_chapter_name[]"]').forEach(input => existingBookChapterNames.push(input.value));
+document.querySelectorAll('input[name="existing_book_page_no[]"]').forEach(input => existingBookPageNos.push(input.value));
+document.querySelectorAll('input[name="existing_book_publisher[]"]').forEach(input => existingBookPublishers.push(input.value));
+document.querySelectorAll('input[name="existing_book_editor[]"]').forEach(input => existingBookEditors.push(input.value));
 document.querySelectorAll('input[name="existing_book_image[]"]').forEach(input => {
     existingBookImages.push(input.value || null); // Push the image URL or null
 });
@@ -1030,101 +1082,172 @@ var books = [
     ...existingBookNames.map((name, index) => ({
         book_name: name,
         book_link: existingBookLinks[index],
+        book_category: existingBookCategories[index],
+        book_chapter_name: existingBookChapterNames[index],
+        book_page_no: existingBookPageNos[index],
+        book_publisher: existingBookPublishers[index],
+        book_editor: existingBookEditors[index],
         book_image: existingBookImages[index] ? existingBookImages[index] : null,
         is_existing: true // Mark as existing
     })),
     ...bookNames.map((name, index) => ({
         book_name: name,
         book_link: bookLinks[index],
+        book_category: bookCategories[index],
+        book_chapter_name: bookChapterNames[index],
+        book_page_no: bookPageNos[index],
+        book_publisher: bookPublishers[index],
+        book_editor: bookEditors[index],
         book_image: bookImages[index] ? bookImages[index] : null,
         is_existing: false // Mark as new
     }))
 ];
         
-        const booksContainer = document.getElementById("books_published");
-        booksContainer.innerHTML = "";
-        
-        if (books && books.length > 0) {
-            books.forEach(book => {
-                if (book.book_name && book.book_link) {
-                    // Create a div for each book entry
-            const bookEntry = document.createElement("div");
-            bookEntry.className = "book-entry mb-3 text-center";
-            bookEntry.style.width = "100px"; // Fixed width for proper alignment
-        
-                    // Create image preview element (Image should be on top)
-                    if (book.book_image) {
-                        const img = document.createElement("img");
-                         // Set the preview image src
-                            img.alt = book.book_name;
-                            img.style.width = "50px"; // Fixed width for image
-                img.style.height = "50px"; // Fixed height for image
-                img.style.objectFit = "cover"; // Ensure proper fit
-                img.style.borderRadius = "8px"; // Rounded corners
-                img.style.boxShadow = "0 4px 6px rgba(0,0,0,0.1)"; // Shadow for better visual appeal
-                img.style.cursor = "pointer"; // Indicate it's clickable
-                             // Set image source
-                if (book.is_existing) {
-                    img.src = `/media/${book.book_image}`;// Use the existing image URL
-                } else {
-                    const reader = new FileReader();
-                    reader.onload = function (e) {
-                        img.src = e.target.result; // Set the preview image src
-                    };
-                    reader.readAsDataURL(book.book_image); // Read the image file as a DataURL
-                }
-                            // Add click event to open the image in a new tab
-                            img.addEventListener("click", function() {
-                                window.open(img.src, "_blank"); // Open image in a new tab
-                            });
-                            
-                            // Append the image to the book entry first (it should be the first child)
-                            bookEntry.appendChild(img);
-                        
-                
-                        // Read the image file as a DataURL
-                    }
-        
-                    // Create book name and link (The book name should be below the image)
-                    const bookInfo = document.createElement("div");
-                    
-                    bookInfo.className = "mt-2"; // Add margin for spacing
+const booksContainer = document.getElementById("books_published");
+booksContainer.innerHTML = "";
 
-            // Create the anchor element for the book name
-            const anchor = document.createElement("a");
-            anchor.href = book.book_link; // Link to the book
-            anchor.target = "_blank"; // Open the link in a new tab
-            anchor.className = "text-decoration-none"; // Remove default text decoration
-            anchor.style.color = "#0d6efd"; // Bootstrap primary color
-            anchor.innerText = book.book_name; // Set the book name as the link text
-        
-                    // Append the book name and link to the book info
-                    bookInfo.appendChild(anchor);
-                    
-                    // Append the book info (name and link) below the image
-                    bookEntry.appendChild(bookInfo);
-        
-                    // Append the entire book entry to the books container
-                    booksContainer.appendChild(bookEntry);
-                }
+if (books && books.length > 0) {
+    // Create a table
+    const table = document.createElement("table");
+    table.className = "table table-bordered table-striped";
+    table.style.width = "100%";
+
+    // Create table header
+    const thead = document.createElement("thead");
+    const headerRow = document.createElement("tr");
+
+    const headers = [
+        "Sl. No.",
+        "Book Name",
+        "Category",
+        "Chapter Name",
+        "Page No.",
+        "Publisher",
+        "Editor",
+        "Image"
+    ];
+
+    headers.forEach(headerText => {
+        const th = document.createElement("th");
+        th.innerText = headerText;
+        th.style.textAlign = "center";
+        headerRow.appendChild(th);
+    });
+
+    thead.appendChild(headerRow);
+    table.appendChild(thead);
+
+    // Create table body
+    const tbody = document.createElement("tbody");
+
+    books.forEach((book, index) => {
+        const row = document.createElement("tr");
+
+        // Serial Number
+        const slnoCell = document.createElement("td");
+        slnoCell.style.textAlign = "center";
+        slnoCell.innerText = index + 1;
+        row.appendChild(slnoCell);
+
+        // Book Name
+        const nameCell = document.createElement("td");
+        nameCell.style.textAlign = "center";
+        const nameAnchor = document.createElement("a");
+        nameAnchor.href = book.book_link || "#";
+        nameAnchor.target = "_blank";
+        nameAnchor.innerText = book.book_name || "N/A";
+        nameAnchor.className = "text-decoration-none text-dark";
+        nameCell.appendChild(nameAnchor);
+        row.appendChild(nameCell);
+
+        // Category
+        const categoryCell = document.createElement("td");
+        categoryCell.style.textAlign = "center";
+        categoryCell.innerText = book.book_category || "N/A";
+        row.appendChild(categoryCell);
+
+        // Chapter Name
+        const chapterCell = document.createElement("td");
+        chapterCell.style.textAlign = "center";
+        chapterCell.innerText = book.book_chapter_name || "N/A";
+        row.appendChild(chapterCell);
+
+        // Page No.
+        const pageNoCell = document.createElement("td");
+        pageNoCell.style.textAlign = "center";
+        pageNoCell.innerText = book.book_page_no || "N/A";
+        row.appendChild(pageNoCell);
+
+        // Publisher
+        const publisherCell = document.createElement("td");
+        publisherCell.style.textAlign = "center";
+        publisherCell.innerText = book.book_publisher || "N/A";
+        row.appendChild(publisherCell);
+
+        // Editor
+        const editorCell = document.createElement("td");
+        editorCell.style.textAlign = "center";
+        editorCell.innerText = book.book_editor || "N/A";
+        row.appendChild(editorCell);
+
+        // Book Image
+        const imageCell = document.createElement("td");
+        imageCell.style.textAlign = "center";
+        if (book.book_image) {
+            const img = document.createElement("img");
+            img.alt = book.book_name || "Book Image";
+            img.style.width = "50px";
+            img.style.height = "50px";
+            img.style.objectFit = "cover";
+            img.style.borderRadius = "4px";
+            img.style.cursor = "pointer";
+
+            if (book.is_existing) {
+                img.src = `/media/${book.book_image}`;
+            } else {
+                const reader = new FileReader();
+                reader.onload = function (e) {
+                    img.src = e.target.result;
+                };
+                reader.readAsDataURL(book.book_image);
+            }
+
+            img.addEventListener("click", function () {
+                window.open(img.src, "_blank");
             });
+
+            imageCell.appendChild(img);
         } else {
-            const noBooksMessage = document.createElement("span");
-            noBooksMessage.innerText = "No Books Published.";
-            booksContainer.appendChild(noBooksMessage);
+            imageCell.innerText = "N/A";
         }
+        row.appendChild(imageCell);
+
+        tbody.appendChild(row);
+    });
+
+    table.appendChild(tbody);
+    booksContainer.appendChild(table);
+} else {
+    const noBooksMessage = document.createElement("span");
+    noBooksMessage.innerText = "No Books Published.";
+    booksContainer.appendChild(noBooksMessage);
+}
+
+
         
 
 
-                // Variables for existing books
 var existingAwardNames = [];
 var existingAwardYears = [];
+var existingAwardCategories = [];
+var existingAwardSubCategories = [];
 var existingAwardByOrganisations = [];
-
 var existingAwardImages = [];
 
         var awardNames = [];
         var awardYears = [];
+        var awardCategories = [];
+        var awardSubCategories = [];
         var awardImages = [];
         var awardByOrganisations = [];
 
@@ -1132,8 +1255,9 @@ var existingAwardImages = [];
         // Gather book names, links, and images from the inputs
         document.querySelectorAll('input[name="award_name[]"]').forEach(input => awardNames.push(input.value));
         document.querySelectorAll('input[name="award_year[]"]').forEach(input => awardYears.push(input.value));
+        document.querySelectorAll('input[name="award_category[]"]').forEach(input => awardCategories.push(input.value));
+        document.querySelectorAll('input[name="award_sub_category[]"]').forEach(input => awardSubCategories.push(input.value));
         document.querySelectorAll('input[name="award_by_organisation[]"]').forEach(input => awardByOrganisations.push(input.value));
-
         document.querySelectorAll('input[name="award_image[]"]').forEach(input => {
             if (input.files[0]) {
                 awardImages.push(input.files[0]);
@@ -1146,6 +1270,8 @@ var existingAwardImages = [];
 // Gather existing book data
 document.querySelectorAll('input[name="existing_award_name[]"]').forEach(input => existingAwardNames.push(input.value));
 document.querySelectorAll('input[name="existing_award_year[]"]').forEach(input => existingAwardYears.push(input.value));
+document.querySelectorAll('input[name="existing_award_category[]"]').forEach(input => existingAwardCategories.push(input.value));
+document.querySelectorAll('input[name="existing_award_sub_category[]"]').forEach(input => existingAwardSubCategories.push(input.value));
 document.querySelectorAll('input[name="existing_award_by_organisation[]"]').forEach(input => existingAwardByOrganisations.push(input.value));
 
 
@@ -1159,6 +1285,8 @@ var awards = [
     ...existingAwardNames.map((name, index) => ({
         award_name: name,
         award_year: existingAwardYears[index],
+        award_category: existingAwardCategories[index],
+        award_sub_category: existingAwardSubCategories[index],
         award_by_organisation: existingAwardByOrganisations[index],
         award_image: existingAwardImages[index] ? existingAwardImages[index] : null,
         is_existing: true // Mark as existing
@@ -1166,44 +1294,81 @@ var awards = [
     ...awardNames.map((name, index) => ({
         award_name: name,
         award_year: awardYears[index],
+        award_category: awardCategories[index],
+        award_sub_category: awardSubCategories[index],
         award_by_organisation: awardByOrganisations[index],
-
         award_image: awardImages[index] ? awardImages[index] : null,
         is_existing: false // Mark as new
     }))
 ];
-        
 const awardsContainer = document.getElementById("awards_received");
 awardsContainer.innerHTML = "";
 
+// Check if awards exist
 if (awards && awards.length > 0) {
-    awards.forEach(award => {
-        if (award.award_name && award.award_year && award.award_by_organisation) {
-            // Create the card container
-            const card = document.createElement("div");
-            card.className = "card shadow-sm bg-light";
-            card.style.width = "150px";
-            card.style.borderRadius = "10px";
+    // Create the table element
+    const table = document.createElement("table");
+    table.className = "table table-striped table-bordered";
+    table.style.width = "100%";
+    table.style.marginTop = "20px";
 
-            // Create the card body
-            const cardBody = document.createElement("div");
-            cardBody.className = "card-body p-2 text-center";
+    // Create the table header
+    const thead = document.createElement("thead");
+    const headerRow = document.createElement("tr");
+    ["Sl. No.", "Award Name", "Award Year", "Category", "Sub-Category", "By Organisation", "Image"].forEach(headerText => {
+        const th = document.createElement("th");
+        th.scope = "col";
+        th.innerText = headerText;
+        headerRow.appendChild(th);
+    });
+    thead.appendChild(headerRow);
+    table.appendChild(thead);
+
+    // Create the table body
+    const tbody = document.createElement("tbody");
+    awards.forEach((award, index) => {
+        if (award.award_name && award.award_year && award.award_by_organisation) {
+            const row = document.createElement("tr");
+
+            // Serial number
+            const slnoCell = document.createElement("td");
+            slnoCell.innerText = index + 1;
+            row.appendChild(slnoCell);
+
+            // Award Name
+            const nameCell = document.createElement("td");
+            nameCell.innerText = award.award_name;
+            row.appendChild(nameCell);
+
+            // Award Year
+            const yearCell = document.createElement("td");
+            yearCell.innerText = award.award_year;
+            row.appendChild(yearCell);
+
+            // Award Category
+            const categoryCell = document.createElement("td");
+            categoryCell.innerText = award.award_category || "-";
+            row.appendChild(categoryCell);
+
+            // Award Sub-Category
+            const subCategoryCell = document.createElement("td");
+            subCategoryCell.innerText = award.award_sub_category || "-";
+            row.appendChild(subCategoryCell);
+
+            // Award By Organisation
+            const byOrgCell = document.createElement("td");
+            byOrgCell.innerText = award.award_by_organisation;
+            row.appendChild(byOrgCell);
 
             // Award Image
+            const imageCell = document.createElement("td");
             if (award.award_image) {
-                const imageLink = document.createElement("a");
-                imageLink.href = award.is_existing
-                    ? `/media/${award.award_image}`
-                    : "#"; // Fallback if image is not existing
-                imageLink.target = "_blank";
-
                 const img = document.createElement("img");
                 img.alt = award.award_name;
-                img.className = "img-fluid rounded-square";
-                img.style.width = "70px";
-                img.style.height = "70px";
+                img.style.width = "50px";
+                img.style.height = "50px";
                 img.style.objectFit = "cover";
-                img.style.boxShadow = "0 4px 6px rgba(0, 0, 0, 0.3)";
+                img.style.borderRadius = "5px";
 
                 if (award.is_existing) {
                     img.src = `/media/${award.award_image}`;
@@ -1215,40 +1380,18 @@ if (awards && awards.length > 0) {
                     reader.readAsDataURL(award.award_image);
                 }
 
-                imageLink.appendChild(img);
-                cardBody.appendChild(imageLink);
+                imageCell.appendChild(img);
+            } else {
+                imageCell.innerText = "N/A";
             }
+            row.appendChild(imageCell);
 
-            // Award Details
-            const detailsContainer = document.createElement("div");
-            detailsContainer.className = "mt-2";
-
-            // Award Name
-            const awardName = document.createElement("div");
-            awardName.className = "font-weight-bold text-dark";
-            awardName.style.fontSize = "14px";
-            awardName.innerText = award.award_name;
-            detailsContainer.appendChild(awardName);
-
-            // Award Year
-            const awardYear = document.createElement("div");
-            awardYear.className = "text-muted";
-            awardYear.style.fontSize = "12px";
-            awardYear.innerText = award.award_year;
-            detailsContainer.appendChild(awardYear);
-
-            // Award By Organisation
-            const awardByOrganisation = document.createElement("div");
-            awardByOrganisation.className = "text-muted";
-            awardByOrganisation.style.fontSize = "10px";
-            awardByOrganisation.innerText = award.award_by_organisation;
-            detailsContainer.appendChild(awardByOrganisation);
-
-            cardBody.appendChild(detailsContainer);
-            card.appendChild(cardBody);
-            awardsContainer.appendChild(card);
+            tbody.appendChild(row);
         }
     });
+
+    table.appendChild(tbody);
+    awardsContainer.appendChild(table);
 } else {
     const noAwardsMessage = document.createElement("span");
     noAwardsMessage.innerText = "No Awards & Recognitions.";
@@ -1267,7 +1410,7 @@ if (awards && awards.length > 0) {
 
                             reader.onload = function (e) {
                                 const col = document.createElement('div');
-                                col.classList.add('col-6', 'col-md-3', 'mb-4');
+                                col.classList.add('col-6', 'col-md-4', 'mb-4');
 
                                 const imageBlock = document.createElement('div');
                                 imageBlock.classList.add('image-block', 'border', 'rounded', 'p-1');
@@ -1276,8 +1419,8 @@ if (awards && awards.length > 0) {
                                 img.src = e.target.result;
                                 img.alt = 'Preview Image';
                                 img.classList.add('img-fluid', 'rounded');
-                                img.style.width = '50px';
-                                img.style.height = '50px';
+                                img.style.width = '70px';
+                                img.style.height = '70px';
                                 img.style.objectFit = 'cover';
 
                                 imageBlock.appendChild(img);
