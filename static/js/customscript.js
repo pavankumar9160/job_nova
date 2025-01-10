@@ -194,18 +194,16 @@ $(document).ready(function() {
         document.querySelectorAll('input[name="award_sub_category[]"]').forEach(input => awardSubCategories.push(input.value));
         document.querySelectorAll('input[name="award_by_organisation[]"]').forEach(input => awardByOrganisations.push(input.value));
 
-        document.querySelectorAll('input[name="award_image[]"]').forEach((input) => {
-            if (input.files.length > 0 && input.files[0]) {
-                awardImages.push(input.files[0]); // Add the uploaded file to bookImages
-
-            } else {
-                awardImages.push(null); // Push null for no new image
-
-
+        // Gather multiple images for each award
+        document.querySelectorAll('input[name="award_images[]"]').forEach((input) => {
+            let images = []; // Temporary array for images of the current award
+            if (input.files.length > 0) {
+                Array.from(input.files).forEach(file => images.push(file)); // Add each file to the temporary array
             }
+            awardImages.push(images); // Push the temporary array to the main awardImages array
         });
 
-        // Append the book details including image to formData
+        // Append award details including multiple images to formData
         awardNames.forEach((name, index) => {
             formData.append('award_name[]', name);
             formData.append('award_year[]', awardYears[index]);
@@ -213,19 +211,17 @@ $(document).ready(function() {
             formData.append('award_sub_category[]', awardSubCategories[index]);
             formData.append('award_by_organisation[]', awardByOrganisations[index]);
 
-
-            if (awardImages[index]) {
-                formData.append('award_image[]', awardImages[index]);
-            } else {
-                return
+            // Append multiple images for the current award
+            if (awardImages[index] && awardImages[index].length > 0) {
+                awardImages[index].forEach((image, imgIndex) => {
+                    formData.append(`award_images_${index}_${imgIndex}`, image); // Use unique keys for each file
+                });
             }
-
-
         });
 
-
-        console.log('awardnames', awardNames);
-        console.log('awardImages', awardImages);
+        // Debugging: Log data
+        console.log('Award Names:', awardNames);
+        console.log('Award Images:', awardImages);
 
 
         console.log('skills updating are :', selectedSkills)
@@ -256,15 +252,12 @@ $(document).ready(function() {
         document.querySelectorAll('input[name="book_editor[]"]').forEach(input => bookEditors.push(input.value));
 
 
-        document.querySelectorAll('input[name="book_image[]"]').forEach((input) => {
-            if (input.files.length > 0 && input.files[0]) {
-                bookImages.push(input.files[0]); // Add the uploaded file to bookImages
-
-            } else {
-                bookImages.push(null); // Push null for no new image
-
-
+        document.querySelectorAll('input[name="book_images[]"]').forEach((input) => {
+            let books = []; // Temporary array for images of the current award
+            if (input.files.length > 0) {
+                Array.from(input.files).forEach(file => books.push(file)); // Add each file to the temporary array
             }
+            bookImages.push(books); // Push the temporary array to the main awardImages array
         });
 
         // Append the book details including image to formData
@@ -279,14 +272,14 @@ $(document).ready(function() {
 
 
 
-            if (bookImages[index]) {
-                formData.append('book_image[]', bookImages[index]);
-            } else {
-                return
+            // Append multiple  for the current book
+            if (bookImages[index] && bookImages[index].length > 0) {
+                bookImages[index].forEach((book, bookIndex) => {
+                    formData.append(`book_images_${index}_${bookIndex}`, book); // Use unique keys for each file
+                });
             }
-
-
         });
+
 
 
         console.log('booknames', bookNames);
@@ -342,7 +335,7 @@ $(document).ready(function() {
             contentType: false,
             success: function(response) {
                 toastr.success('Details Updated successfully!', 'Success');
-                window.location.href = '/artist-profile-setting_updated_one/'
+                // window.location.href = '/artist-profile-setting_updated_one/'
 
             },
             error: function(xhr) {
@@ -1031,7 +1024,7 @@ var existingBookChapterNames = [];
 var existingBookPageNos = [];
 var existingBookPublishers = [];
 var existingBookEditors = [];
-var existingBookImages = [];
+
 
         var bookNames = [];
         var bookLinks = [];
@@ -1055,12 +1048,9 @@ var existingBookImages = [];
 
         document.querySelectorAll('input[name="book_editor[]"]').forEach(input => bookEditors.push(input.value));
 
-        document.querySelectorAll('input[name="book_image[]"]').forEach(input => {
-            if (input.files[0]) {
-                bookImages.push(input.files[0]);
-            } else {
-                bookImages.push(null); // No image selected
-            }
+        document.querySelectorAll('input[name="book_images[]"]').forEach(input => {
+            const files = Array.from(input.files);
+            bookImages.push(files.length > 0 ? files : []);
         });
 
 
@@ -1072,10 +1062,18 @@ document.querySelectorAll('input[name="existing_book_chapter_name[]"]').forEach(
 document.querySelectorAll('input[name="existing_book_page_no[]"]').forEach(input => existingBookPageNos.push(input.value));
 document.querySelectorAll('input[name="existing_book_publisher[]"]').forEach(input => existingBookPublishers.push(input.value));
 document.querySelectorAll('input[name="existing_book_editor[]"]').forEach(input => existingBookEditors.push(input.value));
-document.querySelectorAll('input[name="existing_book_image[]"]').forEach(input => {
-    existingBookImages.push(input.value || null); // Push the image URL or null
+var existingBookImages = [];
+
+// Gather existing award data, including images
+document.querySelectorAll('.book-entry').forEach(bookEntry => {
+    const bookimages = [];
+    bookEntry.querySelectorAll('input[name="existing_book_images[]"]').forEach(input => {
+        bookimages.push(input.value); // Collect all image URLs for the current award
+    });
+    existingBookImages.push(bookimages); // Group images by award
 });
 
+console.log('Existing Book Images:', existingBookImages);
         
         // Combine new books and existing books into one array
 var books = [
@@ -1087,7 +1085,7 @@ var books = [
         book_page_no: existingBookPageNos[index],
         book_publisher: existingBookPublishers[index],
         book_editor: existingBookEditors[index],
-        book_image: existingBookImages[index] ? existingBookImages[index] : null,
+        book_images: existingBookImages[index] || [], // Directly retrieve all images for this award
         is_existing: true // Mark as existing
     })),
     ...bookNames.map((name, index) => ({
@@ -1098,7 +1096,7 @@ var books = [
         book_page_no: bookPageNos[index],
         book_publisher: bookPublishers[index],
         book_editor: bookEditors[index],
-        book_image: bookImages[index] ? bookImages[index] : null,
+        book_images: bookImages[index] ? bookImages[index] : null,
         is_existing: false // Mark as new
     }))
 ];
@@ -1106,6 +1104,7 @@ var books = [
 const booksContainer = document.getElementById("books_published");
 booksContainer.innerHTML = "";
 
+// Check if there are any books to display
 if (books && books.length > 0) {
     // Create a table
     const table = document.createElement("table");
@@ -1192,42 +1191,62 @@ if (books && books.length > 0) {
 
         // Book Image
         const imageCell = document.createElement("td");
-        imageCell.style.textAlign = "center";
-        if (book.book_image) {
-            const img = document.createElement("img");
-            img.alt = book.book_name || "Book Image";
-            img.style.width = "50px";
-            img.style.height = "50px";
-            img.style.objectFit = "cover";
-            img.style.borderRadius = "4px";
-            img.style.cursor = "pointer";
+        imageCell.style.textAlign = "center"; // Center-align the content
 
-            if (book.is_existing) {
-                img.src = `/media/${book.book_image}`;
-            } else {
-                const reader = new FileReader();
-                reader.onload = function (e) {
-                    img.src = e.target.result;
-                };
-                reader.readAsDataURL(book.book_image);
-            }
+        if (book.book_images && book.book_images.length > 0) {
+            // Create a container with grid layout
+            const imageGrid = document.createElement("div");
+            imageGrid.style.display = "grid";
+            imageGrid.style.gridTemplateColumns = "repeat(2, 1fr)"; // Two images per row
+            imageGrid.style.gap = "5px"; // Spacing between images
+            imageGrid.style.justifyContent = "center";
 
-            img.addEventListener("click", function () {
-                window.open(img.src, "_blank");
+            // Loop through book images
+            book.book_images.forEach(image => {
+                const imgWrapper = document.createElement("a");
+                imgWrapper.style.width = "50px";
+                imgWrapper.style.height = "50px";
+                imgWrapper.style.display = "block";
+                imgWrapper.style.margin = "2px";
+                imgWrapper.target = "_blank";
+
+                const img = document.createElement("img");
+                img.style.width = "100%";
+                img.style.height = "100%";
+                img.style.objectFit = "cover";
+                img.style.borderRadius = "5px";
+
+                if (book.is_existing) {
+                    img.src = `${image}`; // Use the media path for existing images
+                    imgWrapper.href = `${image}`; // Link to the full image
+                } else {
+                    const reader = new FileReader();
+                    reader.onload = function (e) {
+                        img.src = e.target.result; // Show uploaded image preview
+                        imgWrapper.href = e.target.result; // Link to the preview image
+                    };
+                    reader.readAsDataURL(image);
+                }
+
+                imgWrapper.appendChild(img);
+                imageGrid.appendChild(imgWrapper);
             });
 
-            imageCell.appendChild(img);
+            imageCell.appendChild(imageGrid);
         } else {
-            imageCell.innerText = "N/A";
+            imageCell.innerText = "N/A"; // Show "N/A" if no images exist
         }
+
         row.appendChild(imageCell);
 
+        // Append the row to the tbody
         tbody.appendChild(row);
     });
 
     table.appendChild(tbody);
     booksContainer.appendChild(table);
 } else {
+    // Display a message if no books are available
     const noBooksMessage = document.createElement("span");
     noBooksMessage.innerText = "No Books Published.";
     booksContainer.appendChild(noBooksMessage);
@@ -1235,52 +1254,55 @@ if (books && books.length > 0) {
 
 
         
-
-
 var existingAwardNames = [];
 var existingAwardYears = [];
 var existingAwardCategories = [];
 var existingAwardSubCategories = [];
 var existingAwardByOrganisations = [];
-var existingAwardImages = [];
-
-        var awardNames = [];
-        var awardYears = [];
-        var awardCategories = [];
-        var awardSubCategories = [];
-        var awardImages = [];
-        var awardByOrganisations = [];
-
-        
-        // Gather book names, links, and images from the inputs
-        document.querySelectorAll('input[name="award_name[]"]').forEach(input => awardNames.push(input.value));
-        document.querySelectorAll('input[name="award_year[]"]').forEach(input => awardYears.push(input.value));
-        document.querySelectorAll('input[name="award_category[]"]').forEach(input => awardCategories.push(input.value));
-        document.querySelectorAll('input[name="award_sub_category[]"]').forEach(input => awardSubCategories.push(input.value));
-        document.querySelectorAll('input[name="award_by_organisation[]"]').forEach(input => awardByOrganisations.push(input.value));
-        document.querySelectorAll('input[name="award_image[]"]').forEach(input => {
-            if (input.files[0]) {
-                awardImages.push(input.files[0]);
-            } else {
-                awardImages.push(null); // No image selected
-            }
-        });
 
 
-// Gather existing book data
+
+// Gather existing award data
 document.querySelectorAll('input[name="existing_award_name[]"]').forEach(input => existingAwardNames.push(input.value));
 document.querySelectorAll('input[name="existing_award_year[]"]').forEach(input => existingAwardYears.push(input.value));
 document.querySelectorAll('input[name="existing_award_category[]"]').forEach(input => existingAwardCategories.push(input.value));
 document.querySelectorAll('input[name="existing_award_sub_category[]"]').forEach(input => existingAwardSubCategories.push(input.value));
 document.querySelectorAll('input[name="existing_award_by_organisation[]"]').forEach(input => existingAwardByOrganisations.push(input.value));
 
+var existingAwardImages = [];
 
-document.querySelectorAll('input[name="existing_award_image[]"]').forEach(input => {
-    existingAwardImages.push(input.value || null); // Push the image URL or null
+// Gather existing award data, including images
+document.querySelectorAll('.award-entry').forEach(awardEntry => {
+    const images = [];
+    awardEntry.querySelectorAll('input[name="existing_award_images[]"]').forEach(input => {
+        images.push(input.value); // Collect all image URLs for the current award
+    });
+    existingAwardImages.push(images); // Group images by award
 });
 
-        
-        // Combine new books and existing books into one array
+console.log('Existing Award Images:', existingAwardImages);
+
+
+
+var awardNames = [];
+var awardYears = [];
+var awardCategories = [];
+var awardSubCategories = [];
+var awardImages = [];
+var awardByOrganisations = [];
+
+// Gather new award data
+document.querySelectorAll('input[name="award_name[]"]').forEach(input => awardNames.push(input.value));
+document.querySelectorAll('input[name="award_year[]"]').forEach(input => awardYears.push(input.value));
+document.querySelectorAll('input[name="award_category[]"]').forEach(input => awardCategories.push(input.value));
+document.querySelectorAll('input[name="award_sub_category[]"]').forEach(input => awardSubCategories.push(input.value));
+document.querySelectorAll('input[name="award_by_organisation[]"]').forEach(input => awardByOrganisations.push(input.value));
+document.querySelectorAll('input[name="award_images[]"]').forEach(input => {
+    const files = Array.from(input.files);
+    awardImages.push(files.length > 0 ? files : []);
+});
+
+// Combine new and existing awards
 var awards = [
     ...existingAwardNames.map((name, index) => ({
         award_name: name,
@@ -1288,8 +1310,8 @@ var awards = [
         award_category: existingAwardCategories[index],
         award_sub_category: existingAwardSubCategories[index],
         award_by_organisation: existingAwardByOrganisations[index],
-        award_image: existingAwardImages[index] ? existingAwardImages[index] : null,
-        is_existing: true // Mark as existing
+        award_images: existingAwardImages[index] || [], // Directly retrieve all images for this award
+            is_existing: true
     })),
     ...awardNames.map((name, index) => ({
         award_name: name,
@@ -1297,25 +1319,26 @@ var awards = [
         award_category: awardCategories[index],
         award_sub_category: awardSubCategories[index],
         award_by_organisation: awardByOrganisations[index],
-        award_image: awardImages[index] ? awardImages[index] : null,
-        is_existing: false // Mark as new
+        award_images: awardImages[index],
+        is_existing: false
     }))
 ];
+console.log('Awards Array:', awards);
+
 const awardsContainer = document.getElementById("awards_received");
 awardsContainer.innerHTML = "";
 
-// Check if awards exist
-if (awards && awards.length > 0) {
-    // Create the table element
+// Create the table
+if (awards.length > 0) {
     const table = document.createElement("table");
     table.className = "table table-striped table-bordered";
     table.style.width = "100%";
     table.style.marginTop = "20px";
 
-    // Create the table header
+    // Table header
     const thead = document.createElement("thead");
     const headerRow = document.createElement("tr");
-    ["Sl. No.", "Award Name", "Award Year", "Category", "Sub-Category", "By Organisation", "Image"].forEach(headerText => {
+    ["Sl. No.", "Award Name", "Award Year", "Category", "Sub-Category", "By Organisation", "Images"].forEach(headerText => {
         const th = document.createElement("th");
         th.scope = "col";
         th.innerText = headerText;
@@ -1324,13 +1347,13 @@ if (awards && awards.length > 0) {
     thead.appendChild(headerRow);
     table.appendChild(thead);
 
-    // Create the table body
+    // Table body
     const tbody = document.createElement("tbody");
     awards.forEach((award, index) => {
         if (award.award_name && award.award_year && award.award_by_organisation) {
             const row = document.createElement("tr");
 
-            // Serial number
+            // Serial Number
             const slnoCell = document.createElement("td");
             slnoCell.innerText = index + 1;
             row.appendChild(slnoCell);
@@ -1360,31 +1383,56 @@ if (awards && awards.length > 0) {
             byOrgCell.innerText = award.award_by_organisation;
             row.appendChild(byOrgCell);
 
-            // Award Image
-            const imageCell = document.createElement("td");
-            if (award.award_image) {
-                const img = document.createElement("img");
-                img.alt = award.award_name;
-                img.style.width = "50px";
-                img.style.height = "50px";
-                img.style.objectFit = "cover";
-                img.style.borderRadius = "5px";
+          // Award Images
+const imageCell = document.createElement("td");
+imageCell.style.textAlign = "center"; // Center-align the content
 
-                if (award.is_existing) {
-                    img.src = `/media/${award.award_image}`;
-                } else {
-                    const reader = new FileReader();
-                    reader.onload = function (e) {
-                        img.src = e.target.result;
-                    };
-                    reader.readAsDataURL(award.award_image);
-                }
+if (award.award_images && award.award_images.length > 0) {
+    // Create a container with grid layout
+    const imageGrid = document.createElement("div");
+    imageGrid.style.display = "grid";
+    imageGrid.style.gridTemplateColumns = "repeat(2, 1fr)"; // Two images per row
+    imageGrid.style.gap = "5px"; // Spacing between images
+    imageGrid.style.justifyContent = "center";
 
-                imageCell.appendChild(img);
-            } else {
-                imageCell.innerText = "N/A";
-            }
-            row.appendChild(imageCell);
+    // Loop through award images
+    award.award_images.forEach(image => {
+        const imgWrapper = document.createElement("a");
+        imgWrapper.style.width = "50px";
+        imgWrapper.style.height = "50px";
+        imgWrapper.style.display = "block";
+        imgWrapper.style.margin = "2px";
+        imgWrapper.target = "_blank";
+
+        const img = document.createElement("img");
+        img.style.width = "100%";
+        img.style.height = "100%";
+        img.style.objectFit = "cover";
+        img.style.borderRadius = "5px";
+
+        if (award.is_existing) {
+            img.src = `${image}`; // Use the media path for existing images
+            imgWrapper.href = `${image}`; // Link to the full image
+        } else {
+            const reader = new FileReader();
+            reader.onload = function (e) {
+                img.src = e.target.result; // Show uploaded image preview
+                imgWrapper.href = e.target.result; // Link to the preview image
+            };
+            reader.readAsDataURL(image);
+        }
+
+        imgWrapper.appendChild(img);
+        imageGrid.appendChild(imgWrapper);
+    });
+
+    imageCell.appendChild(imageGrid);
+} else {
+    imageCell.innerText = "N/A"; // Show "N/A" if no images exist
+}
+
+row.appendChild(imageCell);
+
 
             tbody.appendChild(row);
         }

@@ -191,15 +191,22 @@
                         <td style="text-align: center;">{{ award.award_sub_category|default:"-" }}</td>
                         <td style="text-align: center;">{{ award.award_by_organisation }}</td>
                         <td style="text-align: center;">
-                            {% if award.award_image %}
-                                <a href="{{ award.award_image.url }}" target="_blank">
-                                    <img src="{{ award.award_image.url }}" alt="{{ award.award_name }}" 
-                                         style="width: 50px; height: 50px; object-fit: cover; border-radius: 5px;">
-                                </a>
+                            {% if award.images.all %}
+                                <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 5px; justify-content: center;">
+                                    {% for image in award.images.all %}
+                                        <a href="{{ image.award_image.url }}" target="_blank" style="width: 50px; height: 50px; display: block; margin: 2px;">
+                                            <img src="{{ image.award_image.url }}" alt="{{ award.award_name }}" 
+                                                 style="width: 100%; height: 100%; object-fit: cover; border-radius: 5px;">
+                                        </a>
+                                    {% endfor %}
+                                </div>
                             {% else %}
                                 N/A
                             {% endif %}
                         </td>
+                        
+                        
+                        
                     </tr>
                 {% endfor %}
             </tbody>
@@ -255,12 +262,15 @@
 
                         <!-- Book Image -->
                         <td style="text-align: center;">
-                            {% if book.book_image %}
-                                <a href="{{ book.book_image.url }}" target="_blank">
-                                    <img src="{{ book.book_image.url }}" alt="{{ book.book_name }}" 
-                                         class="img-fluid rounded" 
-                                         style="width: 50px; height: 50px; object-fit: cover; cursor: pointer;">
-                                </a>
+                            {% if book.book_images.all %}
+                                <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 5px; justify-content: center;">
+                                    {% for image in book.book_images.all %}
+                                        <a href="{{ image.book_image.url }}" target="_blank" style="width: 50px; height: 50px; display: block; margin: 2px;">
+                                            <img src="{{ image.book_image.url }}" alt="{{ book.book_name }}" 
+                                                 style="width: 100%; height: 100%; object-fit: cover; border-radius: 5px;">
+                                        </a>
+                                    {% endfor %}
+                                </div>
                             {% else %}
                                 N/A
                             {% endif %}
@@ -450,15 +460,21 @@
                         <td style="text-align: center;">{{ award.award_sub_category|default:"-" }}</td>
                         <td style="text-align: center;">{{ award.award_by_organisation }}</td>
                         <td style="text-align: center;">
-                            {% if award.award_image %}
-                                <a href="{{ award.award_image.url }}" target="_blank">
-                                    <img src="{{ award.award_image.url }}" alt="{{ award.award_name }}" 
-                                         style="width: 50px; height: 50px; object-fit: cover; border-radius: 5px;">
-                                </a>
+                            {% if award.images.all %}
+                                <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 5px; justify-content: center;">
+                                    {% for image in award.images.all %}
+                                        <a href="{{ image.award_image.url }}" target="_blank" style="width: 50px; height: 50px; display: block; margin: 2px;">
+                                            <img src="{{ image.award_image.url }}" alt="{{ award.award_name }}" 
+                                                 style="width: 100%; height: 100%; object-fit: cover; border-radius: 5px;">
+                                        </a>
+                                    {% endfor %}
+                                </div>
                             {% else %}
                                 N/A
                             {% endif %}
                         </td>
+                        
+                        
                     </tr>
                 {% endfor %}
             </tbody>
@@ -515,12 +531,15 @@
 
                         <!-- Book Image -->
                         <td style="text-align: center;">
-                            {% if book.book_image %}
-                                <a href="{{ book.book_image.url }}" target="_blank">
-                                    <img src="{{ book.book_image.url }}" alt="{{ book.book_name }}" 
-                                         class="img-fluid rounded" 
-                                         style="width: 50px; height: 50px; object-fit: cover; cursor: pointer;">
-                                </a>
+                            {% if book.book_images.all %}
+                                <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 5px; justify-content: center;">
+                                    {% for image in book.book_images.all %}
+                                        <a href="{{ image.book_image.url }}" target="_blank" style="width: 50px; height: 50px; display: block; margin: 2px;">
+                                            <img src="{{ image.book_image.url }}" alt="{{ book.book_name }}" 
+                                                 style="width: 100%; height: 100%; object-fit: cover; border-radius: 5px;">
+                                        </a>
+                                    {% endfor %}
+                                </div>
                             {% else %}
                                 N/A
                             {% endif %}

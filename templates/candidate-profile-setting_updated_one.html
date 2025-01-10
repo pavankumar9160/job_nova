@@ -386,13 +386,11 @@
                                             <input type="text" name="existing_book_publisher[]" class="form-control mb-1"  value="{{ book.book_publisher }}" readonly >
                                             <input type="text" name="existing_book_editor[]" class="form-control mb-1"  value="{{ book.book_editor }}" readonly >
 
-                                            {% if book.book_image %}
-                                            <small>Current Book Image: <a href="{{ book.book_image.url }}" target="_blank">{{ book.book_image }}</a></small>
-                                            <input type="hidden" name="existing_book_image[]" value="{{ book.book_image.url|cut:'/media/' }}">
-                                            {% else %}
-                                            <input type="hidden" name="existing_book_image[]" value="">
-                                            {% endif %}                                            
-                                            <button type="button" class="remove-exisitng-book-btn btn btn-danger btn-sm">Remove</button>
+                                            {% for book in book.book_images.all %}
+                                            <small>Current Book Image: <a href="{{ book.book_image.url }}" target="_blank">{{ book.book_image }}</a></small><br>
+                                            <input type="hidden" name="existing_book_images[]" value="{{ book.book_image.url }}">
+                                            {% endfor %}                                          
+                                            <button type="button" class="remove-exisitng-book-btn btn btn-danger chrbtn-sm">Remove</button>
                                         </div>
                                         {% empty %}
                                         <div class="book-entry mb-2">
@@ -403,7 +401,8 @@
                                             <input type="text" name="book_page_no[]" class="form-control mb-1"  placeholder="Enter book page no">
                                             <input type="text" name="book_publisher[]" class="form-control mb-1" placeholder="Enter book publisher">
                                             <input type="text" name="book_editor[]" class="form-control mb-1"  placeholder="Enter book editor">
-                                            <input type="file" name="book_image[]" class="form-control mb-1" accept="image/*">
+                                         <input type="file" name="book_images[]" class="form-control mb-1" accept="image/*" multiple>
+
                                             <button type="button" class="remove-book-btn btn btn-danger btn-sm">Remove</button>
                                         </div>
                                     {% endfor %}
@@ -668,8 +667,9 @@ document.getElementById('addBookBtn').addEventListener('click', function () {
         const existingPublisher = entry.querySelector('input[name="existing_book_publisher[]"]');
         const existingBookPageNo = entry.querySelector('input[name="existing_book_page_no[]"]');
         const existingBookEditor = entry.querySelector('input[name="existing_book_editor[]"]');
-        const existingImageElement = entry.querySelector('input[name="existing_book_image[]"]');
-        const existingImage = existingImageElement ? existingImageElement.value : '';
+        const existingBookImages = entry.querySelector('input[name="existing_award_images[]"]');
+
+       
 
         // Check new fields
         const bookName = entry.querySelector('input[name="book_name[]"]');
@@ -679,7 +679,7 @@ document.getElementById('addBookBtn').addEventListener('click', function () {
         const bookPublisher= entry.querySelector('input[name="book_publisher[]"]');
         const bookEditor = entry.querySelector('input[name="book_editor[]"]');
         const bookPageNo = entry.querySelector('input[name="book_page_no[]"]');
-        const bookImage = entry.querySelector('input[name="book_image[]"]');
+        const awardImageFiles = entry.querySelector('input[name="award_images[]"]');
 
         // Validation logic for each entry
         if (
@@ -727,12 +727,7 @@ document.getElementById('addBookBtn').addEventListener('click', function () {
             canAddBook = false;
         }
 
-        if (
-            (!existingImage || existingImage.trim() === '') &&
-            (!bookImage || !bookImage.files[0]) // Either existing or new image should be provided
-        ) {
-            canAddBook = false;
-        }
+       
     });
 
     // If validation passes, allow adding a new book entry
@@ -749,7 +744,8 @@ document.getElementById('addBookBtn').addEventListener('click', function () {
             <input type="text" name="book_page_no[]" class="form-control mb-1"  placeholder="Enter book page no">
             <input type="text" name="book_publisher[]" class="form-control mb-1" placeholder="Enter book publisher">
             <input type="text" name="book_editor[]" class="form-control mb-1"  placeholder="Enter book editor">
-            <input type="file" name="book_image[]" class="form-control mb-1" accept="image/*">
+            <input type="file" name="book_images[]" class="form-control mb-1" accept="image/*"  multiple>
+
             <button type="button" class="remove-book-btn btn btn-danger btn-sm">Remove</button>
         `;
 
@@ -865,13 +861,12 @@ document.addEventListener('DOMContentLoaded', function () {
                                             <input type="text" name="existing_award_sub_category[]" class="form-control mb-1"  value="{{ award.award_sub_category }}" readonly >
                                             <input type="text" name="existing_award_by_organisation[]" class="form-control mb-1"  value="{{ award.award_by_organisation }}"  readonly >
 
-                                            {% if award.award_image %}
-                                            <small>Current Award Image: <a href="{{ award.award_image.url }}" target="_blank">{{ award.award_image }}</a></small>
-                                            <input type="hidden" name="existing_award_image[]" value="{{ award.award_image.url|cut:'/media/' }}">
-                                            {% else %}
-                                            <input type="hidden" name="existing_award_image[]" value="">
-                                            {% endif %}                                            
-                                            <button type="button" class="remove-exisitng-award-btn btn btn-danger btn-sm">Remove</button>
+                                            {% for image in award.images.all %}
+                                            <small>Current Award Image: <a href="{{ image.award_image.url }}" target="_blank">{{ image.award_image }}</a></small><br>
+                                            <input type="hidden" name="existing_award_images[]" value="{{ image.award_image.url }}">
+                                            {% endfor %}
+                                            
+                                            <button type="button" class="remove-existing-award-btn btn btn-danger btn-sm">Remove</button>
                                         </div>
                                         {% empty %}
                                         <div class="award-entry mb-2">
@@ -881,7 +876,7 @@ document.addEventListener('DOMContentLoaded', function () {
                                             <input type="text" name="award_sub_category[]" class="form-control mb-1" placeholder="Enter award sub category">
                                             <input type="text" name="award_by_organisation[]" class="form-control mb-1" placeholder="Enter award by organisation">
 
-                                            <input type="file" name="award_image[]" class="form-control mb-1" accept="image/*">
+                                            <input type="file" name="award_images[]" class="form-control mb-1" accept="image/*" multiple>
                                             <button type="button" class="remove-award-btn btn btn-danger btn-sm">Remove</button>
                                         </div>
                                     {% endfor %}
@@ -1315,8 +1310,7 @@ document.addEventListener("DOMContentLoaded", function() {
 
         const existingAwardByOrganisation = entry.querySelector('input[name="existing_award_by_organisation[]"]');
 
-        const existingAwardImageElement = entry.querySelector('input[name="existing_award_image[]"]');
-        const existingAwardImage = existingAwardImageElement ? existingAwardImageElement.value : '';
+        const existingAwardImages = entry.querySelector('input[name="existing_award_images[]"]');
 
         // Check new fields
         const awardName = entry.querySelector('input[name="award_name[]"]');
@@ -1326,7 +1320,7 @@ document.addEventListener("DOMContentLoaded", function() {
 
         const awardByOrganisation = entry.querySelector('input[name="award_by_organisation[]"]');
 
-        const awardImage = entry.querySelector('input[name="award_image[]"]');
+        const awardImageFiles = entry.querySelector('input[name="award_images[]"]');
 
         // Validation logic for each entry
         if (
@@ -1362,12 +1356,7 @@ document.addEventListener("DOMContentLoaded", function() {
         }
 
 
-        if (
-            (!existingAwardImage || existingAwardImage.trim() === '') &&
-            (!awardImage || !awardImage.files[0]) // Either existing or new image should be provided
-        ) {
-            canAddAward = false;
-        }
+        
     });
 
     // If validation passes, allow adding a new book entry
@@ -1382,7 +1371,7 @@ document.addEventListener("DOMContentLoaded", function() {
             <input type="text" name="award_category[]" class="form-control mb-1" placeholder="Enter award category">
             <input type="text" name="award_sub_category[]" class="form-control mb-1" placeholder="Enter award sub category">
             <input type="text" name="award_by_organisation[]" class="form-control mb-1" placeholder="Enter award by organisation">
-            <input type="file" name="award_image[]" class="form-control mb-1" accept="image/*">
+            <input type="file" name="award_images[]" class="form-control mb-1" accept="image/*" multiple>
             <button type="button" class="remove-award-btn btn btn-danger btn-sm">Remove</button>
         `;
 
@@ -1402,7 +1391,7 @@ document.getElementById('awardsSection').addEventListener('click', function (e) 
 
 
 // Handle the "Remove" button click event
-document.querySelectorAll('.remove-exisitng-award-btn').forEach(button => {
+document.querySelectorAll('.remove-existing-award-btn').forEach(button => {
     button.addEventListener('click', function() {
         var awardEntry = this.closest('.award-entry');
         var awardId = awardEntry ? awardEntry.dataset.awardId : null;  // Get the book ID

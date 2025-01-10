@@ -279,7 +279,7 @@ def artist_profile_updated_one(request):
 
 
 from django.shortcuts import get_object_or_404
-from .models import ArtistMasterBasic, ArtistMasterAdditional, Awards, Blog, BooksPublished, Education, Experience, Gallery
+from .models import ArtistMasterBasic, ArtistMasterAdditional, AwardImage, Awards, Blog, BookImage, BooksPublished, Education, Experience, Gallery
 
 def artist_profile_updated_one_Id(request, id):
     
@@ -873,7 +873,7 @@ def logout_view(request):
         logout(request) 
         return redirect('login')  
    
-
+from collections import defaultdict
 from .models import ArtistMasterAdditional, ArtistMasterBasic, Skill
 from django.contrib.auth.decorators import login_required
 @csrf_exempt
@@ -1003,48 +1003,68 @@ def update_artist_details_api(request):
             artist.highest_qualification = request.POST.get('highest_qualification')    
             
         
-        book_names =request.POST.getlist('book_name[]')
-        book_categories =request.POST.getlist('book_category[]')
-        book_chapterNames =request.POST.getlist('book_chapter_name[]')
-        book_pageNos =request.POST.getlist('book_page_no[]')
-        book_publishers =request.POST.getlist('book_publisher[]')
-        book_editors =request.POST.getlist('book_editor[]')
-
+        # Retrieve posted data
+        book_names = request.POST.getlist('book_name[]')
+        book_categories = request.POST.getlist('book_category[]')
+        book_chapterNames = request.POST.getlist('book_chapter_name[]')
+        book_pageNos = request.POST.getlist('book_page_no[]')
+        book_publishers = request.POST.getlist('book_publisher[]')
+        book_editors = request.POST.getlist('book_editor[]')
         book_links = request.POST.getlist('book_link[]')
-        book_images = request.FILES.getlist('book_image[]')
-       
-        
-        print("book_images",book_images)
-        
 
+        # Collect book images
+        book_images = defaultdict(list)
+        for key, file in request.FILES.items():
+            if key.startswith('book_images_'):
+                parts = key.split('_')  # Split the key to extract the index
+                index = int(parts[2])  # Extract the book index
+                book_images[index].append(file)  # Append the file to the respective index
+
+        print("book_images", book_images)
+
+        # Validate and process books
         if book_names and book_links and book_categories and book_chapterNames and book_pageNos and book_publishers and book_editors:
             books = []
 
-            for i, (name, link,category,chapterName,pageNo,publisher,editor) in enumerate(zip(book_names, book_links,book_categories,book_chapterNames,book_pageNos,book_publishers,book_editors)):
-                
+            for i, (name, link, category, chapterName, pageNo, publisher, editor) in enumerate(
+                zip(book_names, book_links, book_categories, book_chapterNames, book_pageNos, book_publishers, book_editors)
+            ):
+                # Skip invalid data
                 if not name or not link:
-                 continue  # Skip if name or year is invalid
-                
-                book = BooksPublished(book_name=name, book_url=link,book_category=category,book_chapter_name = chapterName,book_page_no = pageNo,book_publisher= publisher,book_editor = editor)
+                    print(f"Skipping book at index {i} due to missing name or link.")
+                    continue
 
-                
-                if i < len(book_images) and book_images[i]:  # New image uploaded
-                    book.book_image = book_images[i]
-                else:  # No image provided
-                    book.book_image = None
-
-                # Save the book
+                # Create and save book
                 try:
+                    book = BooksPublished(
+                        book_name=name,
+                        book_url=link,
+                        book_category=category,
+                        book_chapter_name=chapterName,
+                        book_page_no=pageNo,
+                        book_publisher=publisher,
+                        book_editor=editor,
+                    )
                     book.save()
                     books.append(book)
                 except Exception as e:
                     print(f"Error saving book {name}: {e}")
+                    continue
 
+                # Save associated images for the book
+                if i in book_images:  # Check if there are images for this book
+                    for image_file in book_images[i]:
+                        try:
+                            BookImage.objects.create(book=book, book_image=image_file)
+                        except Exception as e:
+                            print(f"Error saving image for book {book.book_name}: {e}")
+
+            # Associate books with the artist
             if books:
                 artist.books_published.add(*books)
 
-            # Save the artist instance
             artist.save()
+            
 
         # Clean up books with no associated artists
             books_without_artists = BooksPublished.objects.annotate(artist_count=Count('artist_books')).filter(artist_count=0)
@@ -1147,48 +1167,63 @@ def update_artist_details_api(request):
             except json.JSONDecodeError:
                 return JsonResponse({'error': 'Invalid education data'}, status=400) 
             
-        award_names =request.POST.getlist('award_name[]')
+        
+       # Get all awards data from POST
+        award_names = request.POST.getlist('award_name[]')
         award_years = request.POST.getlist('award_year[]')
         award_categories = request.POST.getlist('award_category[]')
         award_sub_categories = request.POST.getlist('award_sub_category[]')
-        award_images = request.FILES.getlist('award_image[]')
         award_by_organisations = request.POST.getlist('award_by_organisation[]')
 
-       
-        print("award_names",award_names)
-        print("award_by_organisations",award_by_organisations)
-        print("award_images",award_images)
-        
+        award_images = defaultdict(list)
+        for key, file in request.FILES.items():
+            if key.startswith('award_images_'):
+                parts = key.split('_')  # Split the key to extract the index
+                index = int(parts[2])  # Extract the award index
+                award_images[index].append(file)  # Append the file to the respective index
 
-        if award_names and award_years and award_by_organisations and award_categories and award_sub_categories :
+        # Print debug information
+        print("Award Names:", award_names)
+        print("Award Images:", dict(award_images))  
+
+        if award_names and award_years and award_by_organisations and award_categories and award_sub_categories:
             awards = []
 
-            for i, (name, year, organisation,category,subCategory) in enumerate(zip(award_names, award_years,award_by_organisations,award_categories,award_sub_categories)):
-                if not name or not year or not organisation or not category or not subCategory :
-                 continue  # Skip if name or year is invalid
-                
-                award = Awards(award_name=name, award_year=year, award_by_organisation=organisation,award_category=category,award_sub_category=subCategory )
+            for i, (name, year, organisation, category, sub_category) in enumerate(zip(award_names, award_years, award_by_organisations, award_categories, award_sub_categories)):
+                if not name or not year or not organisation or not category or not sub_category:
+                    continue  # Skip invalid entries
 
-                
-                if i < len(award_images) and award_images[i]:  # New image uploaded
-                    award.award_image = award_images[i]
-                else:  # No image provided
-                    award.award_image = None
-
-                # Save the book
+                # Create and save the award
+                award = Awards(
+                    award_name=name,
+                    award_year=year,
+                    award_by_organisation=organisation,
+                    award_category=category,
+                    award_sub_category=sub_category
+                )
                 try:
                     award.save()
                     awards.append(award)
                 except Exception as e:
                     print(f"Error saving award {name}: {e}")
+                    continue
 
+                # Handle multiple images for the current award
+                if i in award_images:  # Check if there are images for this award
+                    for image in award_images[i]:
+                        try:
+                            AwardImage.objects.create(award=award, award_image=image)
+                        except Exception as e:
+                            print(f"Error saving image for award {award.award_name}: {e}")
+
+            # Add the saved awards to the artist
             if awards:
                 artist.awards_received.add(*awards)
 
             # Save the artist instance
             artist.save()
 
-        # Clean up books with no associated artists
+            # Cleanup: Remove awards with no associated artists
             awards_without_artists = Awards.objects.annotate(artist_count=Count('artist_awards')).filter(artist_count=0)
             awards_without_artists.delete()
 
@@ -1686,6 +1721,7 @@ def remove_award(request, award_id):
     if request.method == 'DELETE':
         try:
             award = Awards.objects.get(id=award_id)
+            award.images.all().delete()
             award.delete()  # Delete the award
             return JsonResponse({'success': True})
         except BooksPublished.DoesNotExist:

@@ -78,7 +78,6 @@ class BooksPublished(models.Model):
     book_page_no = models.CharField(max_length=255,blank=True, null=True)
     book_publisher = models.CharField(max_length=255,blank=True, null=True)
     book_editor = models.CharField(max_length=255,blank=True, null=True)
-    book_image = models.ImageField(upload_to='book_images/', blank=True, null=True)
     
     
     
@@ -89,13 +88,28 @@ class Awards(models.Model):
     award_by_organisation = models.CharField(blank=True, null=True,max_length=100)
     award_category = models.CharField(blank=True, null=True,max_length=100)
     award_sub_category=models.CharField(blank=True, null=True,max_length=100)
-    award_image = models.ImageField(upload_to='award_images/', blank=True, null=True)    
+    
+    
+class AwardImage(models.Model):
+    award = models.ForeignKey(Awards, on_delete=models.CASCADE, related_name='images')
+    award_image= models.ImageField(upload_to='award_images/',blank=True, null=True)
 
-    
-    
+    def __str__(self):
+        return f"Image for {self.award.award_name}"
+       
     def __str__(self):
         return self.award_name 
-      
+
+
+class BookImage(models.Model):
+    book = models.ForeignKey(BooksPublished, on_delete=models.CASCADE, related_name='book_images')
+    book_image= models.ImageField(upload_to='book_images/',blank=True, null=True)
+
+    def __str__(self):
+        return f"Image for {self.book.book_name}"
+       
+    def __str__(self):
+        return self.book_name       
         
 class Gallery(models.Model):
     file_name = models.ImageField(upload_to='gallery/', blank=True, null=True)
