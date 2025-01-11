@@ -4547,9 +4547,10 @@
         
         .sticky-note {
             position: relative;
-            width: 300px;
-            height: 280px;
-            background: linear-gradient(to bottom, #fef08a, #facc15);
+            width: 320px;
+            height: 320px;
+            background: var(--bs-light);
+            /* Use Bootstrap bg-light */
             border-radius: 5px;
             box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
             transform: rotate(-2deg);
@@ -4576,7 +4577,7 @@
             left: 0;
             width: 80px;
             height: 80px;
-            background: linear-gradient(to bottom right, #facc15 60%, #ffdd75 100%);
+            background: linear-gradient(to bottom right, var(--bs-light) 60%, rgba(255, 255, 255, 0.8) 100%);
             clip-path: polygon(0 0, 100% 0, 0% 100%);
             box-shadow: -4px -4px 6px rgba(0, 0, 0, 0.2) inset;
             z-index: 2;
@@ -4593,27 +4594,10 @@
             background: linear-gradient(to bottom right, rgba(255, 255, 255, 0.6), rgba(0, 0, 0, 0.1));
             z-index: 3;
         }
-        /* .sticky-note .content {
-            position: absolute;
-            top: 50px;
-            left: 20px;
-            width: calc(100% - 40px);
-            height: calc(100% - 70px);
-            font-size: 16px;
-            color: #333;
-            line-height: 1.5;
-            padding: 10px;
-            background: transparent;
-            box-sizing: border-box;
-            outline: none;
-            z-index: 5;
-            overflow: auto;
-            cursor: text;
-        } */
         
         .sticky-note .content {
             position: absolute;
-            top: 50px;
+            top: 90px;
             left: 20px;
             width: calc(100% - 40px);
             height: calc(100% - 70px);

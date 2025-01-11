@@ -777,19 +777,53 @@
     });
    
     
+    document.getElementById('toggleColumns').addEventListener('change', function() {
+        // Get the selected column class
+        const selectedClass = this.value;
     
-        document.getElementById('toggleColumns').addEventListener('change', function() {
-            // Get the selected column class
-            const selectedClass = this.value;
+        // Get all artist card containers
+        const artistCards = document.querySelectorAll('.artist-card-container');
     
-            // Get all artist card containers
-            const artistCards = document.querySelectorAll('.artist-card-container');
+        // Update the column class for each card
+        artistCards.forEach(card => {
+            card.className = `artist-card-container ${selectedClass} col-12`;
     
-            // Update the column class for each card
-            artistCards.forEach(card => {
-                card.className = `artist-card-container ${selectedClass} col-12`;
-            });
+            // Truncate short_bio to 12 words when 4 columns per row is selected
+            const bioElement = card.querySelector('.content p.text-muted');
+            if (bioElement) {
+                const fullBio = bioElement.dataset.fullBio || bioElement.textContent.trim(); // Store the full bio
+                bioElement.dataset.fullBio = fullBio;
+    
+                if (selectedClass === 'col-md-3') {
+                    // Split the bio into words, check the length, and truncate only if necessary
+                    const words = fullBio.split(' ');
+                    if (words.length > 12) {
+                        const truncatedBio = words.slice(0, 10).join(' ') + '...';
+                        bioElement.textContent = truncatedBio;
+                    } else {
+                        bioElement.textContent = fullBio; // Show the full bio if it's less than or equal to 12 words
+                    }
+                } else {
+                    bioElement.textContent = fullBio; // Reset to full bio for other column classes
+                }
+            }
+    
+            // Hide skills when 4 per row is selected
+            const skillsSections = card.querySelectorAll('.content .badge');
+            if (selectedClass === 'col-md-3') {
+                skillsSections.forEach(skill => {
+                    skill.style.display = 'none';
+                });
+            } else {
+                skillsSections.forEach(skill => {
+                    skill.style.display = ''; // Reset to default
+                });
+            }
         });
+    });
+    
+    
+    
     
     
                                 

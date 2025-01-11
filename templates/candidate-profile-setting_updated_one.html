@@ -551,7 +551,7 @@
                                     });
                                 });
 
-                                document.getElementById("documents").addEventListener("change", function () {
+                                 document.getElementById("documents").addEventListener("change", function () {
                                     const files = this.files;
                                     const fileList = document.getElementById("file-list");
                                     const formData = new FormData();
@@ -616,7 +616,7 @@
                                     .catch(error => {
                                         console.error("Error uploading files:", error);
                                     });
-                                });
+                                }); 
 
                                 document.addEventListener('DOMContentLoaded', function() {
                                    

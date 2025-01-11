@@ -942,7 +942,8 @@ def update_artist_details_api(request):
             
         #     for file in files:
         #         image = Gallery.objects.create(file_name=file)
-        #         artist.images.add(image)       
+        #         artist.images.add(image)  
+             
         
         if request.POST.get('address1'):
             artist.address1 = request.POST.get('address1')

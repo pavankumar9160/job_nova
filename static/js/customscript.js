@@ -794,10 +794,10 @@ $(document).ready(function() {
                                 }
                             }
 
-                            // if (fileInput && fileInput.files && fileInput.files.length > 0) {
+                            if (fileInput && fileInput.files && fileInput.files.length > 0) {
 
-                            //     filesArray = filesArray.concat(Array.from(fileInput.files));
-                            // }
+                                filesArray = filesArray.concat(Array.from(fileInput.files));
+                            }
 
                             return filesArray;
                         }
@@ -1049,8 +1049,8 @@ var existingBookEditors = [];
         document.querySelectorAll('input[name="book_editor[]"]').forEach(input => bookEditors.push(input.value));
 
         document.querySelectorAll('input[name="book_images[]"]').forEach(input => {
-            const files = Array.from(input.files);
-            bookImages.push(files.length > 0 ? files : []);
+            const bookfiles = Array.from(input.files);
+            bookImages.push(bookfiles.length > 0 ? bookfiles : []);
         });
 
 
@@ -1298,8 +1298,8 @@ document.querySelectorAll('input[name="award_category[]"]').forEach(input => awa
 document.querySelectorAll('input[name="award_sub_category[]"]').forEach(input => awardSubCategories.push(input.value));
 document.querySelectorAll('input[name="award_by_organisation[]"]').forEach(input => awardByOrganisations.push(input.value));
 document.querySelectorAll('input[name="award_images[]"]').forEach(input => {
-    const files = Array.from(input.files);
-    awardImages.push(files.length > 0 ? files : []);
+    const imagefiles = Array.from(input.files);
+    awardImages.push(imagefiles.length > 0 ? imagefiles : []);
 });
 
 // Combine new and existing awards
@@ -1489,7 +1489,7 @@ row.appendChild(imageCell);
         reader.onload = function (e) {
             profileImage = e.target.result;
 
-            if (!cover_photo) {
+            if (!cover_photo) {ch
                 updatePreview(profileImage,files, coverImage);
                 $('#previewModal').modal('show');
 
