@@ -36,14 +36,22 @@
 
         <!-- Start -->
         <section class="section">
-            <div class="d-flex justify-content-end mb-3">
-                <label for="toggleColumns" class="me-2">Artists per row:</label>
-                <select id="toggleColumns" class="form-select form-select-sm" style="width: auto;">
-                    <option value="col-md-6">2 per row</option>
-                    <option value="col-md-4">3 per row</option>
-                    <option value="col-md-3">4 per row</option>
-                </select>
+            <div class="d-flex justify-content-end align-items-center mb-3 me-3">
+                <label class="me-3 fw-bold text-secondary">Artists per row:</label>
+                <div id="toggleColumns" class="btn-group btn-group-sm" role="group" aria-label="Artists per row">
+                    <button type="button" class="btn btn-outline-primary d-flex align-items-center p-2" data-value="col-md-6" title="2 per row">
+                        <i class="mdi mdi-grid-large"></i>2
+                    </button>
+                    <button type="button" class="btn btn-outline-primary d-flex align-items-center p-2" data-value="col-md-4" title="3 per row">
+                        <i class="mdi mdi-grid"></i>3
+                    </button>
+                    <button type="button" class="btn btn-outline-primary d-flex align-items-center p-2" data-value="col-md-3" title="4 per row">
+                        <i class="mdi mdi-view-grid"></i> 4<!-- New icon for 4 per row -->
+                    </button>
+                </div>
             </div>
+            
+            
             <div class="container" style="max-width:100%">
                 <div class="row d-flex" style="gap:50px">
                     <div class="col-lg-3 col-md-6 col-12">
@@ -736,6 +744,8 @@
                                     <button class="btn btn-primary btn-sm" id="clearFilterBtn">Clear Filter</button>
                                 </div>
                             </div>
+                        </div>
+                    </div>
                             <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
 
                             <script>
@@ -777,62 +787,52 @@
     });
    
     
-    document.getElementById('toggleColumns').addEventListener('change', function() {
-        // Get the selected column class
-        const selectedClass = this.value;
-    
-        // Get all artist card containers
-        const artistCards = document.querySelectorAll('.artist-card-container');
-    
-        // Update the column class for each card
-        artistCards.forEach(card => {
-            card.className = `artist-card-container ${selectedClass} col-12`;
-    
-            // Truncate short_bio to 12 words when 4 columns per row is selected
-            const bioElement = card.querySelector('.content p.text-muted');
-            if (bioElement) {
-                const fullBio = bioElement.dataset.fullBio || bioElement.textContent.trim(); // Store the full bio
-                bioElement.dataset.fullBio = fullBio;
-    
-                if (selectedClass === 'col-md-3') {
-                    // Split the bio into words, check the length, and truncate only if necessary
-                    const words = fullBio.split(' ');
-                    if (words.length > 12) {
-                        const truncatedBio = words.slice(0, 10).join(' ') + '...';
-                        bioElement.textContent = truncatedBio;
+    document.querySelectorAll('#toggleColumns .btn').forEach(button => {
+        button.addEventListener('click', () => {
+            // Remove active class from all buttons
+            document.querySelectorAll('#toggleColumns .btn').forEach(btn => btn.classList.remove('active', 'btn-primary', 'text-white'));
+
+            // Add active class to the clicked button
+            button.classList.add('active', 'btn-primary', 'text-white');
+
+            // Get the selected column class
+            const selectedClass = button.dataset.value;
+
+            // Update the column class for each artist card
+            const artistCards = document.querySelectorAll('.artist-card-container');
+            artistCards.forEach(card => {
+                card.className = `artist-card-container ${selectedClass} col-12`;
+
+                // Handle bio truncation for 4 per row
+                const bioElement = card.querySelector('.content p.text-muted');
+                if (bioElement) {
+                    const fullBio = bioElement.dataset.fullBio || bioElement.textContent.trim();
+                    bioElement.dataset.fullBio = fullBio;
+
+                    if (selectedClass === 'col-md-3') {
+                        const words = fullBio.split(' ');
+                        bioElement.textContent = words.length > 12
+                            ? words.slice(0, 10).join(' ') + '...'
+                            : fullBio;
                     } else {
-                        bioElement.textContent = fullBio; // Show the full bio if it's less than or equal to 12 words
+                        bioElement.textContent = fullBio;
                     }
-                } else {
-                    bioElement.textContent = fullBio; // Reset to full bio for other column classes
                 }
-            }
-    
-            // Hide skills when 4 per row is selected
-            const skillsSections = card.querySelectorAll('.content .badge');
-            if (selectedClass === 'col-md-3') {
-                skillsSections.forEach(skill => {
-                    skill.style.display = 'none';
-                });
-            } else {
-                skillsSections.forEach(skill => {
-                    skill.style.display = ''; // Reset to default
-                });
-            }
+
+                // Handle skill visibility for 4 per row
+                const skillsSections = card.querySelectorAll('.content .badge');
+                if (selectedClass === 'col-md-3') {
+                    skillsSections.forEach(skill => skill.style.display = 'none');
+                } else {
+                    skillsSections.forEach(skill => skill.style.display = '');
+                }
+            });
         });
     });
     
-    
-    
-    
-    
-                                
-                            </script>
-                            
-                        </div>
-                    </div>
-                   
-                    
+            </script>
+                       
+                               
                     <div class="col-lg-8 col-md-6 col-12">
                         <div class="row g-4">
                             {% if paginated_artists %}
