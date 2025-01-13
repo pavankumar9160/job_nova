@@ -12,8 +12,10 @@ from django.urls import reverse
 
 
 def index(request):
-      
+    
     user = request.user
+    if user.is_superuser:
+        return render(request, 'dashboard-admin.html')  
     profile_picture = None
     if user.is_authenticated:  
             try:
@@ -728,9 +730,17 @@ def lock_screen(request):
 
 def login_page(request):
     if request.user.is_authenticated:
-         return redirect('/artist-profile_updated_one/')
-    
+        if not request.user.is_superuser:
+            return redirect('/artist-profile_updated_one/')
+            
     return render(request,'login.html')
+
+def admin_login_page(request):
+    if request.user.is_authenticated:
+        if request.user.is_superuser:
+            return redirect('/dashboard/')
+    
+    return render(request,'admin-login.html')
 
 def maintenance(request):
     
@@ -839,26 +849,40 @@ def signup_api(request):
         except Exception as e:
             return JsonResponse({'error': str(e)}, status=400)
         
-@csrf_exempt        
+from django.http import JsonResponse
+from django.contrib.auth import authenticate, login
+from django.views.decorators.csrf import csrf_exempt
+
+@csrf_exempt
 def login_api(request):
-    if request.method =="POST":
-        email_or_contact = request.POST.get("email_or_contact") 
-        password = request.POST.get("password") 
-        recaptcha_token = request.POST.get('recaptcha_token') 
+    if request.method == "POST":
+        email_or_contact = request.POST.get("email_or_contact")
+        password = request.POST.get("password")
+        recaptcha_token = request.POST.get("recaptcha_token")
+        
         print('email', email_or_contact)
         print('password', password)
+
+        # Verify reCAPTCHA token
         if not verify_recaptcha(recaptcha_token):
             return JsonResponse({'error': 'Invalid reCAPTCHA. Please try again.'}, status=400)
-        
+
+        # Authenticate the user
         user = authenticate(request, username=email_or_contact, password=password)
         
         if user is not None:
             # Check if user is active
             if not user.is_active:
-                return JsonResponse({'error': 'Your account has been disabled. Please contact support.'}, status=400)        
-            login(request,user)
+                return JsonResponse({'error': 'Your account has been disabled. Please contact support.'}, status=400)
             
-            return JsonResponse({'message': 'Login successful', 'redirect_url': '/artist-profile_updated_one/'})
+            # Log the user in
+            login(request, user)
+
+            # Redirect based on user type
+            if user.is_superuser:
+                return JsonResponse({'message': 'Login successful', 'redirect_url': '/dashboard/'})
+            else:
+                return JsonResponse({'message': 'Login successful', 'redirect_url': '/artist-profile_updated_one/'})
         
         else:
             return JsonResponse({'error': 'Invalid credentials'}, status=400)
@@ -866,12 +890,22 @@ def login_api(request):
     return JsonResponse({'error': 'Invalid request method'}, status=400)
 
 
+
 from django.shortcuts import redirect
 from django.contrib.auth import logout
+from django.contrib.auth import logout
+from django.shortcuts import redirect
+
 def logout_view(request):
-    if request.user.is_authenticated: 
-        logout(request) 
-        return redirect('login')  
+    if request.user.is_authenticated:
+        if request.user.is_superuser:
+            logout(request)
+            return redirect('admin-login')  # Redirect to admin login for superusers
+        else:
+            logout(request)
+            return redirect('login')  # Redirect to regular login for non-superusers
+    return redirect('login')  # In case the user is not authenticated, redirect to login
+  
    
 from collections import defaultdict
 from .models import ArtistMasterAdditional, ArtistMasterBasic, Skill
@@ -1769,5 +1803,87 @@ def upload_gallery_image(request):
         return JsonResponse({'status': 'success', 'uploaded_images': uploaded_images})
     return JsonResponse({'status': 'error', 'message': 'Invalid request'}, status=400)
 
+@login_required
+def dashboard(request):
+    query = request.GET.get('search', '')
 
+    total_artists = ArtistMasterBasic.objects.exclude(is_superuser=True).count()
+    active_artists = ArtistMasterBasic.objects.filter(is_active=True).exclude(is_superuser=True).count()
+    disabled_artists = total_artists - active_artists
+
+    if query:
+        artists = ArtistMasterBasic.objects.filter(name__icontains=query).exclude(is_superuser=True)
+    else:
+        artists = ArtistMasterBasic.objects.all().exclude(is_superuser=True)
+        
+    artists = artists.prefetch_related('additional_info')
+    
+    paginator = Paginator(artists, 10)  
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
+
+    return render(request, 'dashboard-admin.html', {
+        'page_obj': page_obj,             
+        'total_artists': total_artists,   
+        'active_artists': active_artists,
+        'disabled_artists': disabled_artists,
+        'query': query,  
+                         
+    })
+    
+    
+@csrf_exempt
+def update_artist_status(request):
+    if request.method == "POST":
+        try:
+            data = json.loads(request.body)
+            artist_id = data.get("artist_id")
+            is_active = data.get("is_active")
+
+            # Update the artist's status
+            artist = ArtistMasterBasic.objects.get(id=artist_id)
+            artist.is_active = is_active
+            artist.save()
+
+            # Get updated counts
+            total_artists = ArtistMasterBasic.objects.exclude(is_superuser=True).count()
+            active_artists = ArtistMasterBasic.objects.filter(is_active=True).exclude(is_superuser=True).count()
+            disabled_artists = total_artists - active_artists
+
+            return JsonResponse({
+                "success": True,
+                "message": "Artist status updated successfully",
+                "active_artists": active_artists,
+                "disabled_artists": disabled_artists,
+            })
+        except ArtistMasterBasic.DoesNotExist:
+            return JsonResponse({"success": False, "message": "Artist not found"}, status=404)
+        except Exception as e:
+            return JsonResponse({"success": False, "message": str(e)}, status=400)
+    else:
+        return JsonResponse({"success": False, "message": "Invalid request method"}, status=405)   
+    
+    
+
+@csrf_exempt
+def delete_artist(request):
+    if request.method == "POST":
+        try:
+            data = json.loads(request.body)
+            artist_id = data.get('artist_id')
+            
+            artist = ArtistMasterBasic.objects.get(id=artist_id)
+            
+            # Delete related records
+            artist.additional_info.all().delete()  
+            # Finally, delete the artist
+            artist.delete()
+
+            return JsonResponse({"success": True, "message": "Artist and related data deleted successfully!"})
+
+        except ArtistMasterBasic.DoesNotExist:
+            return JsonResponse({"success": False, "message": "Artist not found"})
+        except Exception as e:
+            return JsonResponse({"success": False, "message": str(e)})     
+    
 

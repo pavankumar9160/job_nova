@@ -51,6 +51,7 @@ class Skill(models.Model):
 from django.db import models
 
 class Experience(models.Model):
+    
     designation = models.CharField(max_length=255)
     company = models.CharField(max_length=255)
     start_date = models.DateField()

@@ -66,6 +66,14 @@ urlpatterns = [
     path('remove-award/<int:award_id>/', views.remove_award, name='remove-award'),
     path('remove-image/<int:image_id>/', views.remove_image, name='remove_image'),
     path('upload-gallery-image/', views.upload_gallery_image, name='upload_gallery_image'),
+    path('admin-login/',views.admin_login_page,name="admin-login"),
+    path('dashboard/',views.dashboard,name="dashboard"),
+    path('update-status/', views.update_artist_status, name='update_artist_status'),
+    path('delete_artist/',views.delete_artist,name="delete_artist"),
+    
+
+
+
 
 
 
