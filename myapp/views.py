@@ -14,7 +14,7 @@ from django.urls import reverse
 def index(request):
     
     user = request.user
-    if user.is_superuser:
+    if user.is_superuser or user.is_staff:
         return render(request, 'dashboard-admin.html')  
     profile_picture = None
     if user.is_authenticated:  
@@ -23,7 +23,7 @@ def index(request):
                 profile_picture = additional_info.profile_picture.url if additional_info.profile_picture else None
             except ArtistMasterAdditional.DoesNotExist:
                 profile_picture = None 
-    artists = ArtistMasterBasic.objects.all().exclude(is_superuser=True).order_by('?')[:3]
+    artists = ArtistMasterBasic.objects.all().exclude(Q(is_superuser=True) | Q(is_staff=True)).order_by('?')[:3]
     blogs = Blog.objects.all()
     print("blog",blogs)
     # Prefetch related additional details and skills
@@ -248,7 +248,7 @@ def artist_profile_updated_one(request):
    
     artists_with_details = []
 
-    artists = ArtistMasterBasic.objects.all().exclude(is_superuser=True).exclude(id=user.id).order_by('?')[:3]
+    artists = ArtistMasterBasic.objects.all().exclude(Q(is_superuser=True) | Q(is_staff=True)).exclude(id=user.id).order_by('?')[:3]
 
     for artist in artists:
   
@@ -343,7 +343,7 @@ def artist_profile_updated_one_Id(request, id):
         full_name_user = None
         cover_photo_user = None
     
-    artists = ArtistMasterBasic.objects.all().exclude(is_superuser=True).order_by('?')[:3]
+    artists = ArtistMasterBasic.objects.all().exclude(Q(is_superuser=True) | Q(is_staff=True)).order_by('?')[:3]
 
     # Prefetch related additional details and skills
     additional_details = ArtistMasterAdditional.objects.select_related('user').prefetch_related('skills')
@@ -408,10 +408,10 @@ def artists(request):
                     Q(additional_info__skills__name__icontains=search_query) |  # Search by skills
                     Q(full_name__icontains=search_query) |  
                     Q(name__icontains=search_query)  # Search by artist name
-                ).prefetch_related('additional_info', 'additional_info__skills').exclude(is_superuser=True).distinct()
+                ).prefetch_related('additional_info', 'additional_info__skills').exclude(Q(is_superuser=True) | Q(is_staff=True)).distinct()
     else:
         # Return all artists if no search query is provided
-        artists = ArtistMasterBasic.objects.all().exclude(is_superuser=True)
+        artists = ArtistMasterBasic.objects.all().exclude(Q(is_superuser=True) | Q(is_staff=True))
 
     # Prefetch related additional details and skills
     additional_details = ArtistMasterAdditional.objects.select_related('user').prefetch_related('skills')
@@ -730,14 +730,14 @@ def lock_screen(request):
 
 def login_page(request):
     if request.user.is_authenticated:
-        if not request.user.is_superuser:
+        if not request.user.is_superuser or not request.user.is_staff :
             return redirect('/artist-profile_updated_one/')
             
     return render(request,'login.html')
 
 def admin_login_page(request):
     if request.user.is_authenticated:
-        if request.user.is_superuser:
+        if request.user.is_superuser or request.user.is_staff:
             return redirect('/dashboard/')
     
     return render(request,'admin-login.html')
@@ -879,7 +879,7 @@ def login_api(request):
             login(request, user)
 
             # Redirect based on user type
-            if user.is_superuser:
+            if user.is_superuser or user.is_staff:
                 return JsonResponse({'message': 'Login successful', 'redirect_url': '/dashboard/'})
             else:
                 return JsonResponse({'message': 'Login successful', 'redirect_url': '/artist-profile_updated_one/'})
@@ -898,7 +898,7 @@ from django.shortcuts import redirect
 
 def logout_view(request):
     if request.user.is_authenticated:
-        if request.user.is_superuser:
+        if request.user.is_superuser or request.user.is_staff:
             logout(request)
             return redirect('admin-login')  # Redirect to admin login for superusers
         else:
@@ -1511,10 +1511,10 @@ def search_artists(request):
                     Q(additional_info__languages_speak__icontains=search_query) |
                     Q(full_name__icontains=search_query) |  
                     Q(name__icontains=search_query)  # Search by artist name
-                ).prefetch_related('additional_info', 'additional_info__skills').exclude(is_superuser=True).distinct() # Prefetch related skills
+                ).prefetch_related('additional_info', 'additional_info__skills').exclude(Q(is_superuser=True) | Q(is_staff=True)).distinct() # Prefetch related skills
 
     else:
-        artists = ArtistMasterBasic.objects.all().prefetch_related('additional_info', 'additional_info__skills').exclude(is_superuser=True)
+        artists = ArtistMasterBasic.objects.all().prefetch_related('additional_info', 'additional_info__skills').exclude(Q(is_superuser=True) | Q(is_staff=True))
 
     artists_data = []
     for artist in artists:
@@ -1805,16 +1805,17 @@ def upload_gallery_image(request):
 
 @login_required
 def dashboard(request):
+    user = request.user
     query = request.GET.get('search', '')
 
-    total_artists = ArtistMasterBasic.objects.exclude(is_superuser=True).count()
-    active_artists = ArtistMasterBasic.objects.filter(is_active=True).exclude(is_superuser=True).count()
+    total_artists = ArtistMasterBasic.objects.exclude(Q(is_superuser=True) | Q(is_staff=True)).count()
+    active_artists = ArtistMasterBasic.objects.filter(is_active=True).exclude(Q(is_superuser=True) | Q(is_staff=True)).count()
     disabled_artists = total_artists - active_artists
 
     if query:
-        artists = ArtistMasterBasic.objects.filter(name__icontains=query).exclude(is_superuser=True)
+        artists = ArtistMasterBasic.objects.filter(name__icontains=query).exclude(Q(is_superuser=True) | Q(is_staff=True))
     else:
-        artists = ArtistMasterBasic.objects.all().exclude(is_superuser=True)
+        artists = ArtistMasterBasic.objects.all().exclude(Q(is_superuser=True) | Q(is_staff=True))
         
     artists = artists.prefetch_related('additional_info')
     
@@ -1828,6 +1829,7 @@ def dashboard(request):
         'active_artists': active_artists,
         'disabled_artists': disabled_artists,
         'query': query,  
+        'user':user,
                          
     })
     
@@ -1846,8 +1848,8 @@ def update_artist_status(request):
             artist.save()
 
             # Get updated counts
-            total_artists = ArtistMasterBasic.objects.exclude(is_superuser=True).count()
-            active_artists = ArtistMasterBasic.objects.filter(is_active=True).exclude(is_superuser=True).count()
+            total_artists = ArtistMasterBasic.objects.exclude(Q(is_superuser=True) | Q(is_staff=True)).count()
+            active_artists = ArtistMasterBasic.objects.filter(is_active=True).exclude(Q(is_superuser=True) | Q(is_staff=True)).count()
             disabled_artists = total_artists - active_artists
 
             return JsonResponse({
@@ -1884,6 +1886,158 @@ def delete_artist(request):
         except ArtistMasterBasic.DoesNotExist:
             return JsonResponse({"success": False, "message": "Artist not found"})
         except Exception as e:
-            return JsonResponse({"success": False, "message": str(e)})     
-    
+            return JsonResponse({"success": False, "message": str(e)})   
+        
+        
+def admin_management(request):
+    user = request.user
+    print('user_admin_type',user.admin_type)
+   
+    if user.admin_type == 'Normal Admin':
+        
+        return render(request, 'admin-management.html', {
+            'user': user,
+            
+        })
+    admin_profiles = ArtistMasterBasic.objects.filter(is_staff=True).exclude(Q(is_superuser=True) | Q(id=user.id))
+ 
+    paginator = Paginator(admin_profiles, 10)  
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
 
+    return render(request, 'admin-management.html', {
+        'page_obj': page_obj,
+        'user':user             
+                         
+    })
+   
+    
+@csrf_exempt
+def admin_management_api(request):
+    if request.method == 'POST':
+        admin_username = request.POST.get('admin_username')
+        email = request.POST.get('email')
+        admin_access = request.POST.get('admin_access')
+        password = request.POST.get('password')
+        password2 = request.POST.get('password2')
+        admin_type = request.POST.get('admin_type')
+
+        
+
+        if password != password2:
+            return JsonResponse({'error': 'Passwords do not match.'}, status=400)
+
+        if User.objects.filter(email=email).exists():
+                return JsonResponse({"email": ["Email already in use."]}, status=400)
+       
+        try:
+            user = User(admin_username=admin_username, 
+                        email=email,
+                        admin_access=admin_access,
+                        admin_type = admin_type,
+                        plaintext_password = password
+                        )
+            user.set_password(password)
+            user.is_staff = True  
+            user.save()
+            return JsonResponse({'message': 'Admin created successfully!'}, status=201)
+        except Exception as e:
+            return JsonResponse({'error': str(e)}, status=400)
+        
+
+
+def EditAdminDetailApi(request,admin_id):
+    if request.method =="GET":
+        try:
+            admin = ArtistMasterBasic.objects.get(id=admin_id)
+            
+            admin_data = {
+                'id': admin.id,
+                'admin_username': admin.admin_username,
+                'email': admin.email,
+                'admin_type': admin.admin_type,
+                'admin_access': admin.admin_access,
+            }
+            return JsonResponse({'status': 'success', 'admin': admin_data})
+        except ArtistMasterBasic.DoesNotExist:
+            return JsonResponse({'status': 'error', 'message': 'Admin not found'})
+        
+        
+@csrf_exempt
+def update_admin_management_api(request, admin_id):
+    if request.method == 'POST':
+        admin_username = request.POST.get('admin_username')
+        email = request.POST.get('email')
+        admin_access = request.POST.get('admin_access')
+        password = request.POST.get('password')
+        password2 = request.POST.get('password2')
+        admin_type = request.POST.get('admin_type')
+
+        
+
+        admin = get_object_or_404(ArtistMasterBasic, id=admin_id)
+        admin.admin_username = admin_username
+        admin.email = email
+        admin.admin_type = admin_type
+        admin.admin_access = admin_access
+        
+        if password != password2:
+            return JsonResponse({'error': 'Passwords do not match.'}, status=400)
+        if password:
+            admin.set_password(password)
+            admin.plaintext_password = password
+        
+        admin.save()  # Save the updated admin
+        
+        return JsonResponse({
+            'success': True,
+            'message': 'Admin updated successfully!',
+            'redirect_url': '/admin-management/'  
+        })
+        
+       
+@csrf_exempt
+def delete_admin_management_api(request, admin_id):
+    if request.method == "POST":  
+        try:
+            admin = ArtistMasterBasic.objects.get(id=admin_id)
+            admin.delete()
+            return JsonResponse({'status': 'success'})
+        except ArtistMasterBasic.DoesNotExist:
+            return JsonResponse({'status': 'error', 'message': 'Admin not found'})
+
+
+from django.contrib.auth.hashers import check_password
+
+@csrf_exempt
+def change_admin_password(request, admin_id):
+    if request.method == 'POST':
+        admin_username = request.POST.get('admin_username')
+        oldPassword = request.POST.get('oldPassword')
+        password = request.POST.get('password')
+        password2 = request.POST.get('password2')
+
+       
+        admin = get_object_or_404(ArtistMasterBasic, id=admin_id)
+
+        
+        if not check_password(oldPassword, admin.password):
+            return JsonResponse({'error': 'Old password is incorrect.'}, status=400)
+
+      
+        if password != password2:
+            return JsonResponse({'error': 'Passwords do not match.'}, status=400)
+
+        
+        if password:
+            admin.admin_username = admin_username
+            admin.set_password(password)  
+            admin.plaintext_password = password  
+
+        admin.save()  
+
+        return JsonResponse({
+            'success': True,
+            'message': 'Admin password updated successfully!',
+        })
+    

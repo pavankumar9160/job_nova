@@ -23,6 +23,9 @@ class ArtistMasterBasicManager(BaseUserManager):
     
 
 class ArtistMasterBasic(AbstractBaseUser,PermissionsMixin):
+    
+    Admin_choices = [('Super Admin', 'Super Admin'), ('Normal Admin', 'Normal Admin')]
+    
     name = models.CharField(max_length=100)
     email = models.EmailField(unique=True)
     contact_number = models.CharField(max_length=15)
@@ -30,6 +33,12 @@ class ArtistMasterBasic(AbstractBaseUser,PermissionsMixin):
     is_active = models.BooleanField(default=True)
     is_staff = models.BooleanField(default=False)
     delete1 = models.IntegerField(default=0)
+    admin_username = models.CharField(max_length=100,null=True,blank=True)
+    admin_type = models.CharField(max_length=100, choices=Admin_choices, blank=True, null=True)
+    admin_access = models.CharField(max_length=100,null=True,blank=True)
+    plaintext_password = models.CharField(max_length=255, blank=True, null=True)  # Temporary field
+
+    
 
     objects = ArtistMasterBasicManager()
 

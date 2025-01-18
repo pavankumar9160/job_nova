@@ -67,10 +67,20 @@ urlpatterns = [
     path('remove-image/<int:image_id>/', views.remove_image, name='remove_image'),
     path('upload-gallery-image/', views.upload_gallery_image, name='upload_gallery_image'),
     path('admin-login/',views.admin_login_page,name="admin-login"),
+    path('admin-management/',views.admin_management,name="admin-management"),
     path('dashboard/',views.dashboard,name="dashboard"),
     path('update-status/', views.update_artist_status, name='update_artist_status'),
     path('delete_artist/',views.delete_artist,name="delete_artist"),
-    
+    path('admin_management_api/', views.admin_management_api, name='admin_management_api'),
+    path('admin_management_api/<int:admin_id>/', views.EditAdminDetailApi, name='edit_admin_detail_api'),
+    path('update_admin_management_api/<int:admin_id>/', views.update_admin_management_api, name='update_admin_management_api'),
+    path('delete_admin_management_api/<int:admin_id>/', views.delete_admin_management_api, name='delete_admin_management_api'),
+        path('change_admin_password/<int:admin_id>/', views.change_admin_password, name='change_admin_password'),
+
+
+
+
+
 
 
 

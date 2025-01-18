@@ -46,33 +46,34 @@
                                 <h6 class="mb-3 text-uppercase fw-semibold">Please sign in</h6>
                             
                                 <div class="mb-3">
-                                    <label class="form-label fw-semibold">Your Email or Contact Number</label>
+                                    <label class="form-label fw-semibold">Your Email or Username</label>
                                     <input name="email" id="email_or_contact" type="text" class="form-control" placeholder="Enter your email">
                                 </div>
 
                                 <div class="mb-3">
                                     <label class="form-label fw-semibold" for="password">Password</label>
-                                    <input type="password" class="form-control" id="password" placeholder="Password">
-                                    <i class="mdi mdi-eye position-absolute top-50 end-0 translate-middle-y pe-3" id="togglePassword" style="cursor: pointer;"></i>
+                                    <input type="password" class="form-control" id="password" placeholder="Password"><br>
+                                    {% comment %} <i class="mdi mdi-eye position-absolute top-50 end-0 translate-middle-y pe-3" id="togglePassword" style="cursor: pointer;"></i> {% endcomment %}
                             
-                                <div class="d-flex justify-content-between">
+                                {% comment %} <div class="d-flex justify-content-between">
                                     <div class="mb-3">
                                         <div class="form-check">
                                             <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
                                             <label class="form-label form-check-label text-muted" for="flexCheckDefault">Remember me</label>
                                         </div>
                                     </div>
-                                    <span class="forgot-pass text-muted small mb-0"><a href="{% url 'reset-password' %}" class="text-muted">Forgot password ?</a></span>
-                                </div>
+                                     <span class="forgot-pass text-muted small mb-0"><a href="{% url 'reset-password' %}" class="text-muted">Forgot password ?</a></span> 
+                                </div> {% endcomment %}
 
                                 <div class="g-recaptcha" data-sitekey="6LeAV5oqAAAAAGvSIJX-vuouZSzXMljjRzmGEk6u"></div>
-                                <input type="hidden" name="recaptcha_token" id="recaptcha_token">
+                                <input type="hidden" name="recaptcha_token" id="recaptcha_token"> 
+                                <br>
                                 <button class="btn btn-primary w-100" type="submit">Sign in</button>
-                                {% comment %} 
-
+                                
+{% comment %} 
                                 <div class="col-12 text-center mt-3">
                                     <span><span class="text-muted me-2 small">Don't have an account ?</span> <a href="{% url 'signup' %}"class="text-dark fw-semibold small">Sign Up</a></span>
-                                </div><!--end col--> {% endcomment %}
+                                </div><!--end col-->  {% endcomment %}
                             </form>
                         </div>
                     </div><!--end col-->
@@ -95,14 +96,14 @@
 
     $(document).ready(function() {
 
-        $('#togglePassword').on('click', function() {
+       /* $('#togglePassword').on('click', function() {
             const passwordField = $('#password');
             const type = passwordField.attr('type') === 'password' ? 'text' : 'password';
             passwordField.attr('type', type);
 
             // Toggle eye icon
             $(this).toggleClass('mdi-eye mdi-eye-off');
-        });
+        }); */
         
         $('#loginForm').on('submit', function(event) {
             event.preventDefault(); 
