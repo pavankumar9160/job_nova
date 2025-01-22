@@ -501,7 +501,7 @@ $(document).ready(function() {
 
                     var noArtistsMessage = `
                         <div class="col-12 text-center">
-                            <p class="h5 text-muted">No artist found</p>
+                            <p class="h5"  style="color: red;">No artist found</p>
                         </div>
                     `;
                     container.append(noArtistsMessage);
@@ -614,7 +614,7 @@ $(document).ready(function() {
 
                     var noArtistsMessage = `
                         <div class="col-12 text-center">
-                            <p class="h5 text-muted">No artists found</p>
+                            <p class="h5"  style="color: red;">No artists found</p>
                         </div>
                     `;
                     container.append(noArtistsMessage);

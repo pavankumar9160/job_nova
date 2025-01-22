@@ -2,7 +2,7 @@
 {% load static %}
 {% block content %}
 
-        <section class="bg-half-260 pb-lg-0 pb-md-4 bg-primary d-table w-100" style="background: url('{% static 'images/hero/bg3.jpg' %}') center center;" id="home">
+        <section class="bg-half-260  pb-lg-0 pb-md-4 bg-primary d-table w-100" style="background: url('{% static 'images/hero/indexbg.png' %}') center center;" id="home">
             <div class="bg-overlay bg-black" style="opacity: 0.8;"></div>
             <div class="container">
                 <div class="row g-4 position-relative z-1">
@@ -59,8 +59,7 @@
 
                     <div class="col-lg-5 col-md-6 col-12">
                         <div class="bg-white rounded shadow p-2 position-relative">
-                            <img src="{% static 'images/hero.jpg' %}" class="img-fluid rounded" alt="">
-
+                            <img src="{% static 'images/hero.png' %}" class="img-fluid rounded" style="object-fit: cover;width:100%" alt="">
                             {% comment %} <div class="position-absolute top-50 start-50 translate-middle">
                                 <a href="#!" data-type="youtube" data-id="yba7hPeTSjk" class="avatar avatar-md-md rounded-pill shadow card d-flex justify-content-center align-items-center lightbox">
                                     <i class="mdi mdi-play mdi-24px text-primary"></i>
@@ -274,18 +273,18 @@
                     <div class="col-lg-6 col-md-6 mb-5">
                         <div class="about-left">
                             <div class="position-relative shadow rounded img-one">
-                                <img src="{% static 'images/about/ab01.jpg' %}" class="img-fluid rounded" alt="work-image">
+                                <img src="{% static 'images/about/ab01.png' %}" class="img-fluid rounded" style="object-fit: cover;width:100%" alt="work-image">
                             </div>
             
-                            <div class="img-two shadow rounded p-2 bg-white">
+                            {% comment %} <div class="img-two shadow rounded p-2 bg-white">
                                 <img src="{% static 'images/about/ab02.jpg' %}" class="img-fluid rounded" alt="work-image">
-            
+             {% endcomment %}
                                 {% comment %} <div class="position-absolute top-0 start-50 translate-middle">
                                     <a href="#!" data-type="youtube" data-id="yba7hPeTSjk" class="avatar avatar-md-md rounded-pill shadow card d-flex justify-content-center align-items-center lightbox">
                                         <i class="mdi mdi-play mdi-24px text-primary"></i>
                                     </a>
                                 </div> {% endcomment %}
-                            </div>
+                            {% comment %} </div> {% endcomment %}
                         </div>
                     </div><!--end col-->
             

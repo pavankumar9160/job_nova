@@ -392,9 +392,9 @@
         /*         Bootstrap-custom      */
         /*===============================*/
         
-        @media (min-width: 1400px) {
+        @media (min-width: 1100px) {
             .container {
-                max-width: 1140px !important;
+                max-width: 100% !important;
             }
         }
         
@@ -4617,8 +4617,7 @@
             overflow: auto;
             cursor: text;
         }
-        
-        @media (min-width: 1200px) {
+        /* @media (min-width: 1200px) {
             .container,
             .container-lg,
             .container-md,
@@ -4626,4 +4625,4 @@
             .container-xl {
                 max-width: 100%;
             }
-        }
+        } */

@@ -4,13 +4,14 @@
 
 
         <!-- Hero Start -->
-        <section class="bg-half-170 d-table w-100" style="background: url('{% static 'images/hero/bg.jpg' %}');">
+        <section class="bg-half-170 w-100 d-table" style="background: url('{% static 'images/hero/artistbg.png' %}') no-repeat center;
+    background-size: cover;">
             <div class="bg-overlay bg-gradient-overlay"></div>
             <div class="container">
                 <div class="row mt-5 justify-content-center">
                     <div class="col-12">
                         <div class="title-heading text-center">
-                            <h5 class="heading fw-semibold mb-0 sub-heading text-white title-dark">artists</h5>
+                            <h5 class="heading fw-semibold mb-0 sub-heading text-white title-dark">Artists</h5>
                         </div>
                     </div><!--end col-->
                 </div><!--end row-->
@@ -758,6 +759,8 @@
                                     $("#searchItem2").val('');
                                     $('input[type="checkbox"]:checked').prop('checked', false); 
                                     $('#ageRange').val('18'); 
+                                    // Reload the current page
+                                    window.location.reload();
                                    
                                     const ageRangeValue = document.getElementById('ageRangeValue');
                                     ageRangeValue.textContent = `Selected Age Above: 18`;
@@ -890,7 +893,7 @@
 
                             {% else %}
                                 <div class="col-12 text-center">
-                                    <span class="text-muted">No artists found.</span>
+                                    <span  style="color: red;" class="text">No artists found.</span>
                                 </div>
                             {% endif %}
                         </div>

@@ -252,7 +252,7 @@ $('#createAdminForm').on('submit', function(event) {
             contentType: false,
             success: function(response) {
                 toastr.success('Admin Updated successfully!', 'Success');
-                window.location.href = response.redirect_url;
+                window.location.href = response.redirect_url;c
 
                 // Reset form after successful update
                 $('#createAdminForm')[0].reset();
