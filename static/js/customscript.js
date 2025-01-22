@@ -838,32 +838,33 @@ $(document).ready(function() {
                 <div class="row g-4">
                    
                     <div class="col-lg-8 col-md-7 col-12">
-                        <h5 class="mb-4">Introduction:</h5>
+                      <h5 class="mt-2">Skills:</h5>
+                            <div class="d-flex flex-wrap gap-2" id="skills-container">
+                                <!-- Skills will be dynamically added here -->
+                            </div>
+                        <h5 class="mb-2 mt-3">Introduction:</h5>
                         <p class="text-muted">I am <strong>${name},</strong>${introduction}</p>
                        
                              <h5 class="mt-4">Languages:</h5>
                         <div class="d-flex flex-wrap gap-2">
-                            <h6>Languages Speak:</h6>
+                            <h6>Speak:</h6>
                           
                                 <span>${languages_speak}</span>
                            
                         </div>
 
                         <div class="d-flex flex-wrap gap-2">
-                            <h6>Languages Read:</h6>
+                            <h6>Read:</h6>
                            
                                 <span>${languages_read}</span>
                            
                         </div>
 
                         <div class="d-flex flex-wrap gap-2">
-                            <h6>Languages Write:</h6>
+                            <h6>Write:</h6>
                                 <span>${languages_write}</span>
                         </div>
-                                <h5 class="mt-4">Skills:</h5>
-                            <div class="d-flex flex-wrap gap-2" id="skills-container">
-                                <!-- Skills will be dynamically added here -->
-                            </div>
+                              
                              <h5 class="mt-4">Education:</h5>
                            <div class="d-flex flex-column gap-3" id="education-container">
                                     <!-- Experience cards will be dynamically added here -->
@@ -953,7 +954,7 @@ $(document).ready(function() {
 
                             selectedSkills.forEach(function(skill) {
                                 var badge = document.createElement("span");
-                                badge.classList.add("badge", "bg-soft-primary", "rounded-pill");
+                                badge.classList.add("badge", "bg-soft-primary", "rounded-pill", "btn", "btn-primary");
                                 badge.textContent = skill;
                                 skillsContainer.appendChild(badge);
                             });

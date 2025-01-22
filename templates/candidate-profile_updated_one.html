@@ -50,15 +50,15 @@
                     {% if is_logged_in_user %}
                     {% with additional_info as info %}
                     <div class="col-lg-8 col-md-7 col-12">
-                        <h5 class="mb-4">Introduction:</h5>
+                        {% comment %} <h5 class="mb-4">Introduction:</h5>
                         <p class="text-muted">I am <strong>{{ full_name|default:artist_user.name }},</strong>{{ info.introduction }}</p>
-                       
+                        {% endcomment %}
                        
                         <h5 class="mt-4">Skills:</h5>
-                        <div class="d-flex flex-wrap gap-2">
+                        <div class="d-flex flex-wrap gap-2 mb-3">
                                             {% if info.skills.all %}
                             {% for skill in info.skills.all %}
-                            <a href="javascript:void(0);" class="badge bg-soft-primary rounded-pill" onclick="searchBySkill('{{ skill.name }}')">
+                            <a href="javascript:void(0);" class="badge btn btn-primary bg-soft-primary rounded-pill" onclick="searchBySkill('{{ skill.name }}')">
                                 {{ skill.name }}
                             </a>
                             {% endfor %}
@@ -66,9 +66,12 @@
                             <span>No skills available.</span>
                         {% endif %}
                         </div>
+                        <h5 class="mb-2 mt-3">Introduction:</h5>
+                        <p class="text-muted">I am <strong>{{ full_name|default:artist_user.name }},</strong>{{ info.introduction }}</p>
+                       
                         <h5 class="mt-4">Languages:</h5>
                         <div class="d-flex flex-wrap gap-2">
-                            <h6>Languages Speak:</h6>
+                            <h6>Speak:</h6>
                             {% if info.languages_speak %}
                                 <span>{{ info.languages_speak }}</span>
                             {% else %}
@@ -77,7 +80,7 @@
                         </div>
 
                         <div class="d-flex flex-wrap gap-2">
-                            <h6>Languages Read:</h6>
+                            <h6>Read:</h6>
                             {% if info.languages_read %}
                                 <span>{{ info.languages_read }}</span>
                             {% else %}
@@ -86,7 +89,7 @@
                         </div>
 
                         <div class="d-flex flex-wrap gap-2">
-                            <h6>Languages Write:</h6>
+                            <h6>Write:</h6>
                             {% if info.languages_write %}
                                 <span>{{ info.languages_write }}</span>
                             {% else %}
@@ -321,42 +324,15 @@
                     {% else %}
                     {% with additional_info_user as info %}
                     <div class="col-lg-8 col-md-7 col-12">
-                        <h5 class="mb-4">Introduction:</h5>
+                        {% comment %} <h5 class="mb-4">Introduction:</h5>
                         <p class="text-muted">I am <strong>{{ full_name|default:artist_user.name }},</strong>{{ info.introduction }}</p>
+                        {% endcomment %}
                        
-                        <h5 class="mt-4">Languages:</h5>
-                        <div class="d-flex flex-wrap gap-2">
-                            <h6>Languages Speak:</h6>
-                            {% if info.languages_speak %}
-                                <span>{{ info.languages_speak }}</span>
-                            {% else %}
-                                <span>No Details Available.</span>
-                            {% endif %}
-                        </div>
-
-                        <div class="d-flex flex-wrap gap-2">
-                            <h6>Languages Read:</h6>
-                            {% if info.languages_read %}
-                                <span>{{ info.languages_read }}</span>
-                            {% else %}
-                                <span>No Details Available.</span>
-                            {% endif %}
-                        </div>
-
-                        <div class="d-flex flex-wrap gap-2">
-                            <h6>Languages Write:</h6>
-                            {% if info.languages_write %}
-                                <span>{{ info.languages_write }}</span>
-                            {% else %}
-                                <span>No Details Available.</span>
-                            {% endif %}
-                        </div>
-
                         <h5 class="mt-4">Skills:</h5>
                         <div class="d-flex flex-wrap gap-2">
                             {% if info.skills.all %}
                             {% for skill in info.skills.all %}
-                            <a href="javascript:void(0);" class="badge bg-soft-primary rounded-pill" onclick="searchBySkill('{{ skill.name }}')">
+                            <a href="javascript:void(0);" class="badge btn btn-primary bg-soft-primary rounded-pill" onclick="searchBySkill('{{ skill.name }}')">
                                 {{ skill.name }}
                             </a>
                         {% endfor %}
@@ -364,6 +340,9 @@
                             <span>No skills available.</span>
                         {% endif %}
                         </div>
+                        <h5 class="mb-2 mt-3">Introduction:</h5>
+                        <p class="text-muted">I am <strong>{{ full_name|default:artist_user.name }},</strong>{{ info.introduction }}</p>
+                       
                         <h5 class ="mt-4">Education:</h5>
                         <div class="d-flex flex-column gap-3">
                         {% if info.education_details.all %}
@@ -378,6 +357,33 @@
                            {% else %} 
                            <span>No Details Available.</span>
                            {% endif %}
+                        </div>
+                        <h5 class="mt-4">Languages:</h5>
+                        <div class="d-flex flex-wrap gap-2">
+                            <h6>Speak:</h6>
+                            {% if info.languages_speak %}
+                                <span>{{ info.languages_speak }}</span>
+                            {% else %}
+                                <span>No Details Available.</span>
+                            {% endif %}
+                        </div>
+
+                        <div class="d-flex flex-wrap gap-2">
+                            <h6>Read:</h6>
+                            {% if info.languages_read %}
+                                <span>{{ info.languages_read }}</span>
+                            {% else %}
+                                <span>No Details Available.</span>
+                            {% endif %}
+                        </div>
+
+                        <div class="d-flex flex-wrap gap-2">
+                            <h6>Write:</h6>
+                            {% if info.languages_write %}
+                                <span>{{ info.languages_write }}</span>
+                            {% else %}
+                                <span>No Details Available.</span>
+                            {% endif %}
                         </div>
                         <h5 class="mt-4">Professional Details:</h5>
                             <div class="d-flex flex-column gap-3">
